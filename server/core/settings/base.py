@@ -28,12 +28,38 @@ INSTALLED_APPS = [
     'apis.apps.ApisConfig',
     'rest_framework',
     "corsheaders",
+    'drf_spectacular',
+    'drf_spectacular_sidecar', 
 ]
+
+SPECTACULAR_SETTINGS = {
+    'SERVE_PERMISSIONS': ['rest_framework.permissions.AllowAny'],
+    'COMPONENT_SPLIT_PATCH': True,
+    'COMPONENT_SPLIT_REQUEST': True,
+    'TITLE': 'Edemy APIs 🎓',
+    'DESCRIPTION': 'Discover and learn about any topic 🔖',
+    'VERSION': '1.0.0',
+    'LICENCE': {'name': 'BSD License'},
+    'CONTACT': {'name': 'ZIN', 'email': 'zin.it.dev@gmail.com'},
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SWAGGER_UI_DIST': 'SIDECAR',
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": True,
+        "displayRequestDuration": True
+    },
+    'UPLOADED_FILES_USE_URL': True,
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
+    "TEST_REQUEST_DEFAULT_FORMAT": "json",
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "apis.authentication.Auth0JSONWebTokenAuthentication",
         'rest_framework.authentication.BasicAuthentication',

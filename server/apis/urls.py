@@ -4,6 +4,8 @@ from rest_framework import routers
 from .apiviews import UserViewSet, CategoryViewSet, CourseViewSet
 from .views import index
 
+app_name = 'apis'
+
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet, basename='user')
 router.register(r'categories', CategoryViewSet, basename='category')
