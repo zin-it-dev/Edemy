@@ -8,6 +8,7 @@ coverage==7.10.6
 Django>=5.0.0,<=5.2.6
 django-cloudinary-storage==0.3.0
 django-cors-headers==4.7.0
+django-filter==25.1
 djangorestframework==3.16.1
 drf-spectacular==0.28.0
 drf-spectacular-sidecar==2025.9.1

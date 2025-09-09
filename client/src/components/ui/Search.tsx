@@ -9,8 +9,8 @@ const Search: React.FC = () => {
           size="lg"
           className="w-100"
           type="search"
-          placeholder="Search"
-          aria-label="Search"
+          placeholder="Search for courses"
+          aria-label="Search for courses"
         />
         <Button size="lg" variant="primary">
           Search

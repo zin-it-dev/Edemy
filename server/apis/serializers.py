@@ -8,21 +8,26 @@ class ModelSerializer(serializers.ModelSerializer):
         fields = ['id', 'is_active']
 
 
+class SlugModelSerializer(ModelSerializer):
+    class Meta:
+        fields = ModelSerializer.Meta.fields + ['slug']
+
+
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = ModelSerializer.Meta.fields + ['username', 'email', 'picture', 'first_name', 'last_name']
         
         
-class CategorySerializer(ModelSerializer):
+class CategorySerializer(SlugModelSerializer):
     class Meta:
         model = Category
-        fields = ModelSerializer.Meta.fields + ['name']
+        fields = SlugModelSerializer.Meta.fields + ['name']
         
         
-class CourseSerializer(ModelSerializer):
+class CourseSerializer(SlugModelSerializer):
     category = serializers.StringRelatedField(read_only=True)
     
     class Meta:
         model = Course
-        fields = ModelSerializer.Meta.fields + ['name', 'thumbnail', 'description', 'price', 'discount', 'category']
+        fields = SlugModelSerializer.Meta.fields + ['name', 'thumbnail', 'description', 'price', 'discount', 'category']

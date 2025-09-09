@@ -1,0 +1,38 @@
+[
+  {
+    "model": "apis.course",
+    "pk": 1,
+    "fields": {
+      "name": "HTML & CSS Basics",
+      "slug": "html-css-basics",
+      "description": "A course for beginners to learn how to build websites.",
+      "category": 1,
+      "date_created": "2025-08-18T10:00:00Z",
+      "date_updated": "2025-08-18T10:00:00Z"
+    }
+  },
+  {
+    "model": "apis.course",
+    "pk": 2,
+    "fields": {
+      "name": "Python for Data Science",
+      "slug": "python-for-data-science",
+      "description": "A course covering NumPy, Pandas, and Matplotlib.",
+      "category": 2,
+      "date_created": "2025-08-18T10:00:00Z",
+      "date_updated": "2025-08-18T10:00:00Z"
+    }
+  },
+  {
+    "model": "apis.course",
+    "pk": 3,
+    "fields": {
+      "name": "React Native Basics",
+      "slug": "react-native-basics",
+      "description": "Build mobile applications with React Native.",
+      "category": 3,
+      "date_created": "2025-08-18T10:00:00Z",
+      "date_updated": "2025-08-18T10:00:00Z"
+    }
+  }
+]

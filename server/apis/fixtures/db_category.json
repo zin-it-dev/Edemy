@@ -1,0 +1,32 @@
+[
+  {
+    "model": "apis.category",
+    "pk": 1,
+    "fields": {
+      "name": "Web Development",
+      "slug": "web-development",
+      "date_created": "2025-08-18T10:00:00Z",
+      "date_updated": "2025-08-18T10:00:00Z"
+    }
+  },
+  {
+    "model": "apis.category",
+    "pk": 2,
+    "fields": {
+      "name": "Data Science",
+      "slug": "data-science",
+      "date_created": "2025-08-18T10:00:00Z",
+      "date_updated": "2025-08-18T10:00:00Z"
+    }
+  },
+  {
+    "model": "apis.category",
+    "pk": 3,
+    "fields": {
+      "name": "Mobile Development",
+      "slug": "mobile-development",
+      "date_created": "2025-08-18T10:00:00Z",
+      "date_updated": "2025-08-18T10:00:00Z"
+    }
+  }
+]

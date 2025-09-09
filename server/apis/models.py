@@ -58,7 +58,14 @@ class Common(models.Model):
         abstract = True
 
 
-class Category(Common):
+class SlugModel(models.Model):
+    slug = models.SlugField(default='', null=True)
+
+    class Meta:
+        abstract = True
+
+
+class Category(Common, SlugModel):
     name = models.CharField(unique=True, max_length=80)
     
     class Meta:
@@ -68,7 +75,7 @@ class Category(Common):
         return self.name
     
     
-class Course(Common):
+class Course(Common, SlugModel):
     name = models.CharField(max_length=120)
     thumbnail = models.ImageField(upload_to='courses/%y/%m/%d', blank=True, storage=MediaCloudinaryStorage())
     description = models.TextField()
@@ -81,7 +88,7 @@ class Course(Common):
         return self.name
 
 
-class Lesson(Common):
+class Lesson(Common, SlugModel):
     name = models.CharField(max_length=120)
     content = models.TextField()
     

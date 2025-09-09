@@ -5,12 +5,15 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 import { assets } from "@/libs/constants/assets";
 import useCurrentUser from "@/hooks/use-current-user";
+import useTheme from "@/hooks/use-theme";
 import Profile from "@/pages/Profile";
 import Login from "../ui/Login";
 import Logout from "../ui/Logout";
 import Avatar from "../ui/Avatar";
+import ThemeToggle from "../ui/ThemeToggle";
 
 const Header: React.FC = () => {
+  const { theme } = useTheme();
   const { isAuthenticated } = useAuth0();
   const user = useCurrentUser();
 
@@ -18,8 +21,8 @@ const Header: React.FC = () => {
     <Navbar
       collapseOnSelect
       expand="lg"
-      bg="light"
-      variant="light"
+      bg={theme}
+      variant={theme}
       className="shadow-sm"
     >
       <Container>
@@ -66,9 +69,7 @@ const Header: React.FC = () => {
             ) : (
               <Login />
             )}
-            <Nav.Link eventKey={2} href="#memes">
-              Dank memes
-            </Nav.Link>
+            <ThemeToggle className="d-lg-block d-none" size={24} />
           </Nav>
         </Navbar.Collapse>
       </Container>

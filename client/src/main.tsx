@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 
 import Auth0ProviderNavigate from "@/providers/auth0-provider-navigate";
 import QueryProvider from "@/providers/query-provider";
+import ThemeProvider from "@/providers/theme-provider";
 import "@/styles/globals.css";
 import App from "@/App";
 import { store } from "@/store";
@@ -16,11 +17,13 @@ createRoot(root!).render(
   <StrictMode>
     <BrowserRouter>
       <Auth0ProviderNavigate>
-        <Provider store={store}>
-          <QueryProvider>
-            <App />
-          </QueryProvider>
-        </Provider>
+        <ThemeProvider>
+          <Provider store={store}>
+            <QueryProvider>
+              <App />
+            </QueryProvider>
+          </Provider>
+        </ThemeProvider>
       </Auth0ProviderNavigate>
     </BrowserRouter>
   </StrictMode>
