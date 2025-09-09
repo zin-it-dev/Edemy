@@ -17,12 +17,12 @@ services:
     depends_on:
       - db
 
-  # nginx:
-  #   build: ./nginx
-  #   ports:
-  #     - 1337:80
-  #   depends_on:
-  #     - web
+  nginx:
+    build: ./nginx
+    ports:
+      - 1337:80
+    depends_on:
+      - web
 
 volumes:
   postgres_data:
