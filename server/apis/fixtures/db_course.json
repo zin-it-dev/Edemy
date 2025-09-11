@@ -34,5 +34,17 @@
       "date_created": "2025-08-18T10:00:00Z",
       "date_updated": "2025-08-18T10:00:00Z"
     }
+  },
+  {
+    "model": "apis.course",
+    "pk": 4,
+    "fields": {
+      "name": "Android Mobile Basic",
+      "slug": "android-mobile-basics",
+      "description": "Build mobile applications with Android.",
+      "category": 3,
+      "date_created": "2025-08-18T10:00:00Z",
+      "date_updated": "2025-08-18T10:00:00Z"
+    }
   }
 ]

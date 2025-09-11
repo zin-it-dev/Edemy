@@ -17,6 +17,8 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get("DEBUG"))
 
+LOGIN_URL = '/admin/login/'
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -30,7 +32,8 @@ INSTALLED_APPS = [
     "corsheaders",
     'drf_spectacular',
     'drf_spectacular_sidecar',
-    'django_filters'
+    'django_filters',
+    "django_elasticsearch_dsl"
 ]
 
 SPECTACULAR_SETTINGS = {
@@ -53,6 +56,7 @@ SPECTACULAR_SETTINGS = {
         "displayRequestDuration": True
     },
     'UPLOADED_FILES_USE_URL': True,
+    'SCHEMA_PATH_PREFIX_TRIM': True
 }
 
 REST_FRAMEWORK = {
@@ -67,6 +71,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ]
 }
 
 MIDDLEWARE = [
@@ -156,4 +164,23 @@ CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET')
+}
+
+# Cache
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.environ.get('REDIS_URL'),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# Elasticsearch
+# https://django-elasticsearch-dsl.readthedocs.io/en/latest/settings.html
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": f'http://{os.environ.get('ELASTICSEARCH_HOST')}:{os.environ.get('ELASTICSEARCH_PORT')}'
+    }
 }
