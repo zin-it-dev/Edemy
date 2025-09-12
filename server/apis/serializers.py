@@ -9,7 +9,7 @@ class ModelSerializer(serializers.ModelSerializer):
 
 
 class SlugModelSerializer(ModelSerializer):
-    class Meta:
+    class Meta(ModelSerializer.Meta):
         fields = ModelSerializer.Meta.fields + ['slug']
 
 

@@ -13,7 +13,7 @@ from .repositories import UserRepository, CategoryRepository, CourseRepository
 from .mixins import SearchViewSet
 from .documents import CourseDocument
 from .paginatiors import StandardResultsSetPagination
-
+from .filters import CourseFilter
 
 class UserViewSet(viewsets.GenericViewSet):
     queryset = UserRepository().get_all()
@@ -33,15 +33,16 @@ class CategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     queryset = CategoryRepository().get_all()
     serializer_class = CategorySerializer
     
-    @method_decorator(cache_page(60 * 5, key_prefix='category_list'))
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+    # @method_decorator(cache_page(60 * 5, key_prefix='category_list'))
+    # def list(self, request, *args, **kwargs):
+    #     return super().list(request, *args, **kwargs)
     
     
 class CourseViewSet(SearchViewSet):
     queryset = CourseRepository().get_all()
     serializer_class = CourseSerializer
     document_class = CourseDocument
+    filterset_class = CourseFilter
     pagination_class = StandardResultsSetPagination
     
     def generate_q_expression(self, query):
@@ -52,22 +53,21 @@ class CourseViewSet(SearchViewSet):
                 "description",
             ], fuzziness="auto")
     
+    # @extend_schema(
+    #     parameters=[
+    #         OpenApiParameter(
+    #             name="search",
+    #             type=str,
+    #             location=OpenApiParameter.QUERY,
+    #             description="A search term.",
+    #             required=False,
+    #         )
+    #     ]
+    # )
+    # @method_decorator(cache_page(60 * 5, key_prefix='course_list'))
+    # def list(self, request, *args, **kwargs):
+    #     return super().list(request, *args, **kwargs)
     
-    @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                name="search",
-                type=str,
-                location=OpenApiParameter.QUERY,
-                description="A search term.",
-                required=False,
-            )
-        ]
-    )
-    @method_decorator(cache_page(60 * 5, key_prefix='course_list'))
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-    
-    @method_decorator(cache_page(60 * 5, key_prefix='course_trieve'))
-    def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
+    # @method_decorator(cache_page(60 * 5, key_prefix='course_trieve'))
+    # def retrieve(self, request, *args, **kwargs):
+    #     return super().retrieve(request, *args, **kwargs)

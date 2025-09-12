@@ -18,8 +18,9 @@ class SearchViewSet(viewsets.ReadOnlyModelViewSet):
             if query:
                 q = self.generate_q_expression(query)
                 search = self.document_class.search().query(q)
+                response = search.execute()
             else:
-                search = self.document_class.search()
+                search = self.filter_queryset(self.get_queryset())
             
             page = self.paginate_queryset(search)
             
@@ -27,7 +28,6 @@ class SearchViewSet(viewsets.ReadOnlyModelViewSet):
                 serializer = self.serializer_class(page, many=True)
                 return self.get_paginated_response(serializer.data)
             
-            response = search.execute()
             serializer = self.serializer_class(response, many=True)
             return Response(serializer.data)
         except Exception as e:

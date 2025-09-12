@@ -1,5 +1,6 @@
+import { assets } from "@/libs/constants/assets";
 import React from "react";
-import { Button, Col, Container, Form, Nav, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Image, Nav, Row } from "react-bootstrap";
 import { Link, NavLink } from "react-router";
 
 const Footer: React.FC = () => {
@@ -26,7 +27,16 @@ const Footer: React.FC = () => {
       <Container>
         <Row className="pt-lg-5 pt-md-5 pb-lg-4 pb-md-4 py-4">
           <Col md={3} xs={12} className="mb-3">
-            <h2 className="text-primary fw-bold">Edemy</h2>
+            <h2 className="text-primary fw-bold">
+              <Image
+                alt=""
+                src={assets.logo}
+                width="40"
+                height="40"
+                className="d-inline-block"
+              />{" "}
+              Edemy
+            </h2>
             <p className="col-lg-10 col-12">
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry's standard dummy text.

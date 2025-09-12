@@ -19,7 +19,7 @@ const List: React.FC = () => {
       </p>
 
       <Row className="text-start gy-4">
-        {data?.map((course) => (
+        {data?.results.map((course) => (
           <Col lg={3} md={6} key={course.id}>
             <Item {...course} />
           </Col>

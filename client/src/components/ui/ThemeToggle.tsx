@@ -4,16 +4,11 @@ import { GoSun } from "react-icons/go";
 
 import useTheme from "@/hooks/use-theme";
 
-type ThemeProps = {
-  size: number;
-  className?: string;
-};
-
-const ThemeToggle = ({ size, className }: ThemeProps) => {
+const ThemeToggle = ({ size }: { size: number }) => {
   const { toggleTheme, isDark } = useTheme();
 
   return (
-    <Nav.Link onClick={toggleTheme} className={className}>
+    <Nav.Link onClick={toggleTheme}>
       {!isDark ? <CiDark size={size} /> : <GoSun size={size} />}
     </Nav.Link>
   );

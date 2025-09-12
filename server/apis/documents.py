@@ -1,4 +1,4 @@
-from django_elasticsearch_dsl import Document
+from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
 from .models import Course
@@ -6,6 +6,8 @@ from .models import Course
 
 @registry.register_document
 class CourseDocument(Document):
+    category = fields.TextField()
+    
     class Index:
         name = 'courses'
         settings = {
@@ -17,9 +19,18 @@ class CourseDocument(Document):
         model = Course
 
         fields = [
+            'id',
+            'slug',
+            'is_active',
             'name',
-            'description'
+            'thumbnail', 
+            'description', 
+            'price', 
+            'discount'
         ]
         
         ignore_signals = False
         auto_refresh = True
+        
+    def prepare_category(self, instance):
+        return str(instance.category) if instance.category else ""

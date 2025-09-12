@@ -11,6 +11,8 @@ import Login from "../ui/Login";
 import Logout from "../ui/Logout";
 import Avatar from "../ui/Avatar";
 import ThemeToggle from "../ui/ThemeToggle";
+import Navigation from "../ui/Navigation";
+import Search from "../ui/Search";
 
 const Header: React.FC = () => {
   const { theme } = useTheme();
@@ -38,20 +40,11 @@ const Header: React.FC = () => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
+          <Search className={"py-2 d-lg-none"} size={"sm"} />
           <Nav className="ms-auto align-items-lg-center">
-            <NavDropdown title="Categories" id="collapsible-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
-            </NavDropdown>
+            <Navigation />
           </Nav>
-          <Nav className="align-items-lg-center">
+          <Nav className="align-items-lg-center flex-row justify-content-between">
             {isAuthenticated && user ? (
               <NavDropdown
                 title={
@@ -67,9 +60,9 @@ const Header: React.FC = () => {
                 <Logout />
               </NavDropdown>
             ) : (
-              <Login />
+              <Login size={24} />
             )}
-            <ThemeToggle className="d-lg-block d-none" size={24} />
+            <ThemeToggle size={24} />
           </Nav>
         </Navbar.Collapse>
       </Container>

@@ -1,3 +1,4 @@
+import Courses from "@/pages/Courses";
 import Home from "@/pages/Home";
 import Profile from "@/pages/Profile";
 
@@ -11,6 +12,11 @@ export const routes: Route[] = [
   {
     path: "/",
     component: Home,
+    layout: null,
+  },
+  {
+    path: "/courses",
+    component: Courses,
     layout: null,
   },
   {
