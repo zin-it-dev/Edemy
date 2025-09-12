@@ -32,3 +32,6 @@ DATABASES = {
         'PORT': os.environ.get('POSTGRES_PORT'),
     }
 }
+
+# Email
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

@@ -1,4 +1,4 @@
 from .base import *
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+# Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

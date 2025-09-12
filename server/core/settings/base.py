@@ -181,6 +181,13 @@ CACHES = {
 # https://django-elasticsearch-dsl.readthedocs.io/en/latest/settings.html
 ELASTICSEARCH_DSL = {
     "default": {
-        "hosts": f'http://{os.environ.get('ELASTICSEARCH_HOST')}:{os.environ.get('ELASTICSEARCH_PORT')}'
+        "hosts": f"http://{os.environ.get('ELASTICSEARCH_HOST')}:{os.environ.get('ELASTICSEARCH_PORT')}"
     }
 }
+
+# Admin
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = True
