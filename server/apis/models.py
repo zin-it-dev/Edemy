@@ -59,7 +59,7 @@ class Common(models.Model):
 
 
 class SlugModel(models.Model):
-    slug = models.SlugField(default='', null=True)
+    slug = models.SlugField(default='', null=True, help_text="A short label, generally used in URLs.")
 
     class Meta:
         abstract = True

@@ -6,6 +6,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     # Admin
+    path('admin/doc/', include('django.contrib.admindocs.urls')),
     path(
         "admin/password_reset/",
         auth_views.PasswordResetView.as_view(
@@ -48,7 +49,7 @@ urlpatterns = [
     path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
 
-if settings.DEBUG:
+if settings.DEBUG or settings.TESTING:
     import debug_toolbar
     urlpatterns += [
         path('__debug__/', include(debug_toolbar.urls)),

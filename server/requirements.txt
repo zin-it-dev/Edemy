@@ -15,6 +15,7 @@ django-filter==25.1
 django-redis==6.0.0
 django-silk==5.4.3
 djangorestframework==3.16.1
+docutils==0.22
 drf-spectacular==0.28.0
 drf-spectacular-sidecar==2025.9.1
 ecdsa==0.19.1
