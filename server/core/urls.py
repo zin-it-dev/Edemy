@@ -4,6 +4,8 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 from django.conf import settings
 from django.contrib.auth import views as auth_views
 
+from core.admin import admin_statistics
+
 urlpatterns = [
     # Admin
     path('admin/doc/', include('django.contrib.admindocs.urls')),
@@ -34,6 +36,11 @@ urlpatterns = [
             extra_context={"site_header": admin.site.site_header}
         ),
         name="password_reset_complete",
+    ),
+    path(
+        "admin/statistics",
+        admin.site.admin_view(admin_statistics),
+        name="admin_statistics"
     ),
     path('admin/', admin.site.urls),
     

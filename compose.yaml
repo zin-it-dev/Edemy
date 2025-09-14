@@ -1,4 +1,44 @@
 services:
+  worker:
+    build: ./server
+    container_name: celery-worker
+    entrypoint: ./scripts/worker.entrypoint.sh
+    volumes:
+      - ./server:/app
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - db
+
+  beat:
+    build: ./server
+    container_name: celery-beat
+    entrypoint: ./scripts/beat.entrypoint.sh
+    volumes:
+      - ./server:/app
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - db
+      - web
+
+  flower:
+    build: ./server
+    container_name: celery-flower
+    command: ./scripts/flower.entrypoint.sh
+    volumes:
+      - ./server:/app
+    env_file:
+      - .env
+    ports:
+      - 5555:5555
+    depends_on:
+      - redis
+      - db
+      - web
+
   elasticsearch:
     container_name: elasticsearch
     image: elasticsearch:7.14.2

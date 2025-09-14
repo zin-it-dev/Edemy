@@ -22,7 +22,7 @@ LOGIN_URL = '/admin/login/'
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admindocs',
-    'django.contrib.admin',
+    "core.apps.AdminConfig",
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -34,7 +34,10 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'drf_spectacular_sidecar',
     'django_filters',
-    "django_elasticsearch_dsl"
+    "django_elasticsearch_dsl",
+    "django_celery_results",
+    'django_celery_beat',
+    'chartjs'
 ]
 
 SPECTACULAR_SETTINGS = {
@@ -181,3 +184,11 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
+
+# Celery
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
+CELERY_TIMEZONE = "Australia/Tasmania"
+CELERY_RESULT_EXTENDED = True
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
