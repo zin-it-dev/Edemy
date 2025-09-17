@@ -13,6 +13,6 @@ export type Course = Base & {
 export type Courses = Paginate & {
   results: Pick<
     Course,
-    "id" | "slug" | "name" | "description" | "thumbnail" | "discount" | "price"
+    "id" | "slug" | "name" | "description" | "thumbnail" | "discount" | "price" | "category"
   >[];
 };

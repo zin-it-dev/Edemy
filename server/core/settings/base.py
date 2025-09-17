@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     "django_elasticsearch_dsl",
     "django_celery_results",
     'django_celery_beat',
-    'chartjs'
+    'chartjs',
+    'import_export',
+    'django_pdf_actions'
 ]
 
 SPECTACULAR_SETTINGS = {
@@ -148,6 +150,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
 MEDIA_URL = '/media/'
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
@@ -192,3 +196,5 @@ CELERY_TIMEZONE = "Australia/Tasmania"
 CELERY_RESULT_EXTENDED = True
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
+
+IMPORT_EXPORT_SKIP_ADMIN_CONFIRM = True

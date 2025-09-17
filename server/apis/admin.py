@@ -1,9 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
+from import_export.admin import ImportExportModelAdmin, ExportActionMixin
+from django_pdf_actions.actions import export_to_pdf_landscape, export_to_pdf_portrait
 
 from .models import User, Category, Course, Lesson
 from .forms import UserChangeForm, UserCreationForm
+from .resources import CategoryResource
 
 
 class UserAdmin(BaseUserAdmin):
@@ -56,13 +59,16 @@ class UserAdmin(BaseUserAdmin):
     ]
 
 
-class ModelAdmin(admin.ModelAdmin):
+class ModelAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
+    actions = [export_to_pdf_landscape, export_to_pdf_portrait]
+    prepopulated_fields = {'slug': ['name']}
     list_display = ['id', 'is_active']
     list_filter = ['is_active']
     date_hierarchy = 'date_created'
 
 
 class CategoryAdmin(ModelAdmin):
+    resource_classes = [CategoryResource]
     list_display = ModelAdmin.list_display + ['name']
 
 
