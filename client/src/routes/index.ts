@@ -1,3 +1,4 @@
+import Course from "@/pages/Course";
 import Courses from "@/pages/Courses";
 import Home from "@/pages/Home";
 import Profile from "@/pages/Profile";
@@ -17,6 +18,11 @@ export const routes: Route[] = [
   {
     path: "/courses",
     component: Courses,
+    layout: null,
+  },
+  {
+    path: "/courses/:slug",
+    component: Course,
     layout: null,
   },
   {

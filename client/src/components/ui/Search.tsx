@@ -17,7 +17,7 @@ const Search = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     navigate({
-      pathname: "/courses",
+      pathname: "/courses/",
       search: createSearchParams({ search: keyword }).toString(),
     });
   };

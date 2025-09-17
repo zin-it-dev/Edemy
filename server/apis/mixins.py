@@ -3,9 +3,12 @@ import abc
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
-class SearchViewSet(viewsets.ReadOnlyModelViewSet):
+
+class ReadOnlyView(viewsets.ReadOnlyModelViewSet):
     lookup_field = 'slug'
     
+
+class SearchViewSet(ReadOnlyView):
     @abc.abstractmethod
     def generate_q_expression(self, query):
         """This method should be overridden

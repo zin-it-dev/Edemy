@@ -6,6 +6,8 @@
       "name": "HTML & CSS Basics",
       "slug": "html-css-basics",
       "description": "A course for beginners to learn how to build websites.",
+      "price": 1200.0,
+      "discount": 0.2,
       "category": 1,
       "date_created": "2025-08-18T10:00:00Z",
       "date_updated": "2025-08-18T10:00:00Z"
@@ -18,6 +20,8 @@
       "name": "Python for Data Science",
       "slug": "python-for-data-science",
       "description": "A course covering NumPy, Pandas, and Matplotlib.",
+      "price": 5200.0,
+      "discount": 0.25,
       "category": 2,
       "date_created": "2025-08-18T10:00:00Z",
       "date_updated": "2025-08-18T10:00:00Z"
@@ -30,6 +34,8 @@
       "name": "React Native Basics",
       "slug": "react-native-basics",
       "description": "Build mobile applications with React Native.",
+      "price": 25600.0,
+      "discount": 0.12,
       "category": 3,
       "date_created": "2025-08-18T10:00:00Z",
       "date_updated": "2025-08-18T10:00:00Z"
@@ -42,6 +48,8 @@
       "name": "Android Mobile Basic",
       "slug": "android-mobile-basics",
       "description": "Build mobile applications with Android.",
+      "price": 3200.0,
+      "discount": 1.2,
       "category": 3,
       "date_created": "2025-08-18T10:00:00Z",
       "date_updated": "2025-08-18T10:00:00Z"

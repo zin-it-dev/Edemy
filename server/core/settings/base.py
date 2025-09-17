@@ -47,7 +47,7 @@ SPECTACULAR_SETTINGS = {
     'TITLE': 'Edemy APIs 🎓',
     'DESCRIPTION': 'Discover and learn about any topic 🔖',
     'VERSION': '1.0.0',
-    'LICENCE': {'name': 'BSD License'},
+    'LICENCE': {'name': 'MIT License'},
     'CONTACT': {'name': 'ZIN', 'email': 'zin.it.dev@gmail.com'},
     'SERVE_INCLUDE_SCHEMA': False,
     'SWAGGER_UI_DIST': 'SIDECAR',

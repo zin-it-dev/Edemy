@@ -1,7 +1,8 @@
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import get_object_or_404
 
-from .models import User, Category, Course
+from .models import User, Category, Course, Lesson
 
 class BaseRepository:
     def __init__(self, model: models.Model):
@@ -55,3 +56,15 @@ class CourseRepository(BaseRepository):
         
     def get_all(self):
         return self.model.objects.filter(is_active=True).all().order_by('-date_created')
+
+
+class LessonRepository(BaseRepository):
+    def __init__(self):
+        super().__init__(Lesson)
+        
+    def get_all(self, course=None):
+        return self.model.objects.filter(course__slug=course)
+    
+    def get_by_slug(self, slug=None, course=None):
+        queryset = self.model.objects.filter(slug=slug, course__slug=course)
+        return get_object_or_404(queryset, slug=slug)

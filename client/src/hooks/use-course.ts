@@ -17,7 +17,7 @@ const useCourses = () => {
   });
 };
 
-const useCourse = (slug: string) => {
+const useCourse = (slug?: string) => {
   return useQuery({
     queryKey: ["course", slug],
     queryFn: () => getCourse(slug),

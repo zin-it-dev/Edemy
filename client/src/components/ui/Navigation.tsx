@@ -1,7 +1,7 @@
 import useCategory from "@/hooks/use-category";
 import React from "react";
 import { NavDropdown } from "react-bootstrap";
-import { NavLink } from "react-router";
+import { Link } from "react-router";
 
 const Navigation: React.FC = () => {
   const { data } = useCategory();
@@ -11,7 +11,7 @@ const Navigation: React.FC = () => {
       {data?.map((cat) => (
         <NavDropdown.Item
           key={cat.id}
-          as={NavLink}
+          as={Link}
           to={`/courses/?category=${cat.slug}`}
         >
           {cat.name}

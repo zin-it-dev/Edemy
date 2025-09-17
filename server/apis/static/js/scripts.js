@@ -1,7 +1,6 @@
 window.onload = async () => {
   const response = await fetch("/chart/courses");
   const data = await response.json();
-  console.log(data);
 
   const ctx = document.getElementById("statsChart").getContext("2d");
   new Chart(ctx, {

@@ -1,6 +1,6 @@
 import axios from "@/libs/configs/axios";
 import { endpoints } from "@/libs/constants/endpoints";
-import type { Courses } from "@/types/course.type";
+import type { Course, Courses } from "@/types/course.type";
 
 export const getCourses = async (
   keyword?: string,
@@ -13,7 +13,7 @@ export const getCourses = async (
   return res.data;
 };
 
-export const getCourse = async (slug: string) => {
+export const getCourse = async (slug?: string): Promise<Course> => {
   const res = await axios.get(endpoints.course(slug));
   return res.data;
 };

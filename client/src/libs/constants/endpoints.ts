@@ -1,4 +1,5 @@
 export const endpoints = {
+  currentUser: "/users/current-user/",
   categories: "/categories",
   courses: (params?: {
     keyword?: string;
@@ -12,5 +13,8 @@ export const endpoints = {
     const queryString = searchParams.toString();
     return queryString ? `/courses/?${queryString}` : "/courses";
   },
-  course: (slug: string | null) => `/courses/${slug}`,
+  course: (slug?: string | null) => `/courses/${slug}`,
+  lessons: (slug?: string | null) => `/courses/${slug}/lessons/`,
+  lesson: (params?: { slug?: string | null; lesson_slug?: string | null }) =>
+    `/courses/${params?.slug}/lessons/${params?.lesson_slug}`,
 };

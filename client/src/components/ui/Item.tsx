@@ -10,7 +10,7 @@ const Item: React.FC<Course> = (props: Course) => {
     <Card>
       <Link
         className="text-decoration-none"
-        to={`/courses/${props.id}`}
+        to={`/courses/${props.slug}`}
         onClick={() => scrollTo(0, 0)}
       >
         <Card.Img

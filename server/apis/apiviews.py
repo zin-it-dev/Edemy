@@ -8,9 +8,9 @@ from django.views.decorators.vary import vary_on_cookie, vary_on_headers
 from elasticsearch_dsl import Q
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 
-from .serializers import UserSerializer, CategorySerializer, CourseSerializer
-from .repositories import UserRepository, CategoryRepository, CourseRepository
-from .mixins import SearchViewSet
+from .serializers import UserSerializer, CategorySerializer, CourseSerializer, LessonSerializer
+from .repositories import UserRepository, CategoryRepository, CourseRepository, LessonRepository
+from .mixins import SearchViewSet, ReadOnlyView
 from .documents import CourseDocument
 from .paginatiors import StandardResultsSetPagination
 from .filters import CourseFilter
@@ -71,3 +71,20 @@ class CourseViewSet(SearchViewSet):
     @method_decorator(cache_page(60 * 5, key_prefix='course_trieve'))
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
+    
+    
+class LessonViewSet(ReadOnlyView):
+    queryset = LessonRepository().get_all()
+    serializer_class = LessonSerializer
+    
+    @method_decorator(cache_page(60 * 5, key_prefix='lesson_list'))
+    def list(self, request, *args, **kwargs):
+        queryset = LessonRepository().get_all(course=kwargs.get('course_slug'))
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    @method_decorator(cache_page(60 * 5, key_prefix='lesson_trieve'))
+    def retrieve(self, request, *args, **kwargs):
+        queryset = LessonRepository().get_by_slug(slug=kwargs.get('slug'), course=kwargs.get('course_slug'))
+        serializer = self.get_serializer(queryset)
+        return Response(serializer.data)

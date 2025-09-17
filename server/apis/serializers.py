@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import User, Category, Course
+from .models import User, Category, Course, Lesson
 
 
 class ModelSerializer(serializers.ModelSerializer):
@@ -31,3 +31,9 @@ class CourseSerializer(SlugModelSerializer):
     class Meta:
         model = Course
         fields = SlugModelSerializer.Meta.fields + ['name', 'thumbnail', 'description', 'price', 'discount', 'category']
+        
+        
+class LessonSerializer(SlugModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = SlugModelSerializer.Meta.fields + ['name', 'content']
