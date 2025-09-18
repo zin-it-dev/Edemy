@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
 import "bootswatch/dist/minty/bootstrap.min.css";
@@ -10,6 +10,7 @@ import ThemeProvider from "@/providers/theme-provider";
 import "@/styles/globals.css";
 import App from "@/App";
 import { store } from "@/store";
+import Loading from "@/components/ui/Loading";
 
 const root = document.getElementById("root") as HTMLElement;
 
@@ -20,7 +21,13 @@ createRoot(root!).render(
         <ThemeProvider>
           <Provider store={store}>
             <QueryProvider>
-              <App />
+              <Suspense
+                fallback={
+                  <Loading fullScreen message="Loading..." variant="primary" />
+                }
+              >
+                <App />
+              </Suspense>
             </QueryProvider>
           </Provider>
         </ThemeProvider>

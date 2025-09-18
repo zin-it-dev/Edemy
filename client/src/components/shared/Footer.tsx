@@ -1,57 +1,97 @@
-import { assets } from "@/libs/constants/assets";
 import React from "react";
-import { Button, Col, Container, Form, Image, Nav, Row } from "react-bootstrap";
+import { Col, Container, Image, Nav, Row } from "react-bootstrap";
+import {
+  FaBook,
+  FaEnvelope,
+  FaFacebook,
+  FaGithub,
+  FaHeart,
+  FaHome,
+  FaInfoCircle,
+  FaInstagram,
+  FaLinkedin,
+} from "react-icons/fa";
 import { Link, NavLink } from "react-router";
+
+import { assets } from "@/libs/constants/assets";
 
 const Footer: React.FC = () => {
   const menu = [
+    { path: "/", title: "Home", icon: <FaHome className="me-2" /> },
+    { path: "/courses", title: "Courses", icon: <FaBook className="me-2" /> },
     {
-      path: "/",
-      title: "Home",
+      path: "/about",
+      title: "About Us",
+      icon: <FaInfoCircle className="me-2" />,
     },
     {
-      path: "/courses",
-      title: "Courses",
+      path: "/contact",
+      title: "Contact",
+      icon: <FaEnvelope className="me-2" />,
     },
+  ];
+
+  const socialLinks = [
     {
-      path: "https://github.com/zin-it-dev/",
-      title: "Contact us",
+      icon: <FaGithub size={24} />,
+      url: "https://github.com/zin-it-dev/",
+      name: "GitHub",
     },
+    { icon: <FaFacebook size={24} />, url: "#", name: "Facebook" },
+    { icon: <FaLinkedin size={24} />, url: "#", name: "LinkedIn" },
+    { icon: <FaInstagram size={24} />, url: "#", name: "Instagram" },
   ];
 
   return (
     <footer
-      className="text-white text-center text-lg-start text-md-start"
+      className="text-white text-lg-start text-md-start mt-auto"
       style={{ backgroundColor: "rgb(17 24 39 / var(--tw-bg-opacity, 1))" }}
     >
-      <Container>
-        <Row className="pt-lg-5 pt-md-5 pb-lg-4 pb-md-4 py-4">
-          <Col md={3} xs={12} className="mb-3">
-            <h2 className="text-primary fw-bold">
+      <Container className="pt-5 px-2">
+        <Row className="g-4">
+          <Col lg={6} md={6} xs={12} className="mb-4">
+            <div className="d-flex align-items-center mb-3">
               <Image
-                alt=""
+                alt="Edemy Logo"
                 src={assets.logo}
                 width="40"
                 height="40"
-                className="d-inline-block"
-              />{" "}
-              Edemy
-            </h2>
-            <p className="col-lg-10 col-12">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text.
+                className="d-inline-block me-2 rounded-circle bg-white p-1"
+              />
+              <h3 className="text-white fw-bold mb-0">Edemy</h3>
+            </div>
+            <p className="text-light mb-4 text-start">
+              Edemy provides high-quality educational content to help you
+              advance your career and expand your knowledge. Learn from industry
+              experts and join our community of learners.
             </p>
+            <div className="d-flex gap-3">
+              {socialLinks.map((social, index) => (
+                <Link
+                  key={index}
+                  to={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white fs-5 opacity-75 hover-opacity-100"
+                  aria-label={social.name}
+                >
+                  {social.icon}
+                </Link>
+              ))}
+            </div>
           </Col>
-          <Col md={3} xs={12} className="mb-3">
-            <h5 className="text-primary fw-bold">Company</h5>
+
+          <Col md={3} xs={6} className="mb-4">
+            <h5 className="text-white fw-bold mb-3">Company</h5>
             <Nav as={"ul"} className="flex-column">
               {menu.map((item) => (
                 <li key={item.path} className="nav-item mb-2">
                   <Nav.Link
                     as={NavLink}
                     to={item.path}
-                    className="p-0 text-body-secondary"
+                    className="text-white p-0 opacity-75 hover-opacity-100 d-flex align-items-center"
                   >
+                    {item.icon}
                     {item.title}
                   </Nav.Link>
                 </li>
@@ -59,38 +99,66 @@ const Footer: React.FC = () => {
             </Nav>
           </Col>
 
-          <Col md={5} className="offset-md-1 d-none d-md-block d-lg-block">
-            <Form>
-              <h5 className="text-primary fw-bold">
-                Subscribe to our newsletter
-              </h5>
-              <p>
-                The latest news, articles, and resources, sent to your inbox
-                weekly.
-              </p>
-              <Form.Group className="d-flex">
-                <Form.Control
-                  className="w-75 me-2"
-                  placeholder="Email address"
-                />
-                <Button size={"sm"}>Subscribe</Button>
-              </Form.Group>
-            </Form>
+          <Col md={3} xs={6} className="mb-4">
+            <h5 className="text-white fw-bold mb-3">Support</h5>
+            <Nav as="ul" className="flex-column">
+              <li className="nav-item mb-2">
+                <Nav.Link
+                  href="#"
+                  className="p-0 text-light opacity-75 hover-opacity-100"
+                >
+                  Help Center
+                </Nav.Link>
+              </li>
+              <li className="nav-item mb-2">
+                <Nav.Link
+                  href="#"
+                  className="p-0 text-light opacity-75 hover-opacity-100"
+                >
+                  FAQ
+                </Nav.Link>
+              </li>
+              <li className="nav-item mb-2">
+                <Nav.Link
+                  href="#"
+                  className="p-0 text-light opacity-75 hover-opacity-100"
+                >
+                  Contact
+                </Nav.Link>
+              </li>
+              <li className="nav-item mb-2">
+                <Nav.Link
+                  href="#"
+                  className="p-0 text-light opacity-75 hover-opacity-100"
+                >
+                  Privacy Policy
+                </Nav.Link>
+              </li>
+            </Nav>
           </Col>
         </Row>
-        <div className="text-center py-2 border-top">
-          <p className="mb-0 fs-6 py-2">
-            &copy; {new Date().getFullYear()}{" "}
-            <Link
-              className="text-decoration-none fw-bold"
-              to={"https://github.com/zin-it-dev/"}
-              target="_blank"
-            >
-              ZIN
-            </Link>
-            , Inc. All rights reserved.
-          </p>
-        </div>
+
+        <hr className="my-4 opacity-25 bg-white" />
+
+        <Row className="align-items-center pb-3 ">
+          <Col md={6} className="text-center text-md-start mb-2 mb-md-0">
+            <p className="mb-0 opacity-75">
+              &copy; {new Date().getFullYear()} Edemy. Made with{" "}
+              <FaHeart className="text-danger mx-1" /> by{" "}
+              <Link
+                className="text-decoration-none fw-semibold hover-opacity-100"
+                to="https://github.com/zin-it-dev/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ZIN
+              </Link>
+            </p>
+          </Col>
+          <Col md={6} className="text-center text-md-end">
+            <span className="opacity-75">All rights reserved.</span>
+          </Col>
+        </Row>
       </Container>
     </footer>
   );

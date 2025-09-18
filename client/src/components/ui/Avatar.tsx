@@ -2,18 +2,19 @@ import React from "react";
 import { Image } from "react-bootstrap";
 
 type AvatarProps = {
-  url?: string;
-  title?: string;
-  size: number;
+  src: string;
+  sizes: { width: number; height: number };
+  alt: string;
 };
 
 const Avatar: React.FC<AvatarProps> = (props: AvatarProps) => {
   return (
     <Image
-      src={props.url}
-      alt={props.title}
-      width={props.size}
-      height={props.size}
+      src={props.src}
+      alt={props.alt}
+      title={props.alt}
+      width={props.sizes.width}
+      height={props.sizes.height}
       roundedCircle
     />
   );

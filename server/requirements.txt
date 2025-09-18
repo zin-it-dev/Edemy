@@ -17,7 +17,7 @@ coverage==7.10.6
 cron_descriptor==2.0.6
 defusedxml==0.7.1
 diff-match-patch==20241021
-Django==5.2.6
+Django>=5.0.0,<=5.2.6
 django-celery-beat==2.8.1
 django-chartjs==2.3.0
 django-cloudinary-storage==0.3.0

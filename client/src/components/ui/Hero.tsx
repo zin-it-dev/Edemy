@@ -1,11 +1,9 @@
 import React from "react";
-import { Col } from "react-bootstrap";
-
-import Search from "./Search";
+import { Button, Col } from "react-bootstrap";
 
 const Hero: React.FC = () => {
   return (
-    <section className="fw-bold py-lg-5 py-md-5 py-4 px-lg-4 px-md-4 px-3 text-lg-center text-md-center bg-body-tertiary">
+    <section className="fw-bold py-lg-5 py-md-5 py-4 px-lg-4 px-md-4 px-3 text-lg-center text-md-center">
       <div className="my-lg-5 my-3">
         <h1 className="display-5 fw-bold text-body-emphasis">
           Empower your future with the courses designed to{" "}
@@ -17,8 +15,14 @@ const Hero: React.FC = () => {
             a supportive community to help you achieve your personal and
             professional goals.
           </p>
-
-          <Search />
+          <div className="d-flex gap-2 justify-content-center">
+            <Button className="p-lg-2 py-2 px-3" variant="primary">
+              Explore Courses
+            </Button>
+            <Button className="p-lg-2 py-2 px-3" variant="warning">
+              View Pricing
+            </Button>
+          </div>
         </Col>
       </div>
     </section>

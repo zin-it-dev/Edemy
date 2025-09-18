@@ -6,7 +6,7 @@ const Login = (props: { size: number }) => {
   const { loginWithRedirect } = useAuth0();
 
   return (
-    <Nav.Link onClick={() => loginWithRedirect()}>
+    <Nav.Link className="text-primary" onClick={() => loginWithRedirect()}>
       <IoPersonOutline size={props.size} />
     </Nav.Link>
   );

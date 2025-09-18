@@ -1,3 +1,4 @@
+import Loading from "@/components/ui/Loading";
 import { useCourse } from "@/hooks/use-course";
 import { useLessons } from "@/hooks/use-lesson";
 
@@ -11,13 +12,11 @@ const Course: React.FC = () => {
   const { data, isLoading } = useCourse(slug);
   const { data: lessons } = useLessons(slug);
 
-  console.log(data);
-
   return (
     <Container>
       <Row className="align-items-start justify-content-between py-lg-5 py-4">
         {isLoading ? (
-          <p>Loading...</p>
+          <Loading message="Loading..." />
         ) : (
           data && (
             <>
@@ -28,18 +27,12 @@ const Course: React.FC = () => {
                     __html: data.description.slice(0, 200),
                   }}
                 ></p>
-                <div className="d-flex gap-2">
-                  <p>Start</p>
-                  <Link
-                    to={`/courses/?category=${data.category}`}
-                    className="text-decoration-none"
-                  >
-                    {data.category}
-                  </Link>
-                </div>
-                <p>
-                  Course by: <Link to={"/"}>ZIN</Link>
-                </p>
+                <Link
+                  to={`/courses/?category=${data.category}`}
+                  className="text-decoration-none"
+                >
+                  {data.category}
+                </Link>
 
                 <div className="py-2">
                   <h3 className="mb-3 text-primary fw-bold">

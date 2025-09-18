@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router";
 // import { CiStar } from "react-icons/ci";
 
@@ -24,14 +24,18 @@ const Item: React.FC<Course> = (props: Course) => {
       <Card.Body>
         <Card.Title>
           <Link
-            className="text-decoration-none"
+            className="text-decoration-none fw-bold"
             to={`/courses/${props.id}`}
             onClick={() => scrollTo(0, 0)}
           >
             {props.name}
           </Link>
         </Card.Title>
-        <Card.Text>{props.description}</Card.Text>
+        <Card.Text
+          dangerouslySetInnerHTML={{
+            __html: props.description.slice(0, 80),
+          }}
+        ></Card.Text>
         {/* <div>
           <Card.Text>4.5</Card.Text>
           <div>
@@ -42,6 +46,9 @@ const Item: React.FC<Course> = (props: Course) => {
           <p>22</p>
         </div>
         <Card.Text>$4555</Card.Text> */}
+        <Button className="w-100" variant="primary">
+          Get it Now
+        </Button>
       </Card.Body>
     </Card>
   );

@@ -20,5 +20,5 @@ class LargeResultsSetPagination(PageNumberPagination):
 
 
 class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 2
+    page_size = 10
     max_page_size = 100

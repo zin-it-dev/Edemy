@@ -1,7 +1,9 @@
-import Course from "@/pages/Course";
-import Courses from "@/pages/Courses";
-import Home from "@/pages/Home";
-import Profile from "@/pages/Profile";
+import { lazy } from "react";
+
+const Home = lazy(() => import("@/pages/Home"));
+const Courses = lazy(() => import("@/pages/Courses"));
+const Course = lazy(() => import("@/pages/Course"));
+const Profile = lazy(() => import("@/pages/Profile"));
 
 type Route = {
   path: string;

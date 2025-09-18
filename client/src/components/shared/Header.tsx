@@ -11,8 +11,6 @@ import Login from "../ui/Login";
 import Logout from "../ui/Logout";
 import Avatar from "../ui/Avatar";
 import ThemeToggle from "../ui/ThemeToggle";
-import Navigation from "../ui/Navigation";
-import Search from "../ui/Search";
 
 const Header: React.FC = () => {
   const { theme } = useTheme();
@@ -25,30 +23,36 @@ const Header: React.FC = () => {
       expand="lg"
       bg={theme}
       variant={theme}
-      className="shadow-sm"
+      sticky="top"
+      className="border-bottom"
     >
       <Container>
-        <Navbar.Brand as={NavLink} to={"/"} className="fw-semibold">
+        <Navbar.Brand
+          as={NavLink}
+          to={"/"}
+          className="fw-bold d-flex align-items-center"
+        >
           <Image
-            alt=""
+            alt="Edemy"
             src={assets.logo}
             width="40"
             height="40"
-            className="d-inline-block"
-          />{" "}
-          Edemy
+            loading="lazy"
+          />
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Search className={"py-2 d-lg-none"} size={"sm"} />
-          <Nav className="ms-auto align-items-lg-center">
-            <Navigation />
-          </Nav>
-          <Nav className="align-items-lg-center flex-row justify-content-between">
+
+        {/* <Search className="d-none d-md-flex me-3" /> */}
+
+        <div className="d-flex gap-3 align-items-center">
+          <div className="d-lg-none d-md-none d-flex gap-3">
             {isAuthenticated && user ? (
               <NavDropdown
                 title={
-                  <Avatar url={user.picture} title={user.username} size={30} />
+                  <Avatar
+                    src={user.picture}
+                    alt={user.username}
+                    sizes={{ width: 30, height: 30 }}
+                  />
                 }
                 id="collapsible-nav-dropdown"
               >
@@ -60,9 +64,57 @@ const Header: React.FC = () => {
                 <Logout />
               </NavDropdown>
             ) : (
-              <Login size={24} />
+              <Login size={30} />
             )}
-            <ThemeToggle size={24} />
+            <ThemeToggle size={30} />
+          </div>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        </div>
+
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link as={NavLink} to={"/"}>
+              Home
+            </Nav.Link>
+            <Nav.Link as={NavLink} to={"/courses"}>
+              Courses
+            </Nav.Link>
+            <Nav.Link as={NavLink} to={"/about-us"}>
+              About Us
+            </Nav.Link>
+            <Nav.Link as={NavLink} to={"/pricing"}>
+              Pricing
+            </Nav.Link>
+            <Nav.Link as={NavLink} to={"/contact"}>
+              Contact
+            </Nav.Link>
+          </Nav>
+
+          <Nav>
+            {isAuthenticated && user ? (
+              <NavDropdown
+                title={
+                  <Avatar
+                    src={user.picture}
+                    alt={user.username}
+                    sizes={{ width: 30, height: 30 }}
+                  />
+                }
+                id="collapsible-nav-dropdown"
+              >
+                <Profile />
+                <NavDropdown.Item href="#action/3.2">
+                  Another action
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <Logout />
+              </NavDropdown>
+            ) : (
+              <>
+                <Login size={25} />
+                <ThemeToggle size={25} />
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

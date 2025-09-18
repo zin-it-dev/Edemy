@@ -1,8 +1,9 @@
 import React from "react";
 import { Route, Routes } from "react-router";
-import { routes } from "./routes";
-import RootLayout from "./components/layouts/RootLayout";
-import AuthLayout from "./components/layouts/AuthLayout";
+
+import { routes } from "@/routes";
+import RootLayout from "@/components/layouts/RootLayout";
+import AuthLayout from "@/components/layouts/AuthLayout";
 
 const App: React.FC = () => {
   return (
