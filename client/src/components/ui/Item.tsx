@@ -1,54 +1,41 @@
 import React from "react";
-import { Button, Card } from "react-bootstrap";
+import { Card, Placeholder } from "react-bootstrap";
 import { Link } from "react-router";
-// import { CiStar } from "react-icons/ci";
 
 import type { Course } from "@/types/course.type";
 
 const Item: React.FC<Course> = (props: Course) => {
   return (
+    <Link
+      className="text-decoration-none"
+      to={`/courses/${props.slug}`}
+      onClick={() => scrollTo(0, 0)}
+    >
+      <Card className="shadow-sm">
+        <Card.Body>
+          <Card.Title className="text-primary fw-bold">{props.name}</Card.Title>
+          <Card.Text
+            dangerouslySetInnerHTML={{
+              __html: props.description.slice(0, 80),
+            }}
+          ></Card.Text>
+        </Card.Body>
+      </Card>
+    </Link>
+  );
+};
+
+export const ItemSkeleton: React.FC = () => {
+  return (
     <Card>
-      <Link
-        className="text-decoration-none"
-        to={`/courses/${props.slug}`}
-        onClick={() => scrollTo(0, 0)}
-      >
-        <Card.Img
-          variant="top"
-          style={{
-            objectFit: "cover",
-          }}
-          src="https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png"
-        />
-      </Link>
       <Card.Body>
-        <Card.Title>
-          <Link
-            className="text-decoration-none fw-bold"
-            to={`/courses/${props.id}`}
-            onClick={() => scrollTo(0, 0)}
-          >
-            {props.name}
-          </Link>
-        </Card.Title>
-        <Card.Text
-          dangerouslySetInnerHTML={{
-            __html: props.description.slice(0, 80),
-          }}
-        ></Card.Text>
-        {/* <div>
-          <Card.Text>4.5</Card.Text>
-          <div>
-            {[...Array(5)].map((_, idx) => (
-              <CiStar key={idx} size={24} />
-            ))}
-          </div>
-          <p>22</p>
-        </div>
-        <Card.Text>$4555</Card.Text> */}
-        <Button className="w-100" variant="primary">
-          Get it Now
-        </Button>
+        <Placeholder as={Card.Title} animation="glow">
+          <Placeholder xs={6} />
+        </Placeholder>
+        <Placeholder as={Card.Text} animation="glow">
+          <Placeholder xs={7} /> <Placeholder xs={4} /> <Placeholder xs={4} />
+          <Placeholder xs={6} /> <Placeholder xs={8} />
+        </Placeholder>
       </Card.Body>
     </Card>
   );

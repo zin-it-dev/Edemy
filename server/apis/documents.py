@@ -24,9 +24,7 @@ class CourseDocument(Document):
             'is_active',
             'name',
             'thumbnail', 
-            'description', 
-            'price', 
-            'discount'
+            'description'
         ]
         
         ignore_signals = False

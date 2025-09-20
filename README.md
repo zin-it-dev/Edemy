@@ -16,6 +16,7 @@ Discover and learn about any topic 🔖
 - 🔍 **Elasticsearch** for feature full-text searching.
 - 🗽 **Celery** for async task and background jobs.
 - 📚 **Redis** for caching memory.
+- 📈 Chart.js for dashboards or data visualizations.
 
 ---
 
@@ -52,7 +53,6 @@ Discover and learn about any topic 🔖
 - 🔐 **Auth0** for authentication & authorization.
 - ☁️ **Cloudinary** – media storage, image & video optimization.  
 - 📫 **Email providers** (**MailTrap** for development, **SendGrid** for production).
-- 💳 **Payment gateways** (**Stripe**) – optional integration for e-commerce use cases.
 
 
 ## Author

@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.urls import path, re_path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
-from django.conf import settings
 from django.contrib.auth import views as auth_views
+from django.conf import settings
 
 from core.admin import admin_statistics
 
@@ -43,6 +43,9 @@ urlpatterns = [
         name="admin_statistics"
     ),
     path('admin/', admin.site.urls),
+    
+    # CKEditor
+    path('ckeditor/', include('ckeditor_uploader.urls')),
     
     # Core
     re_path(r'^', include('apis.urls')),

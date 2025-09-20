@@ -25,15 +25,13 @@ class CategorySerializer(SlugModelSerializer):
         fields = SlugModelSerializer.Meta.fields + ['name']
         
         
-class CourseSerializer(SlugModelSerializer):
-    category = serializers.StringRelatedField(read_only=True)
-    
+class CourseSerializer(SlugModelSerializer):    
     class Meta:
         model = Course
-        fields = SlugModelSerializer.Meta.fields + ['name', 'thumbnail', 'description', 'price', 'discount', 'category']
+        fields = SlugModelSerializer.Meta.fields + ['name', 'thumbnail', 'description']
         
         
 class LessonSerializer(SlugModelSerializer):
     class Meta:
         model = Lesson
-        fields = SlugModelSerializer.Meta.fields + ['name', 'content']
+        fields = SlugModelSerializer.Meta.fields + ['name', 'content', 'url']

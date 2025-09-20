@@ -1,7 +1,10 @@
 import React from "react";
 import { Button, Col } from "react-bootstrap";
+import { useNavigate } from "react-router";
 
 const Hero: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="fw-bold py-lg-5 py-md-5 py-4 px-lg-4 px-md-4 px-3 text-lg-center text-md-center">
       <div className="my-lg-5 my-3">
@@ -16,7 +19,11 @@ const Hero: React.FC = () => {
             professional goals.
           </p>
           <div className="d-flex gap-2 justify-content-center">
-            <Button className="p-lg-2 py-2 px-3" variant="primary">
+            <Button
+              onClick={() => navigate("/courses")}
+              className="p-lg-2 py-2 px-3"
+              variant="primary"
+            >
               Explore Courses
             </Button>
             <Button className="p-lg-2 py-2 px-3" variant="warning">

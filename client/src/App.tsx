@@ -3,13 +3,13 @@ import { Route, Routes } from "react-router";
 
 import { routes } from "@/routes";
 import RootLayout from "@/components/layouts/RootLayout";
-import AuthLayout from "@/components/layouts/AuthLayout";
+import ErrorLayout from "@/components/layouts/ErrorLayout";
 
 const App: React.FC = () => {
   return (
     <Routes>
       {routes.map((route) => {
-        const Layout = route.layout === undefined ? AuthLayout : RootLayout;
+        const Layout = route.layout === undefined ? ErrorLayout : RootLayout;
         return (
           <Route element={<Layout />}>
             <Route

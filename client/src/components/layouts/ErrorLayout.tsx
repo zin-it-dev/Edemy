@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router";
 
-const AuthLayout: React.FC = () => {
+const ErrorLayout: React.FC = () => {
   return (
     <>
       <main className="min-vh-100">
@@ -11,4 +11,4 @@ const AuthLayout: React.FC = () => {
   );
 };
 
-export default AuthLayout;
+export default ErrorLayout;

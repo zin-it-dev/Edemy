@@ -20,12 +20,14 @@ diff-match-patch==20241021
 Django>=5.0.0,<=5.2.6
 django-celery-beat==2.8.1
 django-chartjs==2.3.0
+django-ckeditor==6.7.3
 django-cloudinary-storage==0.3.0
 django-cors-headers==4.7.0
 django-debug-toolbar==6.0.0
 django-elasticsearch-dsl==8.2
 django-filter==25.1
 django-import-export==4.3.9
+django-js-asset==3.1.2
 django-model-utils==5.0.0
 django-pdf-actions==0.1.52
 django-redis==6.0.0

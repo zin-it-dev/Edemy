@@ -39,7 +39,11 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'chartjs',
     'import_export',
-    'django_pdf_actions'
+    'django_pdf_actions',
+    'ckeditor',
+    'ckeditor_uploader',
+    'cloudinary',
+    'cloudinary_storage'
 ]
 
 SPECTACULAR_SETTINGS = {
@@ -152,9 +156,9 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-MEDIA_URL = '/media/'
-
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -198,3 +202,15 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
 IMPORT_EXPORT_SKIP_ADMIN_CONFIRM = True
+
+# CKEditor
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_STORAGE_BACKEND = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'extraPlugins': 'uploadimage',
+        'filebrowserUploadUrl': '/ckeditor/upload/',
+    },
+}

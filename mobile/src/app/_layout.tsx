@@ -10,7 +10,7 @@ export default function RootLayout() {
       <SafeAreaView className="flex-1">
         <QueryProvider>
           <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" />
+            <Stack.Screen name="(tabs)" />
           </Stack>
         </QueryProvider>
       </SafeAreaView>

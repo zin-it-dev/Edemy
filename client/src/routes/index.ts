@@ -3,7 +3,7 @@ import { lazy } from "react";
 const Home = lazy(() => import("@/pages/Home"));
 const Courses = lazy(() => import("@/pages/Courses"));
 const Course = lazy(() => import("@/pages/Course"));
-const Profile = lazy(() => import("@/pages/Profile"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
 
 type Route = {
   path: string;
@@ -28,8 +28,8 @@ export const routes: Route[] = [
     layout: null,
   },
   {
-    path: "/profile",
-    component: Profile,
+    path: "*",
+    component: NotFound,
     layout: undefined,
   },
 ];

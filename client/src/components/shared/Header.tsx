@@ -6,11 +6,12 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { assets } from "@/libs/constants/assets";
 import useCurrentUser from "@/hooks/use-current-user";
 import useTheme from "@/hooks/use-theme";
-import Profile from "@/pages/Profile";
 import Login from "../ui/Login";
 import Logout from "../ui/Logout";
 import Avatar from "../ui/Avatar";
 import ThemeToggle from "../ui/ThemeToggle";
+import Categories from "../ui/Categories";
+import Search from "../ui/Search";
 
 const Header: React.FC = () => {
   const { theme } = useTheme();
@@ -41,8 +42,6 @@ const Header: React.FC = () => {
           />
         </Navbar.Brand>
 
-        {/* <Search className="d-none d-md-flex me-3" /> */}
-
         <div className="d-flex gap-3 align-items-center">
           <div className="d-lg-none d-md-none d-flex gap-3">
             {isAuthenticated && user ? (
@@ -56,7 +55,6 @@ const Header: React.FC = () => {
                 }
                 id="collapsible-nav-dropdown"
               >
-                <Profile />
                 <NavDropdown.Item href="#action/3.2">
                   Another action
                 </NavDropdown.Item>
@@ -73,24 +71,22 @@ const Header: React.FC = () => {
 
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={NavLink} to={"/"}>
-              Home
-            </Nav.Link>
+            <Categories />
             <Nav.Link as={NavLink} to={"/courses"}>
               Courses
             </Nav.Link>
-            <Nav.Link as={NavLink} to={"/about-us"}>
-              About Us
-            </Nav.Link>
-            <Nav.Link as={NavLink} to={"/pricing"}>
-              Pricing
-            </Nav.Link>
-            <Nav.Link as={NavLink} to={"/contact"}>
-              Contact
+            <Nav.Link
+              as={NavLink}
+              to={"https://github.com/zin-it-dev/"}
+              target="_blank"
+            >
+              Support
             </Nav.Link>
           </Nav>
 
-          <Nav>
+          <Search />
+
+          <Nav className="d-none d-lg-flex">
             {isAuthenticated && user ? (
               <NavDropdown
                 title={
@@ -102,7 +98,6 @@ const Header: React.FC = () => {
                 }
                 id="collapsible-nav-dropdown"
               >
-                <Profile />
                 <NavDropdown.Item href="#action/3.2">
                   Another action
                 </NavDropdown.Item>
@@ -112,9 +107,9 @@ const Header: React.FC = () => {
             ) : (
               <>
                 <Login size={25} />
-                <ThemeToggle size={25} />
               </>
             )}
+            <ThemeToggle size={25} />
           </Nav>
         </Navbar.Collapse>
       </Container>
