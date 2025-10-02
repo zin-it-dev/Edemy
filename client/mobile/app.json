@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "Edemy",
+    "slug": "edemy",
+    "scheme": "edemy",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "",
+      "bundler": "metro"
+    },
+    "plugins": ["expo-router"]
+  }
+}

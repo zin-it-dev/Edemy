@@ -1,0 +1,14 @@
+asgiref==3.9.2
+autopep8==2.3.2
+Django==5.2.7
+djangorestframework==3.16.1
+drf-spectacular==0.28.0
+drf-spectacular-sidecar==2025.10.1
+django-cors-headers==4.9.0
+gprof2dot==2025.4.14
+Markdown==3.9
+psycopg2-binary==2.9.10
+pycodestyle==2.14.0
+python-dotenv==1.1.1
+sqlparse==0.5.3
+tzdata==2025.2
