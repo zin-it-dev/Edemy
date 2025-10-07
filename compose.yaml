@@ -1,0 +1,73 @@
+services:
+  worker:
+    build: ./server
+    container_name: celery-worker
+    entrypoint: ./scripts/worker.entrypoint.sh
+    volumes:
+      - ./server:/app
+    env_file:
+      - ./server/.env.local
+    depends_on:
+      - redis
+      - db
+      - django
+
+  beat:
+    build: ./server
+    container_name: celery-beat
+    entrypoint: ./scripts/beat.entrypoint.sh
+    volumes:
+      - ./server:/app
+    env_file:
+      - ./server/.env.local
+    depends_on:
+      - redis
+      - db
+      - django
+
+  flower:
+    build: ./server
+    container_name: celery-flower
+    command: ./scripts/flower.entrypoint.sh
+    volumes:
+      - ./server:/app
+    env_file:
+      - ./server/.env.local
+    ports:
+      - 5555:5555
+    depends_on:
+      - redis
+      - db
+      - django
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis_data:/data
+    ports:
+      - 6379:6379
+
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    env_file:
+      - ./server/.env.local
+
+  django:
+    build: ./server
+    volumes:
+      - ./server:/app
+    ports:
+      - 8000:8000
+    env_file:
+      - ./server/.env.local
+    depends_on:
+      - db
+      - redis
+
+volumes:
+  postgres_data:
+  redis_data:
