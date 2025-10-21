@@ -3,7 +3,7 @@ from typing import List
 
 
 class CommonSchema(BaseModel):
-    name: str = Field(description="The name or title of the item.")
+    title: str = Field(description="The name or title of the item.")
 
 
 class BaseSchema(CommonSchema):
@@ -12,6 +12,7 @@ class BaseSchema(CommonSchema):
 
 class LessonSchema(BaseSchema):
     title: str = Field(description="The concise title for the lesson.")
+    content: str = Field(description="The detailed, comprehensive content for the lesson. Can be left empty in the initial outline.")
 
 
 class ModuleSchema(BaseSchema):
@@ -21,7 +22,3 @@ class ModuleSchema(BaseSchema):
 class CourseOutlineSchema(CommonSchema):
     description: str = Field(description="A brief summary of what the course covers.")
     modules: List[ModuleSchema] = Field(description="A list of course modules, each containing lessons.")
-
-
-class LessonContentSchema(BaseModel):
-    content: str = Field(description="The detailed, comprehensive content for the lesson. Can be left empty in the initial outline.")

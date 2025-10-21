@@ -1,130 +1,150 @@
-import { useEffect, useState, useCallback, type FormEvent } from "react";
-import useWebSocket, { ReadyState } from "react-use-websocket";
+
+import Container from "react-bootstrap/Container";
+import { Button, Col, Form, Row } from "react-bootstrap";
+import { useMutation } from "@tanstack/react-query";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router";
+
+import { generateCourseOutline } from "@/services/course.service";
+import { schema, type AgentFormData } from "@/libs/validations/agent.schema";
 
 const Generator = () => {
-  const WS_URL = import.meta.env.VITE_WS_URL;
+  const navigate = useNavigate();
 
-  const [messageHistory, setMessageHistory] = useState<string[]>([]);
-  const [inputValue, setInputValue] = useState<string>("");
-
-  const { sendMessage, lastMessage, readyState } = useWebSocket(WS_URL, {
-    share: false,
-    shouldReconnect: () => true,
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<AgentFormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      topic: "",
+      level: "Beginner",
+      video: "Yes",
+      duration: "1 Hours",
+      chapters: 1,
+    },
   });
 
-  useEffect(() => {
-    if (lastMessage !== null) {
-      let displayMsg: string;
-      try {
-        const data = JSON.parse(lastMessage.data);
-        if (data.type === "status") {
-          displayMsg = `[STATUS] ${data.message}`;
-        } else if (data.type === "echo_response") {
-          displayMsg = `[ECHO] Received: "${data.original_data.message}"`;
-        } else {
-          displayMsg = `[RAW] ${lastMessage.data}`;
-        }
-      } catch (e) {
-        displayMsg = `[RAW] ${lastMessage.data}`;
-        console.error(e);
-      }
-      setMessageHistory((prev) => [...prev, displayMsg]);
-    }
-  }, [lastMessage]);
+  const mutation = useMutation({
+    mutationFn: generateCourseOutline,
+    onSuccess: () => {
+      navigate(
+        `/tutor/outline`
+      );
+    },
+    onError: (error) => {
+      alert(`Error during generation: ${error.message}`);
+    },
+  });
 
-  const getConnectionStatus = (state: ReadyState): string => {
-    switch (state) {
-      case ReadyState.CONNECTING:
-        return "Connecting";
-      case ReadyState.OPEN:
-        return "Open";
-      case ReadyState.CLOSING:
-        return "Closing";
-      case ReadyState.CLOSED:
-        return "Closed";
-      default:
-        return "Unknown State";
-    }
+  const onSubmit: SubmitHandler<AgentFormData> = (data) => {
+    if (mutation.isPending) return;
+    mutation.mutate(data);
+    console.log(data);
   };
 
-  const connectionStatus = getConnectionStatus(readyState);
-
-  const handleSendTestMessage = useCallback(() => {
-    if (readyState === ReadyState.OPEN && inputValue.trim() !== "") {
-      const messageToSend = JSON.stringify({ message: inputValue.trim() });
-      sendMessage(messageToSend);
-      setMessageHistory((prev) => [
-        ...prev,
-        `[Client] Sent: "${inputValue.trim()}"`,
-      ]);
-      setInputValue("");
-    }
-  }, [inputValue, readyState, sendMessage]);
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    handleSendTestMessage();
-  };
+  const options = ["Beginner", "Intermediate", "Advanced"];
+  const durations = ["1 Hours", "2 Hours", "More than 3 Hours"];
+  const videos = ["Yes", "No"];
 
   return (
-    <div style={{ padding: "20px", maxWidth: "600px", margin: "auto" }}>
-      <p>
-        Status:{" "}
-        <span
-          style={{ color: readyState === ReadyState.OPEN ? "green" : "red" }}
-        >
-          {connectionStatus}
-        </span>
-      </p>
+    <Container className="my-lg-5 my-4">
+      <div className="text-center mb-4">
+        <h1 className="text-light fw-bold">🧠 What can I help you learn?</h1>
+        <p>Enter a topic below to generate a personalized course for it</p>
+      </div>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Enter message..."
-          disabled={readyState !== ReadyState.OPEN}
-          style={{ width: "70%", padding: "8px" }}
-        />
-        <button
+      <Form className="mx-auto col-lg-8" onSubmit={handleSubmit(onSubmit)}>
+        <Form.Group className="mb-3">
+          <Form.Label>
+            💡Write the topic for which you want to generate a course (e.g.,
+            Python, Yoga, etc.):
+          </Form.Label>
+          <Form.Control
+            type="text"
+            {...register("topic")}
+            isInvalid={!!errors.topic}
+            name={"topic"}
+            placeholder="Enter a topic below to generate a personalized course for it"
+          />
+          <Form.Control.Feedback type="invalid">
+            {errors.topic?.message}
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>
+            ✍️ Tell us more about your course, what you want to include in the
+            course (Optional)
+          </Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={3}
+            placeholder="About your course"
+          />
+        </Form.Group>
+
+        <Row className="mb-3">
+          <Col>
+            <Form.Group>
+              <Form.Label>🎓 Level</Form.Label>
+              <Form.Select aria-label="Select">
+                {options.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group>
+              <Form.Label>⏰ Duration</Form.Label>
+              <Form.Select aria-label="Select">
+                {durations.map((duration) => (
+                  <option key={duration} value={duration}>
+                    {duration}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col>
+            <Form.Group>
+              <Form.Label>🎥 Include Video</Form.Label>
+              <Form.Select aria-label="Select">
+                {videos.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group>
+              <Form.Label>📖 Chapters</Form.Label>
+              <Form.Control
+                type="number"
+                defaultValue={1}
+                placeholder="Enter number of chapters"
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Button
+          variant="primary"
           type="submit"
-          disabled={readyState !== ReadyState.OPEN || inputValue.trim() === ""}
-          style={{ padding: "8px 15px", marginLeft: "10px" }}
+          disabled={isSubmitting || mutation.isPending}
         >
-          Send
-        </button>
-      </form>
-
-      <h3>Messages History:</h3>
-      <ul
-        style={{
-          maxHeight: "300px",
-          overflowY: "auto",
-          border: "1px solid #ccc",
-          padding: "10px",
-          listStyleType: "none",
-          marginTop: "10px",
-        }}
-      >
-        {messageHistory
-          .slice()
-          .reverse()
-          .map((msg, idx) => (
-            <li
-              key={idx}
-              style={{
-                color: msg.includes("[STATUS]")
-                  ? "blue"
-                  : msg.includes("[ECHO]")
-                  ? "darkgreen"
-                  : "black",
-              }}
-            >
-              {msg}
-            </li>
-          ))}
-      </ul>
-    </div>
+          {mutation.isPending ? "Generating..." : "Generate"}
+        </Button>
+      </Form>
+    </Container>
   );
 };
 

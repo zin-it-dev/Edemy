@@ -1,0 +1,9 @@
+POST http://localhost:8000/courses/generate/ HTTP/1.1
+content-type: application/json
+
+{
+    "topic": "Python Programming",
+    "duration": "10 hours",
+    "chapters": 5,
+    "level": "Beginner"
+}

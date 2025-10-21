@@ -6,13 +6,15 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.conf import settings
-from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
+from asgiref.sync import async_to_sync
 
+from .schemas import CourseOutlineSchema
 from .mixins import ReadOnlyViewSet
 from .repositories import CategoryRepository
 from .serializers import CategorySerializer, CourseSerializer, CourseGenerationRequestSerializer
 from .models import Course, User
-from .tasks import execute_ai_agent
+from .agent import generate_outline
 from .services import sync_clerk_user
 
 
@@ -41,26 +43,29 @@ class CategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
 class CourseViewSet(ReadOnlyViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+    permission_classes = [AllowAny]
     
     def get_serializer_class(self):
         if self.action == 'generate':
             return CourseGenerationRequestSerializer
         return self.serializer_class
     
-    def get_permissions(self):
-        if self.action == 'generate':
-            permission_classes = [IsAuthenticated]
-        else:
-            permission_classes = [AllowAny]
-        return [permission() for permission in permission_classes]
+    # def get_permissions(self):
+    #     if self.action == 'generate':
+    #         permission_classes = [IsAuthenticated]
+    #     else:
+    #         permission_classes = [AllowAny]
+    #     return [permission() for permission in permission_classes]
     
     @action(methods=['post'], detail=False, url_path='generate')
     def generate(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             data = serializer.validated_data
-            execute_ai_agent.delay(data)
-            return Response(status=status.HTTP_202_ACCEPTED)
+            result = async_to_sync(generate_outline)(data)
+            return Response({"result": result}, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
+                                status=status.HTTP_400_BAD_REQUEST)
+            
+            

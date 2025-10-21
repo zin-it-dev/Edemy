@@ -1,5 +1,4 @@
-# For more information, please refer to https://aka.ms/vscode-docker-python
-FROM python:3-slim
+FROM python:3.12-slim
 
 EXPOSE 8000
 
@@ -17,11 +16,11 @@ WORKDIR /app
 COPY . /app
 
 # Install pip requirements
-RUN pip install --upgrade pip && pip install -r requirements/local.txt
+RUN pip install -r requirements/local.txt
 
 # Make entrypoints executable
-RUN sed -i 's/\r$//g' ./scripts/*.entrypoint.sh
-RUN chmod +x ./scripts/*.entrypoint.sh
+RUN sed -i 's/\r$//g' ./scripts/migrate.entrypoint.sh
+RUN chmod +x ./scripts/migrate.entrypoint.sh
 
 ENTRYPOINT ["./scripts/migrate.entrypoint.sh"]
 

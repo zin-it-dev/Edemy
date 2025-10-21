@@ -1,10 +1,12 @@
 from celery import shared_task
+from django.conf import settings
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_google_genai import ChatGoogleGenerativeAI
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
-from .processes import AIProcessor
+from .agent import generate_outline
 
-
-@shared_task
-def execute_ai_agent(course_id, data):
-    result = AIProcessor().generator_outline(data['topic'], data['level'], data['duration_weeks'])
-    print(result)
-    return {'course_id': course_id, 'result': result}
+@shared_task(bind=True)
+def execute_llm(self, args):    
+    return generate_outline(args)

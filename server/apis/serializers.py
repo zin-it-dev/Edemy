@@ -38,5 +38,6 @@ class CourseSerializer(ModelSerializer):
         
 class CourseGenerationRequestSerializer(serializers.Serializer):
     topic = serializers.CharField(max_length=255, required=True)
-    level = serializers.ChoiceField(choices=['Beginner', 'Intermediate', 'Advanced'], required=True)
-    duration_weeks = serializers.IntegerField(min_value=1, max_value=12, required=True)
+    level = serializers.ChoiceField(choices=['Beginner', 'Intermediate', 'Advanced'])
+    chapters = serializers.IntegerField(min_value=1, max_value=20)
+    duration = serializers.CharField(max_length=100, required=False, allow_blank=True)

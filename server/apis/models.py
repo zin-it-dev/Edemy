@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.text import slugify
@@ -17,7 +19,7 @@ class Model(models.Model):
         
         
 class Common(Model):
-    slug = models.SlugField(unique=True, max_length=255, null=True, help_text="A short label, generally used in URLs.")
+    slug = models.SlugField(help_text="A short label, generally used in URLs.")
     
     class Meta:
         abstract = True
@@ -58,27 +60,18 @@ class Category(Common):
     def __str__(self):
         return self.name
     
-    
-STATUS_CHOICES = [
-    ('PENDING', 'Pending'), 
-    ('PROCESSING', 'Processing'),
-    ('COMPLETED', 'Completed'),
-    ('FAILED', 'Failed'),
-]
-    
+LEVEL_CHOICES = (
+    ('BEGINNER', 'Beginner'),
+    ('INTERMEDIATE', 'Intermediate'),
+    ('ADVANCED', 'Advanced')
+)
+
 class Course(Common):
     name = models.CharField(max_length=255)
     description = models.TextField()
-    status = models.CharField(
-        max_length=10, 
-        choices=STATUS_CHOICES, 
-        default='PENDING'
-    )
-    task_id = models.UUIDField(
-        null=True, 
-        blank=True,
-        unique=True
-    )
+    level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='BEGINNER')
+    # thumbnail = models.URLField(max_length=200, blank=True, null=True)
+    # image = models.ImageField(upload_to='courses/%y/%m/%d', blank=True, null=True)
     
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     # user = models.ForeignKey(User, on_delete=models.CASCADE)
