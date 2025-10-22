@@ -18,9 +18,6 @@ system_message = """
             The course MUST be comprehensive and cover all necessary aspects of the topic.
             [CONSTRAINTS]
             - Topic: {topic}
-            {level}
-            {duration}
-            {chapter}
             [/CONSTRAINTS]
         """
 
@@ -32,7 +29,7 @@ propmt = ChatPromptTemplate.from_messages(
         ),
         (
             "human",
-            "{topic} {level} {duration} {chapter}",
+            "{topic} {duration} {chapter} {level}",
         ), 
     ]
 )
@@ -40,7 +37,7 @@ propmt = ChatPromptTemplate.from_messages(
 structured_llm_json = llm.with_structured_output(CourseOutlineSchema, method="json_mode")
 
 
-async def generate_outline(data):   
+def generate_outline(data):   
     topic = data.get("topic")
     
     duration = (
@@ -64,7 +61,7 @@ async def generate_outline(data):
 
     chain = propmt | structured_llm_json
     
-    response = await chain.ainvoke(template)
+    response = chain.invoke(template)
     result = response.model_dump(exclude_none=True)
     
     return result

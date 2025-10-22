@@ -1,7 +1,11 @@
 import React from "react";
 
-const Greeting: React.FC<{ name: string }> = ({ name }: { name: string }) => {
-  return <h2 className="fw-bold">Welcome to Edemy, <strong className="text-primary">{name}</strong></h2>;
+type GreetingProps = {
+  name: string;
+}
+
+const Greeting: React.FC<GreetingProps> = (props: GreetingProps) => {
+  return <h4 className="fw-bold">Welcome to Edemy, <strong className="text-primary">{props.name}</strong></h4>;
 };
 
 export default Greeting;

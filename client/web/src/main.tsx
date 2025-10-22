@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import "bootswatch/dist/vapor/bootstrap.min.css";
 
@@ -17,9 +17,11 @@ const root = document.getElementById("root") as HTMLElement;
 
 createRoot(root!).render(
   <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY} signInUrl="/">
       <QueryProvider>
-        <App />
+        <Suspense fallback={<p>Loading...</p>}>
+          <App />
+        </Suspense>
       </QueryProvider>
     </ClerkProvider>
   </StrictMode>

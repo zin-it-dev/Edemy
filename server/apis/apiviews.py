@@ -7,15 +7,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.conf import settings
 from rest_framework.views import APIView
-from asgiref.sync import async_to_sync
+from celery.result import AsyncResult
 
 from .schemas import CourseOutlineSchema
 from .mixins import ReadOnlyViewSet
 from .repositories import CategoryRepository
 from .serializers import CategorySerializer, CourseSerializer, CourseGenerationRequestSerializer
 from .models import Course, User
-from .agent import generate_outline
 from .services import sync_clerk_user
+from .tasks import execute_llm
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -41,7 +41,7 @@ class CategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     
     
 class CourseViewSet(ReadOnlyViewSet):
-    queryset = Course.objects.all()
+    queryset = Course.objects.filter(user__is_staff=True).all()
     serializer_class = CourseSerializer
     permission_classes = [AllowAny]
     
@@ -50,22 +50,35 @@ class CourseViewSet(ReadOnlyViewSet):
             return CourseGenerationRequestSerializer
         return self.serializer_class
     
-    # def get_permissions(self):
-    #     if self.action == 'generate':
-    #         permission_classes = [IsAuthenticated]
-    #     else:
-    #         permission_classes = [AllowAny]
-    #     return [permission() for permission in permission_classes]
+    def get_permissions(self):
+        if self.action in ['generate', 'status', 'my_courses']:
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
     
     @action(methods=['post'], detail=False, url_path='generate')
     def generate(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             data = serializer.validated_data
-            result = async_to_sync(generate_outline)(data)
-            return Response({"result": result}, status=status.HTTP_200_OK)
+            task = execute_llm.delay(data)
+            return Response({"task_id": task.id, 'status': task.status}, status=status.HTTP_202_ACCEPTED)
         else:
-            return Response(serializer.errors,
-                                status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
-            
+    @action(methods=['get'], detail=False, url_path='status/(?P<task_id>[^/.]+)')
+    def status(self, request, task_id=None):
+        result = AsyncResult(task_id)
+        response = {
+            "status": result.status,
+            "result": None
+        }
+        if result.successful():
+            response["result"] = result.get() 
+        return Response(response, status=status.HTTP_200_OK)
+
+    @action(methods=['get'], detail=False, url_path='my-courses')
+    def my_courses(self, request):
+        response = Course.objects.filter(user=request.user)
+        return Response(self.serializer_class(response).data, status=status.HTTP_200_OK)

@@ -14,7 +14,7 @@ const DashboardLayout: React.FC = () => {
       <div className="flex-grow-1 d-flex flex-column overflow-y-auto overflow-x-hidden">
         <DashboardHeader />
         
-        <main className="p-4 p-sm-5 flex-1">
+        <main className="p-3 p-sm-5 flex-1">
           <Outlet />
         </main>
       </div>

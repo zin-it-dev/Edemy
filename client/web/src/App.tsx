@@ -1,30 +1,40 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
 
-import Home from "@/pages/Home";
-import RootLayout from "./components/layouts/RootLayout";
-import AuthLayout from "./components/layouts/AuthLayout";
+import RootLayout from "@/components/layouts/RootLayout";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
-import Generator from "./pages/Generator";
-import Dashboard from "./pages/Dashboard";
-import GeneratorOutlet from "./pages/GeneratorOutlet";
+import PublicGuard from "./components/guards/PublicGuard";
+import PrivateGuard from "./components/guards/PrivateGuard";
+import { NOT_FOUND_ROUTE, PRIVATE_ROUTES, PUBLIC_ROUTES } from "@/routes/routes";
+import ErrorLayout from "./components/layouts/ErrorLayout";
 
 const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<RootLayout />}>
-          <Route path="/" element={<Home />} />
-        </Route>
+        {PUBLIC_ROUTES.map((route) => {
+          return (
+            <Route element={<PublicGuard />}>
+              <Route key={route.path} element={<RootLayout />}>
+                <Route path={route.path} element={<route.component />} />
+              </Route>
+            </Route>
+          );
+        })}
 
-        <Route element={<AuthLayout />}>
-          <Route element={<DashboardLayout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-          </Route>
-          <Route element={<RootLayout />}>
-            <Route path="/tutor" element={<Generator />} />
-            <Route path="/tutor/outline" element={<GeneratorOutlet />} />
-          </Route>
+        {PRIVATE_ROUTES.map((route) => {
+          const Layout = route.layout !== null ? RootLayout : DashboardLayout;
+          return (
+            <Route element={<PrivateGuard />}>
+              <Route element={<Layout />}>
+                <Route path={route.path} element={<route.component />} />
+              </Route>
+            </Route>
+          );
+        })}
+
+        <Route element={<ErrorLayout />}>
+          <Route path={NOT_FOUND_ROUTE.path} element={<NOT_FOUND_ROUTE.component />} />
         </Route>
       </Routes>
     </BrowserRouter>
