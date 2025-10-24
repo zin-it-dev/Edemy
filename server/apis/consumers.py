@@ -2,8 +2,6 @@ import json
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from .tasks import execute_llm
-
 class GeneratorConsumer(AsyncWebsocketConsumer):  
     async def connect(self):
         self.group_name = "agent"
