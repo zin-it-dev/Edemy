@@ -4,10 +4,14 @@ from django.urls import path, re_path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
 urlpatterns = [
+    path("i18n/", include("django.conf.urls.i18n"), name="set_language"),
     path('admin/', admin.site.urls),
     
     # APIs
     re_path(r'^', include('apis.urls')),
+    
+    # CKEditor
+    re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
     
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     
