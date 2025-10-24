@@ -74,6 +74,10 @@ class User(AbstractUser):
 
         
 class Category(Common):
+    """
+    Stores a category entry :model:`apis.Category`.
+    """
+    
     name = models.CharField(unique=True, max_length=80)
     
     class Meta:

@@ -35,7 +35,8 @@ ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(",")
 # Application definition
 INSTALLED_APPS = [
     'jazzmin',
-    'django.contrib.admin',
+    'django.contrib.admindocs',
+    "core.apps.AdminConfig",
     "daphne",
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,13 +48,16 @@ INSTALLED_APPS = [
     'drf_spectacular_sidecar',
     'rest_framework',
     'adrf',
+    'chartjs',
     'corsheaders',
     'django_celery_beat',
     'django_celery_results',
     'cloudinary',
     'cloudinary_storage',
     'ckeditor',
-    'ckeditor_uploader'
+    'ckeditor_uploader',
+    'import_export',
+    'django_pdf_actions'
 ]
 
 REST_FRAMEWORK = {
@@ -197,6 +201,8 @@ LOGIN_URL = '/admin/login/'
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
 MEDIA_URL = '/media/' 
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
@@ -313,22 +319,17 @@ JAZZMIN_SETTINGS = {
     # Whether to aut expand the menu
     "navigation_expanded": True,
 
-    # Custom links to append to app groups, keyed on app name
-    "custom_links": {
-        # "books": [{
-        #     "name": "Make Messages", 
-        #     "url": "make_messages", 
-        #     "icon": "fas fa-comments",
-        #     "permissions": ["books.view_book"]
-        # }]
-    },
-
     # Custom icons for side menu apps/models See https://fontawesome.com/icons?d=gallery&m=free&v=5.0.0,5.0.1,5.0.10,5.0.11,5.0.12,5.0.13,5.0.2,5.0.3,5.0.4,5.0.5,5.0.6,5.0.7,5.0.8,5.0.9,5.1.0,5.1.1,5.2.0,5.3.0,5.3.1,5.4.0,5.4.1,5.4.2,5.13.0,5.12.0,5.11.2,5.11.1,5.10.0,5.9.0,5.8.2,5.8.1,5.7.2,5.7.1,5.7.0,5.6.3,5.5.0,5.4.2
     # for the full list of 5.13.0 free icon classes
     "icons": {
         "auth": "fas fa-users-cog",
         "apis.User": "fas fa-user",
         "auth.Group": "fas fa-users",
+        "auth.Permission": "fa fa-shield",
+        "apis.Category": "fa-folder",
+        "apis.Course": "fas fa-book",
+        "apis.Lesson": "fas fa-chalkboard-teacher",
+        "apis.Module": "fas fa-cogs",
     },
     # Icons that are used when one is not manually specified
     "default_icon_parents": "fas fa-chevron-circle-right",
@@ -355,7 +356,16 @@ JAZZMIN_SETTINGS = {
     # override change forms on a per modeladmin basis
     "changeform_format_overrides": {"apis.User": "collapsible", "auth.Group": "vertical_tabs"},
     # Add a language dropdown into the admin
-    "language_chooser": True
+    "language_chooser": True,
+    
+    # Custom links to append to app groups, keyed on app name
+    "custom_links": {
+        "apis": [{
+            "name": _("Charts"), 
+            "url": "admin_statistics", 
+            "icon": "fa fa-pie-chart",
+        }]
+    },
 }
 
 JAZZMIN_UI_TWEAKS = {
@@ -381,3 +391,6 @@ CKEDITOR_CONFIGS = {
         'filebrowserUploadUrl': '/ckeditor/upload/',
     },
 }
+
+# Import Export
+IMPORT_EXPORT_SKIP_ADMIN_CONFIRM = True
