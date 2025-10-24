@@ -33,9 +33,10 @@ DEBUG = bool(os.environ.get('DJANGO_DEBUG', default=True))
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(",")
 
 # Application definition
-
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'jazzmin',
+    'django.contrib.admindocs',
+    "core.apps.AdminConfig",
     "daphne",
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,25 +47,21 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'drf_spectacular_sidecar',
     'rest_framework',
+    'adrf',
+    'chartjs',
     'corsheaders',
     'django_celery_beat',
     'django_celery_results',
-    'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist'
+    'cloudinary',
+    'cloudinary_storage',
+    'ckeditor',
+    'ckeditor_uploader',
+    'import_export',
+    'django_pdf_actions'
 ]
-
-from datetime import timedelta
-
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "ROTATE_REFRESH_TOKENS": False,
-    "BLACKLIST_AFTER_ROTATION": False,
-}
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
@@ -73,6 +70,11 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
     'TEST_REQUEST_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer'
     ]
@@ -103,6 +105,7 @@ SPECTACULAR_SETTINGS = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -168,6 +171,21 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
+from django.utils.translation import gettext_lazy as _
+
+LANGUAGES = (
+    ('en', _('English')),
+    ('fr', _('French')),
+    ('es', _('Spanish')),
+    ('vi', _('Vietnamese')),
+    ('ko', _('Korean')),
+    ('ja', _('Japanese')),
+    ('zh-hans', _('Chinese (Simplified)')),
+    ('zh-hant', _('Chinese (Traditional)')),
+)
+
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Ho_Chi_Minh'
@@ -182,6 +200,12 @@ LOGIN_URL = '/admin/login/'
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+MEDIA_URL = '/media/' 
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -221,3 +245,152 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+# RAPIDAPI
+RAPIDAPI_HEADERS = {
+    "x-rapidapi-key": os.environ.get("RAPIDAPI_KEY"),
+    "x-rapidapi-host": os.environ.get("RAPIDAPI_HOST"),
+}
+
+# JAZZMIN
+JAZZMIN_SETTINGS = {
+    # title of the window (Will default to current_admin_site.site_title if absent or None)
+    "site_title": "Edemy",
+
+    # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_header": "Edemy",
+
+    # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_brand": "Edemy",
+
+    # Logo to use for your site, must be present in static files, used for brand on top left
+    "site_logo": "images/logo.svg",
+
+    # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
+    "login_logo": None,
+
+    # Logo to use for login form in dark themes (defaults to login_logo)
+    "login_logo_dark": None,
+
+    # CSS classes that are applied to the logo above
+    "site_logo_classes": "img-circle",
+
+    # Relative path to a favicon for your site, will default to site_logo if absent (ideally 32x32 px)
+    "site_icon": None,
+
+    # Welcome text on the login screen
+    "welcome_sign": "Welcome to the Edemy",
+
+    # Copyright on the footer
+    "copyright": "ZIN",
+
+    # List of model admins to search from the search bar, search bar omitted if excluded
+    # If you want to use a single search field you dont need to use a list, you can use a simple string 
+    "search_model": ["apis.Course", "apis.Lesson"],
+
+    # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
+    "user_avatar": "picture",
+
+    ############
+    # Top Menu #
+    ############
+
+    # Links to put along the top menu
+    "topmenu_links": [
+        {"name": _("Support"), "url": "https://github.com/zin-it-dev/Edemy/issues", "new_window": True},
+    ],
+
+    #############
+    # User Menu #
+    #############
+
+    # Additional links to include in the user menu on the top right ("app" url type is not allowed)
+    "usermenu_links": [
+        {"name": _("Support"), "url": "https://github.com/zin-it-dev/Edemy/issues", "new_window": True},
+    ],
+
+    #############
+    # Side Menu #
+    #############
+
+    # Whether to display the side menu
+    "show_sidebar": True,
+
+    # Whether to aut expand the menu
+    "navigation_expanded": True,
+
+    # Custom icons for side menu apps/models See https://fontawesome.com/icons?d=gallery&m=free&v=5.0.0,5.0.1,5.0.10,5.0.11,5.0.12,5.0.13,5.0.2,5.0.3,5.0.4,5.0.5,5.0.6,5.0.7,5.0.8,5.0.9,5.1.0,5.1.1,5.2.0,5.3.0,5.3.1,5.4.0,5.4.1,5.4.2,5.13.0,5.12.0,5.11.2,5.11.1,5.10.0,5.9.0,5.8.2,5.8.1,5.7.2,5.7.1,5.7.0,5.6.3,5.5.0,5.4.2
+    # for the full list of 5.13.0 free icon classes
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "apis.User": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "auth.Permission": "fa fa-shield",
+        "apis.Category": "fa-folder",
+        "apis.Course": "fas fa-book",
+        "apis.Lesson": "fas fa-chalkboard-teacher",
+        "apis.Module": "fas fa-cogs",
+    },
+    # Icons that are used when one is not manually specified
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+
+    #############
+    # UI Tweaks #
+    #############
+    # Whether to link font from fonts.googleapis.com (use custom_css to supply font otherwise)
+    "use_google_fonts_cdn": True,
+    # Whether to show the UI customizer on the sidebar
+    "show_ui_builder": True,
+
+    ###############
+    # Change view #
+    ###############
+    # Render out the change view as a single form, or in tabs, current options are
+    # - single
+    # - horizontal_tabs (default)
+    # - vertical_tabs
+    # - collapsible
+    # - carousel
+    "changeform_format": "horizontal_tabs",
+    # override change forms on a per modeladmin basis
+    "changeform_format_overrides": {"apis.User": "collapsible", "auth.Group": "vertical_tabs"},
+    # Add a language dropdown into the admin
+    "language_chooser": True,
+    
+    # Custom links to append to app groups, keyed on app name
+    "custom_links": {
+        "apis": [{
+            "name": _("Charts"), 
+            "url": "admin_statistics", 
+            "icon": "fa fa-pie-chart",
+        }]
+    },
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "lux",
+    "dark_mode_theme": "darkly",
+}
+
+# Cloudinary
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET')
+}
+
+# CKEditor
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_STORAGE_BACKEND = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'extraPlugins': 'uploadimage',
+        'filebrowserUploadUrl': '/ckeditor/upload/',
+    },
+}
+
+# Import Export
+IMPORT_EXPORT_SKIP_ADMIN_CONFIRM = True

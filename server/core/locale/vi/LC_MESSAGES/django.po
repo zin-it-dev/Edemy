@@ -1,0 +1,117 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-25 02:00+0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: .\apis\admin.py:18 .\apis\admin.py:42
+msgid "Personal info"
+msgstr "Thông tin cá nhân"
+
+#: .\apis\admin.py:20 .\apis\admin.py:44
+msgid "Permissions"
+msgstr "Phân quyền"
+
+#: .\apis\admin.py:32
+msgid "Important dates"
+msgstr "Ngày quan trọng"
+
+#: .\apis\models.py:15
+msgid "active"
+msgstr ""
+
+#: .\apis\models.py:18
+msgid ""
+"Designates whether this item should be treated as active. Unselect this "
+"instead of deleting items."
+msgstr ""
+
+#: .\apis\models.py:23
+msgid "created on"
+msgstr ""
+
+#: .\apis\models.py:27
+msgid "changed on"
+msgstr ""
+
+#: .\apis\models.py:38
+msgid "A short label, generally used in URLs."
+msgstr ""
+
+#: .\apis\models.py:52
+msgid "Admin"
+msgstr ""
+
+#: .\apis\models.py:53
+msgid "User"
+msgstr ""
+
+#: .\apis\models.py:64
+msgid "Avatar"
+msgstr ""
+
+#: .\apis\models.py:78
+msgid "Categories"
+msgstr "Các danh mục"
+
+#: .\apis\models.py:100
+msgid "Courses"
+msgstr ""
+
+#: .\apis\models.py:112
+msgid "Modules"
+msgstr ""
+
+#: .\apis\models.py:123
+msgid "Lessons"
+msgstr ""
+
+#: .\core\settings\base.py:169
+msgid "English"
+msgstr ""
+
+#: .\core\settings\base.py:170
+msgid "French"
+msgstr ""
+
+#: .\core\settings\base.py:171
+msgid "Spanish"
+msgstr ""
+
+#: .\core\settings\base.py:172
+msgid "Vietnamese"
+msgstr ""
+
+#: .\core\settings\base.py:173
+msgid "Korean"
+msgstr ""
+
+#: .\core\settings\base.py:174
+msgid "Japanese"
+msgstr ""
+
+#: .\core\settings\base.py:175
+msgid "Chinese (Simplified)"
+msgstr ""
+
+#: .\core\settings\base.py:176
+msgid "Chinese (Traditional)"
+msgstr ""
+
+#: .\core\settings\base.py:286 .\core\settings\base.py:295
+msgid "Support"
+msgstr "Hỗ trợ"

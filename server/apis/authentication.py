@@ -2,10 +2,11 @@ import requests, logging
 
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
+from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 from jose import jwt, jwk
 
-from .models import User
+from .repositories import UserRepository
 
 logger = logging.getLogger(__name__)
 
@@ -51,11 +52,11 @@ class ClerkAuthentication(BaseAuthentication):
 
             clerk_id = payload.get('sub')
             
-            user = User.objects.get(clerk_id=clerk_id, is_active=True)
+            user = UserRepository().get_by_clerk_id(clerk_id)
             
             return (user, token)
             
-        except User.DoesNotExist:
+        except ObjectDoesNotExist:
             raise AuthenticationFailed('User account not synchronized or inactive.')
         except StopIteration:
             raise AuthenticationFailed('Invalid key ID in token header.')

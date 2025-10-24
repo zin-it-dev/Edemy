@@ -2,6 +2,7 @@ from django.urls import path, include
 from rest_framework_nested import routers
 
 from .apiviews import CategoryViewSet, CourseViewSet, ClerkWebhookAPIView
+from .views import LineChartJSONView
 
 app_name = "apis"
 
@@ -13,4 +14,7 @@ urlpatterns = [
     path('', include(router.urls)),
     
     path('webhooks/', ClerkWebhookAPIView.as_view(), name='clerk_webhook'),
+    
+    # Charts
+    path('chart/courses', LineChartJSONView.as_view()),
 ]
