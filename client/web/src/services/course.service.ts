@@ -22,11 +22,3 @@ export type Outline = {
   };
 };
 
-export const fetchTaskStatus = async (taskId: string): Promise<Outline> => {
-  if (!taskId) {
-    throw new Error("Task ID is required for fetching status.");
-  }
-  const response = await axios.get(`/courses/status/${taskId}/`);
-  console.log("Fetch Task Status Response:", response.data);
-  return response.data;
-};

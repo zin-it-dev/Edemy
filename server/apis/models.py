@@ -3,9 +3,9 @@ import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.text import slugify
+from unidecode import unidecode
 from django.contrib import admin
 from django.utils.html import mark_safe
-from unidecode import unidecode
 
 from .utils import gravatar_url
 
@@ -19,7 +19,7 @@ class Model(models.Model):
         
         
 class Common(Model):
-    slug = models.SlugField(help_text="A short label, generally used in URLs.")
+    slug = models.SlugField(max_length=255, help_text="A short label, generally used in URLs.")
     
     class Meta:
         abstract = True
@@ -59,17 +59,16 @@ class Category(Common):
     
     def __str__(self):
         return self.name
-    
-LEVEL_CHOICES = (
-    ('BEGINNER', 'Beginner'),
-    ('INTERMEDIATE', 'Intermediate'),
-    ('ADVANCED', 'Advanced')
-)
 
 class Course(Common):
+    class Level(models.TextChoices):
+        BEGINNER = 'BEGINNER', 'Beginner',
+        INTERMEDIATE = 'INTERMEDIATE', 'Intermediate',
+        ADVANCED = 'ADVANCED', 'Advanced'
+        
     name = models.CharField(max_length=255)
     description = models.TextField()
-    level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='BEGINNER')
+    level = models.CharField(max_length=20, choices=Level.choices, default=Level.BEGINNER)
     # thumbnail = models.URLField(max_length=200, blank=True, null=True)
     # image = models.ImageField(upload_to='courses/%y/%m/%d', blank=True, null=True)
     
@@ -82,22 +81,18 @@ class Course(Common):
     
 class Module(Model):
     name = models.CharField(max_length=255)
-    order = models.PositiveIntegerField()
     
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='modules')
     
     class Meta:
-        ordering = ['order']
-        unique_together = ['course', 'order']
+        unique_together = ['course', 'name']
         
         
 class Lesson(Common):
     name = models.CharField(max_length=255)
-    order = models.PositiveIntegerField()
     content = models.TextField(blank=True)
     
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='lessons')
 
     class Meta:
-        ordering = ['module__order', 'order']
-        unique_together = ['module', 'order']
+        unique_together = ['module', 'name']

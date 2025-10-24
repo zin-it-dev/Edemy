@@ -36,7 +36,7 @@ class CourseSerializer(ModelSerializer):
         fields = ModelSerializer.Meta.fields + ['name', 'description', 'modules']
         
         
-class CourseGenerationRequestSerializer(serializers.Serializer):
+class AgentSerializer(serializers.Serializer):
     topic = serializers.CharField(max_length=255, required=True)
     level = serializers.ChoiceField(choices=['Beginner', 'Intermediate', 'Advanced'])
     chapters = serializers.IntegerField(min_value=1, max_value=20)

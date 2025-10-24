@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from adrf.viewsets import ReadOnlyModelViewSet
 
-class ReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
+class ReadOnlyViewSet(ReadOnlyModelViewSet):
     lookup_field = "slug"

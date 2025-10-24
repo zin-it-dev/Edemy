@@ -46,21 +46,11 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'drf_spectacular_sidecar',
     'rest_framework',
+    'adrf',
     'corsheaders',
     'django_celery_beat',
-    'django_celery_results',
-    'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist'
+    'django_celery_results'
 ]
-
-from datetime import timedelta
-
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "ROTATE_REFRESH_TOKENS": False,
-    "BLACKLIST_AFTER_ROTATION": False,
-}
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
@@ -220,4 +210,10 @@ CHANNEL_LAYERS = {
             "hosts": [("redis", 6379)],
         },
     },
+}
+
+# RAPIDAPI
+RAPIDAPI_HEADERS = {
+    "x-rapidapi-key": os.environ.get("RAPIDAPI_KEY"),
+    "x-rapidapi-host": os.environ.get("RAPIDAPI_HOST"),
 }

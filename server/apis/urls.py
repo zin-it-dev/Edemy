@@ -12,5 +12,5 @@ router.register(r'courses', CourseViewSet, basename='course')
 urlpatterns = [
     path('', include(router.urls)),
     
-    path('webhooks/', ClerkWebhookAPIView.as_view(), name='clerk_webhook'),
+    path('webhooks/', ClerkWebhookAPIView.as_view(), name='clerk_webhook')
 ]
