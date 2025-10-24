@@ -8,6 +8,6 @@ Discover and learn about any topic 🔖
 
 ### Resources 👇
 
-- **Documents:** [Wiki](https://github.com/zin-it-dev/Edemy.wiki.git)
+- **Documents:** [Wiki](https://github.com/zin-it-dev/Edemy/wiki)
 
 - **License:** [MIT](https://github.com/zin-it-dev/Edemy?tab=MIT-1-ov-file#readme)
