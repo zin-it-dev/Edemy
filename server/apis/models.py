@@ -69,8 +69,6 @@ class Course(Common):
     name = models.CharField(max_length=255)
     description = models.TextField()
     level = models.CharField(max_length=20, choices=Level.choices, default=Level.BEGINNER)
-    # thumbnail = models.URLField(max_length=200, blank=True, null=True)
-    # image = models.ImageField(upload_to='courses/%y/%m/%d', blank=True, null=True)
     
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Image } from 'react-bootstrap';
 
-import { assets } from '@/utils/assets';
+import { assets } from '@/utils/constants';
 
 interface ILogoProps {
     size: number;

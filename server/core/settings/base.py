@@ -25,107 +25,109 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get('DJANGO_DEBUG', default=True))
+DEBUG = bool(os.environ.get("DJANGO_DEBUG", default=True))
 
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(",")
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(",")
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    "django.contrib.admin",
     "daphne",
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'apis.apps.ApisConfig',
-    'drf_spectacular',
-    'drf_spectacular_sidecar',
-    'rest_framework',
-    'adrf',
-    'corsheaders',
-    'django_celery_beat',
-    'django_celery_results'
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "apis.apps.ApisConfig",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
+    "rest_framework",
+    "adrf",
+    "corsheaders",
+    "django_celery_beat",
+    "django_celery_results",
+    "django_filters",
+    "django_elasticsearch_dsl"
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
     ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'apis.authentication.ClerkAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "apis.authentication.ClerkAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     ],
-    'TEST_REQUEST_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer'
-    ]
+    "ORDERING_PARAM": "ordering",
+    "TEST_REQUEST_DEFAULT_FORMAT": "json",
+    "TEST_REQUEST_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
 }
 
 # Swagger
 SPECTACULAR_SETTINGS = {
-    'COMPONENT_SPLIT_REQUEST': True,
-    'TITLE': 'Edemy APIs 🎓',
-    'DESCRIPTION': 'Discover and learn about any topic 🔖',
-    'VERSION': '1.0.0',
-    'LICENCE': {'name': 'MIT License'},
-    'CONTACT': {'name': 'ZIN', 'email': 'zin.it.dev@gmail.com'},
-    'SERVE_INCLUDE_SCHEMA': False,
-    'SWAGGER_UI_DIST': 'SIDECAR',
-    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
-    'REDOC_DIST': 'SIDECAR',
-    'SWAGGER_UI_SETTINGS': {
-        'deepLinking': True,
+    "COMPONENT_SPLIT_REQUEST": True,
+    "TITLE": "Edemy APIs 🎓",
+    "DESCRIPTION": "Discover and learn about any topic 🔖",
+    "VERSION": "1.0.0",
+    "LICENCE": {"name": "MIT License"},
+    "CONTACT": {"name": "ZIN", "email": "zin.it.dev@gmail.com"},
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_DIST": "SIDECAR",
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
         "persistAuthorization": True,
         "displayOperationId": True,
-        "displayRequestDuration": True
+        "displayRequestDuration": True,
     },
-    'UPLOADED_FILES_USE_URL': True,
-    'SCHEMA_PATH_PREFIX_TRIM': True,
+    "UPLOADED_FILES_USE_URL": True,
+    "SCHEMA_PATH_PREFIX_TRIM": True,
 }
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'core.urls'
+ROOT_URLCONF = "core.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'core.wsgi.application'
+WSGI_APPLICATION = "core.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    "default": {
         "ENGINE": f"django.db.backends.{os.environ.get('POSTGRES_ENGINE', default='sqlite3')}",
         "NAME": os.environ.get("POSTGRES_DB", BASE_DIR / "db.sqlite3"),
         "USER": os.environ.get("POSTGRES_USER"),
@@ -141,16 +143,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -158,29 +160,29 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'Asia/Ho_Chi_Minh'
+TIME_ZONE = "Asia/Ho_Chi_Minh"
 
 USE_I18N = True
 
 USE_TZ = True
 
-LOGIN_URL = '/admin/login/' 
+LOGIN_URL = "/admin/login/"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOW_CREDENTIALS = True
 
-AUTH_USER_MODEL = 'apis.User'
+AUTH_USER_MODEL = "apis.User"
 
 # Celery
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
@@ -189,19 +191,19 @@ CELERY_TIMEZONE = "Asia/Ho_Chi_Minh"
 CELERY_RESULT_EXTENDED = True
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
 
 # Google Gemini
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 
 # Clerk
-CLERK_WEBHOOK_SECRET = os.environ.get('CLERK_WEBHOOK_SECRET')
-CLERK_JWKS_URL = os.environ.get('CLERK_JWKS_URL')
+CLERK_WEBHOOK_SECRET = os.environ.get("CLERK_WEBHOOK_SECRET")
+CLERK_JWKS_URL = os.environ.get("CLERK_JWKS_URL")
 
 # Channels
-ASGI_APPLICATION = 'core.asgi.application'
+ASGI_APPLICATION = "core.asgi.application"
 
 CHANNEL_LAYERS = {
     "default": {
@@ -216,4 +218,11 @@ CHANNEL_LAYERS = {
 RAPIDAPI_HEADERS = {
     "x-rapidapi-key": os.environ.get("RAPIDAPI_KEY"),
     "x-rapidapi-host": os.environ.get("RAPIDAPI_HOST"),
+}
+
+# Elasticsearch
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": os.environ.get('ELASTICSEARCH_URL')
+    },
 }
