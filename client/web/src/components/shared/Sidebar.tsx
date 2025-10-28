@@ -1,28 +1,14 @@
 import React from "react";
 import { Button, Card, Nav, ProgressBar } from "react-bootstrap";
 import {
-  HiOutlineHome,
-  HiOutlineShieldCheck,
-  HiOutlineSquare3Stack3D,
+  HiOutlineShieldCheck
 } from "react-icons/hi2";
 import { NavLink } from "react-router";
 
 import Logo from "../ui/Logo";
+import { menu } from "@/utils/constants";
 
 const Sidebar: React.FC = () => {
-  const menu = [
-    {
-      path: "/dashboard",
-      name: "Dashboard",
-      icon: <HiOutlineHome size={20} />,
-    },
-    {
-      path: "/dashboard/explore",
-      name: "Explore",
-      icon: <HiOutlineSquare3Stack3D size={20} />,
-    }
-  ];
-
   return (
     <div
       className="d-flex flex-column justify-content-between border-end bg-dark vh-100"
@@ -47,7 +33,7 @@ const Sidebar: React.FC = () => {
               as={NavLink}
               className="d-flex align-items-center gap-2"
             >
-              {item.icon} {item.name}
+              {<item.icon size={20} />} {item.name}
             </Nav.Link>
           ))}
         </Nav>

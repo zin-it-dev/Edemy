@@ -47,6 +47,17 @@ services:
     ports:
       - 6379:6379
 
+  elasticsearch:
+    container_name: elasticsearch
+    image: elasticsearch:7.14.2
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+
   db:
     image: postgres:15
     volumes:
@@ -67,7 +78,9 @@ services:
     depends_on:
       - db
       - redis
+      - elasticsearch
 
 volumes:
   postgres_data:
   redis_data:
+  esdata:

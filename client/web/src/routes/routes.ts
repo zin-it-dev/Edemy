@@ -8,6 +8,10 @@ export const PRIVATE_ROUTES: RouteType[] = [
     layout: null,
   },
   {
+    path: "/dashboard/explore",
+    component: lazy(() => import("@/pages/Explore")),
+  },
+  {
     path: "/tutor",
     component: lazy(() => import("@/pages/Generator")),
   },

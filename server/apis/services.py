@@ -1,4 +1,5 @@
 from .models import User
+from .repositories import UserRepository
 
 def sync_clerk_user(event):
     type = event.get('type')
@@ -20,15 +21,13 @@ def sync_clerk_user(event):
         last_name = data.get('last_name')
         picture = data.get('image_url')
         
-        User.objects.update_or_create(
-            clerk_id=clerk_id, 
-            defaults={
-                'username': f'clerk_{clerk_id}',
-                'email': primary_email,
-                'first_name': first_name,
-                'last_name': last_name,
-                'picture': picture
-            }
+        UserRepository().create_or_update_user(
+            clerk_id=clerk_id,
+            username=f'clerk_{clerk_id}',
+            email=primary_email,
+            first_name=first_name,
+            last_name=last_name,
+            picture=picture
         )
     elif type == 'user.deleted':
-        User.objects.filter(clerk_id=clerk_id).update(is_active=False)
+        UserRepository().delete_by_clerk_id(clerk_id)

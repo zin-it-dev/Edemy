@@ -2,7 +2,7 @@ POST http://localhost:8000/courses/generate/ HTTP/1.1
 content-type: application/json
 
 {
-    "topic": "Python Programming",
+    "topic": "Machine Learning cơ bản",
     "duration": "10 hours",
     "chapters": 5,
     "level": "Beginner"
