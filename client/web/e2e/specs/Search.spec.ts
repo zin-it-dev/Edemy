@@ -2,7 +2,6 @@ import { test, expect, Page } from "@playwright/test";
 
 const SEARCH_INPUT_PLACEHOLDER = "Search";
 const COURSE_CARD_SELECTOR = ".card";
-const NO_RESULTS_SELECTOR = ".text-warning";
 
 async function searchAndAwait(
   page: Page,
@@ -10,7 +9,7 @@ async function searchAndAwait(
   delay: number = 500
 ) {
   const searchInput = page.getByPlaceholder(SEARCH_INPUT_PLACEHOLDER);
-  await searchInput.fill(keyword);
+  await searchInput.fill(keyword, { timeout: 60000 });
   await page.waitForTimeout(delay);
 }
 

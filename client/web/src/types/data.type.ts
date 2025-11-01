@@ -5,3 +5,10 @@ export type MenuType = {
     name: string;
     icon: ComponentType<any>;
 }
+
+export type FeatureType = {
+    title: string;
+    icon: ComponentType<any>;
+    description: string;
+    benefit: string;
+}

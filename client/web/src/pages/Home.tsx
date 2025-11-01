@@ -8,6 +8,7 @@ import { useCategories } from "@/hooks/useCategories";
 import { useCourses } from "@/hooks/useCourses";
 import Search from "@/components/ui/Search";
 import Paginator from "@/components/ui/Paginator";
+import Features from "@/components/ui/Features";
 
 const Home: React.FC = () => {
   const { data } = useCourses();
@@ -15,9 +16,16 @@ const Home: React.FC = () => {
 
   return (
     <>
+      {/* Hero */}
       <Hero />
 
       <Container>
+        {/* Features */}
+        <section className="mt-4 mb-5">
+          <h3 className="fw-bold">Features</h3>
+          <Features />
+        </section>
+
         {/* Official Courses */}
         <section className="mt-4 mb-5">
           <div className="d-flex justify-content-between align-items-center py-2">
