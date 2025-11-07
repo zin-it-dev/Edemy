@@ -37,3 +37,11 @@ jobs:
       - name: Unit tests
         run: pytest
         working-directory: ./server
+      - name: Deploy to Production
+        if: ${{ success() }}
+        run: |
+          echo "Deploying to production..."
+      - name: Notify on Failure
+        if: ${{ failure() }}
+        run: |
+          echo "Build failed! Sending notification..."
