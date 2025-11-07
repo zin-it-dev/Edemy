@@ -6,11 +6,12 @@ on:
   pull_request:
     branches: ["main", "develop"]
 
+env:
+  VITE_APP_TITLE: "Edemy 🎓 - Discover and learn about any topic 🔖"
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      VITE_APP_TITLE: "Edemy 🎓 - Discover and learn about any topic 🔖"
     strategy:
       matrix:
         node-version: ['20.x', '22.x']
