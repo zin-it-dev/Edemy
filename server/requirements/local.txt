@@ -1,0 +1,6 @@
+-r base.txt
+django-debug-toolbar==6.1.0
+django-silk==5.4.3
+pytest-cov==7.0.0
+pytest-django==4.11.1
+pytest-factoryboy==2.8.1

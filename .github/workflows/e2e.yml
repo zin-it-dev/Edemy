@@ -1,0 +1,41 @@
+name: E2E Pipeline
+
+on:
+  workflow_run:
+    workflows: ["Frontend CI/CD Pipeline", "Backend CI/CD Pipeline"]
+    types: [completed]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./client/web
+
+      - name: Build React app
+        run: npm run build
+        working-directory: ./client/web
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+        working-directory: ./client/web
+
+      - name: Run Playwright E2E Tests
+        run: npm run e2e:ci
+        working-directory: ./client/web
+
+      - name: Upload Playwright Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: ./client/web/playwright-report
+          retention-days: 30

@@ -1,0 +1,9 @@
+Django==5.2.8
+django-filter==25.2
+djangorestframework==3.16.1
+drf-spectacular==0.29.0
+drf-spectacular-sidecar==2025.10.1
+Markdown==3.10
+psycopg2-binary==2.9.11
+python-dotenv==1.2.1
+sentry-sdk==2.43.0
