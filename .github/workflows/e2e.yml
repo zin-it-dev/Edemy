@@ -8,9 +8,11 @@ on:
 
 jobs:
   build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.workflow_name == 'Backend CI/CD Pipeline' }}
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    env:
+      CI: true
     steps:
       - uses: actions/checkout@v5
       - name: Use Node.js 20
