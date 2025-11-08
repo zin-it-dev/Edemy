@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django_filters",
     "drf_spectacular",
     "drf_spectacular_sidecar",
+    "taggit"
 ]
 
 REST_FRAMEWORK = {
@@ -54,17 +55,32 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
     ],
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication'
+    ]
 }
 
 # SWAGGER
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Your Project API",
-    "DESCRIPTION": "Your project description",
+    "TITLE": "Edemy 🎓",
+    "DESCRIPTION": "Discover and learn about any topic 🔖",
     "VERSION": "1.0.0",
+    "LICENCE": {"name": "MIT License"},
+    "CONTACT": {"name": "ZIN", "email": "zin.it.dev@gmail.com"},
     "SERVE_INCLUDE_SCHEMA": False,
     "SWAGGER_UI_DIST": "SIDECAR",
     "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
     "REDOC_DIST": "SIDECAR",
+    "COMPONENT_SPLIT_REQUEST": True,
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": True,
+        "displayRequestDuration": True,
+    },
+    "UPLOADED_FILES_USE_URL": True,
+    "SCHEMA_PATH_PREFIX_TRIM": True,
 }
 
 MIDDLEWARE = [
