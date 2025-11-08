@@ -1,14 +1,15 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from .apiviews import CategoryViewSet
+from .apiviews import CategoryViewSet, CourseViewSet, CommentViewSet
 
 app_name = "apis"
 
 router = routers.DefaultRouter()
 router.register(r"categories", CategoryViewSet, basename="category")
+router.register("courses", CourseViewSet, basename="course")
+router.register("comments", CommentViewSet, basename="comment")
 
 urlpatterns = [
-    path("", include(router.urls)),
-    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path("", include(router.urls))
 ]

@@ -11,11 +11,16 @@ if not TESTING:
     ]
 
     DEBUG_TOOLBAR_CONFIG = {
-        'SHOW_TOOLBAR_CALLBACK': lambda request: True,
-        'INTERCEPT_REDIRECTS': False,
+        "SHOW_TOOLBAR_CALLBACK": lambda request: True,
+        "INTERCEPT_REDIRECTS": False,
     }
-    
+
     REST_FRAMEWORK = {
-        **REST_FRAMEWORK, 
-        "TEST_REQUEST_DEFAULT_FORMAT": "json"
+        **REST_FRAMEWORK,
+        "TEST_REQUEST_DEFAULT_FORMAT": "json",
+        "TEST_REQUEST_RENDERER_CLASSES": [
+            "rest_framework.renderers.MultiPartRenderer",
+            "rest_framework.renderers.JSONRenderer",
+            "rest_framework.renderers.TemplateHTMLRenderer",
+        ],
     }
