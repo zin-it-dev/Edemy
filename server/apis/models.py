@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
 from taggit.managers import TaggableManager
 
+
 class Base(models.Model):
     is_active = models.BooleanField(
         _("active"),
@@ -25,7 +26,7 @@ class SlugMixin(models.Model):
 
     class Meta:
         abstract = True
-    
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
@@ -33,12 +34,16 @@ class SlugMixin(models.Model):
 
 class Common(Base, SlugMixin):
     tags = TaggableManager()
-    
+
     class Meta:
         abstract = True
 
 
 class User(AbstractUser):
+    """
+    Stores a single user entry :model:`apis.User`.
+    """
+    
     email = models.EmailField(_("email address"), unique=True)
 
     USERNAME_FIELD = "email"
@@ -49,13 +54,24 @@ class User(AbstractUser):
 
 
 class Category(Base, SlugMixin):
+    """
+    Stores a single category entry :model:`apis.Category`.
+    """
+    
     name = models.CharField(unique=True)
+
+    class Meta:
+        verbose_name_plural = _("Categories")
 
     def __str__(self):
         return self.name
 
 
 class Course(Common):
+    """
+    Stores a single course entry :model:`apis.Course`.
+    """
+    
     name = models.CharField(unique=True)
 
     def __str__(self):
@@ -68,10 +84,14 @@ class Interaction(Base):
 
     class Meta:
         abstract = True
-        
-        
+
+
 class Comment(Interaction):
-    content = models.TextField()
+    """
+    Stores a single comment entry :model:`apis.Comment`.
+    """
     
+    content = models.TextField()
+
     def __str__(self):
         return self.content[:10]

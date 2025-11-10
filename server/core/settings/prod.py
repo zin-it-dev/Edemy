@@ -1,1 +1,4 @@
 from .base import *
+
+# MAILTRAP
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

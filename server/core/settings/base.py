@@ -34,8 +34,10 @@ TESTING = "test" in sys.argv or "PYTEST_VERSION" in os.environ
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default=["*"]).split(",")
 
 # Application definition
+
 INSTALLED_APPS = [
-    "django.contrib.admin",
+    "django.contrib.admindocs",
+    "core.apps.AdminConfig",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -46,7 +48,8 @@ INSTALLED_APPS = [
     "django_filters",
     "drf_spectacular",
     "drf_spectacular_sidecar",
-    "taggit"
+    "taggit",
+    'chartjs'
 ]
 
 REST_FRAMEWORK = {
@@ -62,8 +65,9 @@ REST_FRAMEWORK = {
 }
 
 # SWAGGER
+
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Edemy 🎓",
+    "TITLE": "Edemy Swagger 🎓",
     "DESCRIPTION": "Discover and learn about any topic 🔖",
     "VERSION": "1.0.0",
     "LICENCE": {"name": "MIT License"},
@@ -84,6 +88,7 @@ SPECTACULAR_SETTINGS = {
 }
 
 MIDDLEWARE = [
+    "django.contrib.admindocs.middleware.XViewMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -156,13 +161,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGIN_URL = '/admin/'
+
+SITE_ID = 1
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Ho_Chi_Minh"
 
 USE_I18N = True
 
@@ -182,6 +190,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "apis.User"
 
 # SENTRY
+
 import sentry_sdk, django.db.models.signals
 from sentry_sdk.integrations.django import DjangoIntegration
 
@@ -205,3 +214,10 @@ sentry_sdk.init(
     profile_session_sample_rate=1.0,
     profile_lifecycle="trace",
 )
+
+# MAILTRAP
+
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST_USER = os.environ.get("EMAIL_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
+EMAIL_PORT = '2525'

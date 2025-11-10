@@ -8,7 +8,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "quantity",
+            "--quantity",
             type=int,
             default=10,
             help="Number of objects to create.",
