@@ -2,6 +2,9 @@ from .base import *
 
 INTERNAL_IPS = ["127.0.0.1"]
 
+# MAILTRAP
+MAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
 if not TESTING:
     INSTALLED_APPS += ["debug_toolbar", "silk"]
 
