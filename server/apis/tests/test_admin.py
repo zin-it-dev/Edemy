@@ -16,7 +16,7 @@ class TestAdminSite:
         assert response.status_code == 200
         
     def test_statistics_apis(self, admin_client):
-        url = reverse('apis:line_chart')
+        url = reverse('apis:customer_growth')
         response = admin_client.get(url)
         assert response.status_code == 200
         
