@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get("DJANGO_DEBUG", default=True))
+DEBUG = bool(os.environ.get("DJANGO_DEBUG", default=0))
 
 TESTING = "test" in sys.argv or "PYTEST_VERSION" in os.environ
 
@@ -49,7 +49,9 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "drf_spectacular_sidecar",
     "taggit",
-    'chartjs'
+    "chartjs",
+    "import_export",
+    "django_pdf_actions",
 ]
 
 REST_FRAMEWORK = {
@@ -58,10 +60,10 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
     ],
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication'
-    ]
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+    ],
 }
 
 # SWAGGER
@@ -161,7 +163,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGIN_URL = '/admin/'
+LOGIN_URL = "/admin/"
 
 SITE_ID = 1
 
@@ -189,6 +191,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "apis.User"
 
+EMAIL_PORT = 2525
+
 # SENTRY
 
 import sentry_sdk, django.db.models.signals
@@ -215,9 +219,8 @@ sentry_sdk.init(
     profile_lifecycle="trace",
 )
 
-# MAILTRAP
+DEFAULT_FROM_EMAIL = "support@edemy.com"
 
-EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-EMAIL_HOST_USER = os.environ.get("EMAIL_USER")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
-EMAIL_PORT = '2525'
+# Import/Export
+
+IMPORT_EXPORT_SKIP_ADMIN_CONFIRM = True

@@ -18,5 +18,5 @@ urlpatterns = [
         "statistics/customer-growth/",
         staff_member_required(CustomerGrowthJSONView.as_view()),
         name="customer_growth",
-    ),
+    )
 ]
