@@ -9,12 +9,13 @@ from apis.models import User
 
 register(CategoryFactory)
 
+
 @pytest.fixture
 def api_client():
     return APIClient()
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def admin_user(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
         user = User.objects.create_superuser(
