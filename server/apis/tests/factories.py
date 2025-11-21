@@ -16,6 +16,7 @@ class CategoryFactory(factory.django.DjangoModelFactory):
 
 class CourseFactory(factory.django.DjangoModelFactory):
     name = factory.LazyAttribute(lambda x: faker.name())
-
+    category = factory.SubFactory(CategoryFactory)
+    
     class Meta:
         model = Course
