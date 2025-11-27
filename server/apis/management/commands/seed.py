@@ -2,9 +2,10 @@ import requests
 
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
+from django.db import transaction
 
-from apis.models import Category
-from apis.tests.factories import CategoryFactory
+from apis.models import Category, Course
+from apis.tests.factories import CategoryFactory, CourseFactory
 
 
 class Command(BaseCommand):
@@ -18,12 +19,14 @@ class Command(BaseCommand):
             help="Number of objects to create.",
         )
 
+    @transaction.atomic
     def handle(self, *args, **options):
         if settings.DEBUG:
             quantity = options["quantity"]
             CategoryFactory.create_batch(quantity)
+            CourseFactory.create_batch(quantity)
             self.stdout.write(
-                self.style.SUCCESS(f"Successfully created {quantity} Category objects.")
+                self.style.SUCCESS(f"Successfully created {quantity} objects.")
             )
         else:
             for page in options["quantity"]:

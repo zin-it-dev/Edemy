@@ -5,22 +5,31 @@ from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportModelAdmin, ExportActionMixin
 from django_pdf_actions.actions import export_to_pdf_landscape, export_to_pdf_portrait
 
-from .models import User, Comment, Course, Category
+from .models import User, Comment, Course, Category, Tag
 from .actions import export_as_json
 from .utils import _register_site
 from .forms import UserChangeForm, UserCreationForm
 from .resources import CategoryResource
-from .inlines import CourseInline
+from .inlines import CourseInline, TagInline
+from .paginatiors import LargeResultsSetPagination
 
 
-class UserAdmin(ExportActionMixin, BaseUserAdmin):
-    form = UserChangeForm
-    add_form = UserCreationForm
-
+class GenericAdmin(ImportExportModelAdmin, ExportActionMixin):
     empty_value_display = "-Unknown-"
 
     actions = [export_as_json, export_to_pdf_landscape, export_to_pdf_portrait]
-    list_display = list(BaseUserAdmin.list_display) + ["is_active"]
+    list_display = ["is_active"]
+    list_filter = ["is_active"]
+    list_editable = ["is_active"]
+    list_per_page = LargeResultsSetPagination.page_size
+
+
+class UserAdmin(GenericAdmin, BaseUserAdmin):
+    form = UserChangeForm
+    add_form = UserCreationForm
+
+    date_hierarchy = "date_joined"
+    list_display = list(BaseUserAdmin.list_display) + GenericAdmin.list_display
     fieldsets = (
         (None, {"fields": ("username", "email", "password")}),
         (_("Personal info"), {"fields": ("first_name", "last_name")}),
@@ -62,15 +71,12 @@ class UserAdmin(ExportActionMixin, BaseUserAdmin):
     ]
 
 
-class Administrator(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
-    empty_value_display = "-Unknown-"
-    date_hierarchy = "date_created"
+class Administrator(GenericAdmin, admin.ModelAdmin):
     prepopulated_fields = {"slug": ["name"]}
 
-    actions = [export_as_json, export_to_pdf_landscape, export_to_pdf_portrait]
-    list_display = ["is_active", "date_created", "date_updated"]
-    list_filter = ["is_active"]
-    list_per_page = 1
+    readonly_fields = ["date_created", "date_updated"]
+    list_display = GenericAdmin.list_display + ["date_created", "date_updated"]
+    list_per_page = LargeResultsSetPagination.page_size
 
 
 class CategoryAdmin(Administrator):
@@ -79,20 +85,25 @@ class CategoryAdmin(Administrator):
 
     list_display = ["name"] + Administrator.list_display
 
-    def has_view_permission(self, request, obj=None):
-        return request.user.is_authenticated and (
-            request.user.is_staff or request.user.is_superuser
-        )
-
 
 class CourseAdmin(Administrator):
-    list_display = ["name"] + Administrator.list_display
+    inlines = [TagInline]
+
+    list_display = ["name", "category"] + Administrator.list_display
     search_fields = ["name"]
+    list_filter = ["category__name"] + Administrator.list_filter
+    filter_horizontal = ["tags"]
+
+
+class TagAdmin(Administrator):
+    prepopulated_fields = {}
+    
+    list_display = ["name"] + Administrator.list_display
 
 
 admin.site.register(Permission)
 
 _register_site(
-    models=[User, Category, Course, Comment],
-    admin_classes=[UserAdmin, CategoryAdmin, CourseAdmin],
+    models=[User, Category, Course, Tag, Comment],
+    admin_classes=[UserAdmin, CategoryAdmin, CourseAdmin, TagAdmin],
 )

@@ -16,7 +16,13 @@ class CategoryFactory(factory.django.DjangoModelFactory):
 
 class CourseFactory(factory.django.DjangoModelFactory):
     name = factory.LazyAttribute(lambda x: faker.name())
+    description = factory.LazyAttribute(lambda x: faker.text())
+    price = factory.LazyAttribute(
+        lambda x: round(
+            faker.pydecimal(left_digits=3, right_digits=2, positive=True), 2
+        )
+    )
     category = factory.SubFactory(CategoryFactory)
-    
+
     class Meta:
         model = Course

@@ -3,7 +3,7 @@ from import_export import resources
 from .models import Category
 
 
-class BaseModelResource(resources.ModelResource):
+class GenericResource(resources.ModelResource):
     class Meta:
         export_order = '__all__'
         widgets = {
@@ -11,7 +11,7 @@ class BaseModelResource(resources.ModelResource):
         }
         
 
-class CategoryResource(BaseModelResource):
+class CategoryResource(GenericResource):
     class Meta:
         model = Category
         import_order = ['name']

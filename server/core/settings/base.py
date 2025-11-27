@@ -48,11 +48,14 @@ INSTALLED_APPS = [
     "django_filters",
     "drf_spectacular",
     "drf_spectacular_sidecar",
-    "taggit",
     "chartjs",
     "import_export",
     "django_pdf_actions",
+    "django_elasticsearch_dsl",
 ]
+
+# Django REST Framework
+# See https://www.django-rest-framework.org/api-guide/settings/
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -66,7 +69,9 @@ REST_FRAMEWORK = {
     ],
 }
 
-# SWAGGER
+
+# DRF Spectacular - Swagger / Redoc
+# See https://drf-spectacular.readthedocs.io/en/latest/
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Edemy Swagger 🎓",
@@ -167,6 +172,7 @@ LOGIN_URL = "/admin/"
 
 SITE_ID = 1
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -193,7 +199,11 @@ AUTH_USER_MODEL = "apis.User"
 
 EMAIL_PORT = 2525
 
-# SENTRY
+DEFAULT_FROM_EMAIL = "support@edemy.com"
+
+
+# Sentry
+# See https://docs.sentry.io/platforms/python/guides/django/
 
 import sentry_sdk, django.db.models.signals
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -219,8 +229,20 @@ sentry_sdk.init(
     profile_lifecycle="trace",
 )
 
-DEFAULT_FROM_EMAIL = "support@edemy.com"
 
-# Import/Export
+# Django Import/Export
+# See https://django-import-export.readthedocs.io/en/latest/getting_started.html#configuration
 
 IMPORT_EXPORT_SKIP_ADMIN_CONFIRM = True
+
+# Elasticsearch
+# See https://django-elasticsearch-dsl.readthedocs.io/en/latest/settings.html}
+ELASTICSEARCH_DSL = {"default": {"hosts": os.environ.get("ELASTICSEARCH_URL")}}
+
+ELASTICSEARCH_DSL_SIGNAL_PROCESSOR = (
+    "django_elasticsearch_dsl.signals.RealTimeSignalProcessor"
+)
+ELASTICSEARCH_DSL_INDEX_SETTINGS = {}
+ELASTICSEARCH_DSL_AUTO_REFRESH = True
+ELASTICSEARCH_DSL_AUTOSYNC = True
+ELASTICSEARCH_DSL_PARALLEL = False

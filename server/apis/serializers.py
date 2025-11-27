@@ -1,40 +1,41 @@
 from rest_framework import serializers
-from taggit.serializers import TagListSerializerField, TaggitSerializer
 
-from .models import Category, Course, Comment
+from .models import Category, Course, Comment, Tag
 
 
-class BaseModelSerializer(serializers.ModelSerializer):        
+class GeneralSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ['id', 'is_active']
-        read_only_fields = ['is_active']
-    
-    
-class SlugSerializer(BaseModelSerializer):        
+        fields = ["id", "is_active"]
+        read_only_fields = ["is_active"]
+
+
+class GenericSerializer(GeneralSerializer):
     class Meta:
-        fields = BaseModelSerializer.Meta.fields + ['slug']
-            
-
-class TagSerializer(TaggitSerializer, SlugSerializer):
-    tags = TagListSerializerField()
-    
-    class Meta:
-        fields = SlugSerializer.Meta.fields + ['tags']
+        fields = GeneralSerializer.Meta.fields + ["slug"]
 
 
-class CategorySerializer(SlugSerializer):
+class CategorySerializer(GenericSerializer):
     class Meta:
         model = Category
-        fields = SlugSerializer.Meta.fields + ['name']
+        fields = GenericSerializer.Meta.fields + ["name"]
 
 
-class CourseSerializer(TagSerializer):
+class CourseSerializer(GenericSerializer):
+    category = serializers.StringRelatedField(read_only=True)
+    tags = serializers.StringRelatedField(many=True, read_only=True)
+
     class Meta:
         model = Course
-        fields = TagSerializer.Meta.fields + ['name']
-        
-        
-class CommentSerializer(BaseModelSerializer):
+        fields = GenericSerializer.Meta.fields + [
+            "name",
+            "description",
+            "price",
+            "category",
+            "tags",
+        ]
+
+
+class CommentSerializer(GeneralSerializer):
     class Meta:
         model = Comment
-        fields = BaseModelSerializer.Meta.fields + ['content']  
+        fields = GeneralSerializer.Meta.fields + ["content"]

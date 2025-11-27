@@ -1,4 +1,15 @@
 services:
+  elasticsearch:
+    container_name: elasticsearch
+    image: elasticsearch:7.14.2
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+
   db:
     image: postgres:15
     volumes:
@@ -18,6 +29,8 @@ services:
       - ./server/.env
     depends_on:
       - db
+      - elasticsearch
 
 volumes:
   postgres_data:
+  esdata:
