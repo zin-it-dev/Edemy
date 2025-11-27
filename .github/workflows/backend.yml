@@ -26,12 +26,27 @@ jobs:
         python-version: ["3.11", "3.12", "3.13"]
 
     services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: "edemy"
+          POSTGRES_USER: "postgres"
+          POSTGRES_PASSWORD: "postgres"
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
       elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+        image: docker.elastic.co/elasticsearch/elasticsearch:latest
         env:
           discovery.type: single-node
+          ES_JAVA_OPTS: "-Xms512m -Xmx512m"
         options: >-
-          --health-cmd "curl http://localhost:9200/_cluster/health"
+          --health-cmd "curl http://localhost:9200/_cluster/health?wait_for_status=yellow"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 10
@@ -53,6 +68,10 @@ jobs:
         run: |
           python manage.py migrate
           python manage.py search_index --rebuild -f
+        working-directory: ./server
+      - name: Load initial test data
+        run: |
+          python manage.py seed --quantity 10
         working-directory: ./server
       - name: Unit tests
         run: pytest
