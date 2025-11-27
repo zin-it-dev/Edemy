@@ -49,8 +49,9 @@ jobs:
           pip install -r requirements/local.txt
         working-directory: ./server
       - name: Run migrations & populate Elasticsearch index
-        run: python manage.py migrate
-        run: python manage.py search_index --rebuild -f
+        run: |
+          python manage.py migrate
+          python manage.py search_index --rebuild -f
         working-directory: ./server
       - name: Unit tests
         run: pytest
