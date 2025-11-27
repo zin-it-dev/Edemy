@@ -25,6 +25,19 @@ jobs:
       matrix:
         python-version: ["3.11", "3.12", "3.13"]
 
+    services:
+      elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+        env:
+          discovery.type: single-node
+        options: >-
+          --health-cmd "curl http://localhost:9200/_cluster/health"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+        ports:
+        - 9200:9200
+
     steps:
       - uses: actions/checkout@v5
       - name: Set up Python ${{ matrix.python-version }}
@@ -36,6 +49,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements/local.txt
         working-directory: ./server
+      - name: Run Elasticsearch
+        run: |
+          python manage.py migrate
+          python manage.py search_index --rebuild -f
       - name: Unit tests
         run: pytest
         working-directory: ./server
