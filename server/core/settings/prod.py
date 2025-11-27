@@ -1,6 +1,7 @@
 from .base import *
 
 # Email
+# See https://docs.djangoproject.com/en/5.2/topics/email/
 
 ADMINS = [("ZIN", "zin.it.dev@gmail.com")]
 
@@ -13,7 +14,9 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get("EMAIL_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
 
-# LOGGING
+
+# Logging
+# See https://docs.djangoproject.com/en/5.2/topics/logging/
 
 LOG_ROOT = os.path.join(BASE_DIR, "logs")
 
@@ -55,7 +58,10 @@ LOGGING = {
     },
 }
 
+
 # RAPIDAPI
+# See https://docs.rapidapi.com/docs/keys-and-key-rotation/
+
 RAPIDAPI_URL = (
     "https://udemy-paid-courses-for-free-api.p.rapidapi.com/rapidapi/courses/"
 )

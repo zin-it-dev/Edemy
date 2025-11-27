@@ -14,14 +14,39 @@ jobs:
       DJANGO_DEBUG: 1
       DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1"
       POSTGRES_ENGINE: "postgresql"
+      POSTGRES_HOST: "postgres"
       POSTGRES_DB: "edemy"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
+      ELASTICSEARCH_URL: "http://elasticsearch:9200"
     strategy:
       fail-fast: false
       max-parallel: 4
       matrix:
         python-version: ["3.10", "3.11", "3.12", "3.13"]
+
+    services:
+      postgres:
+        image: postgres:latest
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.14.2
+        env:
+          discovery.type: single-node
+        ports:
+          - 9200/tcp
+        options: >
+          --health-cmd "curl http://localhost:9200/_cluster/health"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - uses: actions/checkout@v5
