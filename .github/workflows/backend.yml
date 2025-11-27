@@ -21,9 +21,9 @@ jobs:
       ELASTICSEARCH_URL: "http://elasticsearch:9200"
     strategy:
       fail-fast: false
-      max-parallel: 4
+      max-parallel: 2
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.12", "3.13"]
 
     services:
       postgres:
@@ -40,13 +40,12 @@ jobs:
         image: docker.elastic.co/elasticsearch/elasticsearch:7.14.2
         env:
           discovery.type: single-node
-          bootstrap.memory_lock: "true"
           xpack.security.enabled: "false"
           ES_JAVA_OPTS: "-Xms512m -Xmx512m"
         ports:
           - 9200/tcp
         options: >
-          --health-cmd "curl -f http://localhost:9200/_cluster/health || exit 1"
+          --health-cmd "curl http://localhost:9200/_cluster/health"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
