@@ -6,25 +6,39 @@ on:
   pull_request:
     branches: ["main", "develop"]
 
+env:
+  DJANGO_SECRET_KEY: "dc+o#2fmc+352(l1h*yo2rfv!a(e^n)bcy17$&zdreamutt+*p"
+  DJANGO_DEBUG: 1
+  DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1"
+  POSTGRES_ENGINE: "postgresql"
+  POSTGRES_DB: "edemy"
+  POSTGRES_USER: "postgres"
+  POSTGRES_PASSWORD: "postgres"
+  POSTGRES_HOST: "postgres"
+  ELASTICSEARCH_URL: "http://elasticsearch:9200"
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      DJANGO_SECRET_KEY: "dc+o#2fmc+352(l1h*yo2rfv!a(e^n)bcy17$&zdreamutt+*p"
-      DJANGO_DEBUG: 1
-      DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1"
-      POSTGRES_ENGINE: "postgresql"
-      POSTGRES_DB: "edemy"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
-      ELASTICSEARCH_URL: "http://elasticsearch:9200"
     strategy:
       fail-fast: false
       max-parallel: 3
       matrix:
         python-version: ["3.11", "3.12", "3.13"]
-      
+
     services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: "edemy"
+          POSTGRES_USER: "postgres"
+          POSTGRES_PASSWORD: "postgres"
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
       elasticsearch:
         image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
         env:
