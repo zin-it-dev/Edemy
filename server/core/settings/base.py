@@ -237,8 +237,8 @@ IMPORT_EXPORT_SKIP_ADMIN_CONFIRM = True
 
 # Elasticsearch
 # See https://django-elasticsearch-dsl.readthedocs.io/en/latest/settings.html}
-ELASTICSEARCH_DSL = {"default": {"hosts": [os.environ.get("ELASTICSEARCH_URL")]}}
- 
+ELASTICSEARCH_DSL = {"default": {"hosts": os.environ.get("ELASTICSEARCH_URL")}}
+
 ELASTICSEARCH_DSL_SIGNAL_PROCESSOR = (
     "django_elasticsearch_dsl.signals.RealTimeSignalProcessor"
 )
