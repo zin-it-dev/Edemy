@@ -60,6 +60,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements/local.txt
+          pip install dockerize
+        working-directory: ./server
+      - name: Wait for services to be ready
+        run: |
+          echo "Waiting for PostgreSQL (5432) and Elasticsearch (9200) to be ready..."
+          dockerize -wait tcp://postgres:5432 -timeout 60s
+           dockerize -wait tcp://elasticsearch:9200 -timeout 60s
         working-directory: ./server
       - name: Unit tests
         run: pytest
