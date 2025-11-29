@@ -2,20 +2,24 @@ import factory
 
 from faker import Factory as FakerFactory
 
-from apis.models import Category, Course
+from apis.models import Category, Course, Lesson
 
 faker = FakerFactory.create()
 
 
-class CategoryFactory(factory.django.DjangoModelFactory):
+class GenericFactory(factory.django.DjangoModelFactory):
     name = factory.LazyAttribute(lambda x: faker.name())
 
+    class Meta:
+        abstract = True
+
+
+class CategoryFactory(GenericFactory):
     class Meta:
         model = Category
 
 
-class CourseFactory(factory.django.DjangoModelFactory):
-    name = factory.LazyAttribute(lambda x: faker.name())
+class CourseFactory(GenericFactory):
     description = factory.LazyAttribute(lambda x: faker.text())
     price = factory.LazyAttribute(
         lambda x: round(
@@ -26,3 +30,11 @@ class CourseFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Course
+
+
+class LessonFactory(GenericFactory):
+    content = factory.LazyAttribute(lambda x: faker.text())
+    course = factory.SubFactory(CourseFactory)
+
+    class Meta:
+        model = Lesson

@@ -1,12 +1,14 @@
-import random, abc
+import abc
 
-from rest_framework.viewsets import ReadOnlyModelViewSet
 from typing import Iterator, Tuple, List
-from rest_framework.filters import SearchFilter
+from rest_framework import viewsets
+from rest_framework_extensions.mixins import DetailSerializerMixin
+from rest_framework_extensions.cache.mixins import CacheResponseMixin
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.filters import SearchFilter, OrderingFilter
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from model_utils.models import TimeStampedModel, SoftDeletableModel
+from taggit.managers import TaggableManager
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
 
@@ -14,34 +16,28 @@ from .utils import generate_colors
 
 
 class ColorMixin:
+    """ "A mixin to dynamically generate a sufficient number of unique colors."""
+
     def get_colors(self) -> Iterator[Tuple[int, int, int]]:
         num_providers = len(self.get_providers())
         return iter(generate_colors(num_providers))
 
 
-class GenericMixin(models.Model):
-    """Generic mixin to be inherited by all models."""
-
-    is_active = models.BooleanField(
-        _("active"),
-        default=True,
-        help_text=_(
-            "Specifies whether this entity should be considered active."
-            "Uncheck this instead of deleting the entity."
-        ),
-    )
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
+class GenericModel(TimeStampedModel, SoftDeletableModel):
+    """A mixin to be inherited by all models."""
 
     class Meta:
         abstract = True
-        ordering = ["-date_created", "-date_updated"]
 
 
-class SlugifyMixin(models.Model):
-    """Slugify mixin to be inherited by all models use slug field."""
+class SlugifyModel(models.Model):
+    """A mixin to be inherited by all models use slug field."""
 
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(
+        unique=True,
+        verbose_name=_("URI"),
+        help_text=_("A unique, URL-friendly string, usually derived from the name."),
+    )
 
     class Meta:
         abstract = True
@@ -51,8 +47,18 @@ class SlugifyMixin(models.Model):
         super().save(*args, **kwargs)
 
 
-class SearchMixin(ReadOnlyModelViewSet):
-    lookup_field = "slug"
+class TaggifyModel(GenericModel, SlugifyModel):
+    """A mixin to enable generic tagging across inheriting models."""
+
+    tags = TaggableManager()
+
+    class Meta:
+        abstract = True
+
+
+class SearchMixin:
+    """A mixin to override the default DRF filtering mechanism with Elasticsearch search."""
+
     filter_backends = [SearchFilter]
 
     @abc.abstractmethod
@@ -61,27 +67,29 @@ class SearchMixin(ReadOnlyModelViewSet):
 
     def filter_queryset(self, queryset):
         param = self.request.query_params.get("search")
-
         if param:
             q = self.generate_search_query(param)
             search = self.document_class.search().query(q)
             response = search.execute()
             return response
-        else:
-            return super().filter_queryset(queryset)
+        return super().filter_queryset(queryset)
 
-    def list(self, request, *args, **kwargs):
-        try:
-            queryset = self.filter_queryset(self.get_queryset())
-            page = self.paginate_queryset(queryset)
 
-            if page is not None:
-                serializer = self.serializer_class(page, many=True)
-                return self.get_paginated_response(serializer.data)
+class OrderingMixin:
+    """A mixin to enable standard ordering functionality."""
 
-            serializer = self.serializer_class(queryset, many=True)
-            return Response(serializer.data)
-        except Exception as e:
-            return Response(
-                {"message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+    filter_backends = [OrderingFilter]
+    ordering_fields = ["created"]
+    ordering = ["-created"]
+
+
+class ReadOnlyCachedViewSet(
+    CacheResponseMixin, DetailSerializerMixin, viewsets.ReadOnlyModelViewSet
+):
+    """
+    A viewset that provides cached `retrieve` and `list` actions.
+
+    To use it, override the class, applies response caching and set the `lookup_field` attribute by slug.
+    """
+
+    lookup_field = "slug"

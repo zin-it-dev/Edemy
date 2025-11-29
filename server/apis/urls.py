@@ -1,19 +1,30 @@
 from django.urls import path, include
-from rest_framework import routers
+from rest_framework_nested import routers
 from django.contrib.admin.views.decorators import staff_member_required
 
-from .apiviews import CategoryViewSet, CourseViewSet, CommentViewSet
+from .apiviews import (
+    CategoryViewSet,
+    CourseViewSet,
+    CommentViewSet,
+    UserViewSet,
+    LessonViewSet,
+)
 from .views import CustomerGrowthJSONView
 
 app_name = "apis"
 
 router = routers.DefaultRouter()
 router.register(r"categories", CategoryViewSet, basename="category")
-router.register("courses", CourseViewSet, basename="course")
-router.register("comments", CommentViewSet, basename="comment")
+router.register(r"courses", CourseViewSet, basename="course")
+router.register(r"users", UserViewSet, basename="user")
+
+courses_router = routers.NestedSimpleRouter(router, r"courses", lookup="course")
+courses_router.register(r"comments", CommentViewSet, basename="course-comments")
+courses_router.register(r"lessons", LessonViewSet, basename="lesson")
 
 urlpatterns = [
-    path("", include(router.urls)),
+    path(r"", include(router.urls)),
+    path(r"", include(courses_router.urls)),
     path(
         "statistics/customer-growth/",
         staff_member_required(CustomerGrowthJSONView.as_view()),

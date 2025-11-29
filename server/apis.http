@@ -5,3 +5,17 @@ GET http://localhost:8000/courses/
 
 # Search
 GET http://localhost:8000/courses/?search=Hospital
+
+###
+
+# Comments
+GET http://localhost:8000/courses/mary-cole/comments/
+
+###
+
+# Comment
+GET http://localhost:8000/courses/mary-cole/comments/1/
+
+###
+
+POST http://localhost:8000/courses/mary-cole/comments/1/

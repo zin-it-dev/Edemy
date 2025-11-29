@@ -1,17 +1,12 @@
 from rest_framework import serializers
+from taggit.serializers import TagListSerializerField, TaggitSerializer
 
-from .models import Category, Course, Comment, Tag
+from .models import Category, Course, Comment, User, Lesson
 
 
-class GeneralSerializer(serializers.ModelSerializer):
+class GenericSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ["id", "is_active"]
-        read_only_fields = ["is_active"]
-
-
-class GenericSerializer(GeneralSerializer):
-    class Meta:
-        fields = GeneralSerializer.Meta.fields + ["slug"]
+        fields = ["id", "slug"]
 
 
 class CategorySerializer(GenericSerializer):
@@ -22,7 +17,6 @@ class CategorySerializer(GenericSerializer):
 
 class CourseSerializer(GenericSerializer):
     category = serializers.StringRelatedField(read_only=True)
-    tags = serializers.StringRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Course
@@ -31,11 +25,47 @@ class CourseSerializer(GenericSerializer):
             "description",
             "price",
             "category",
-            "tags",
         ]
 
 
-class CommentSerializer(GeneralSerializer):
+class TagSerializer(TaggitSerializer):
+    tags = TagListSerializerField()
+
+    class Meta:
+        fields = ["tags"]
+
+
+class LessonSerializer(TagSerializer, GenericSerializer):
+    class Meta:
+        model = Lesson
+        fields = GenericSerializer.Meta.fields + ["name"] + TagSerializer.Meta.fields
+
+
+class CourseDetailSerializer(TagSerializer, CourseSerializer):
+    class Meta:
+        model = CourseSerializer.Meta.model
+        fields = CourseSerializer.Meta.fields + TagSerializer.Meta.fields
+
+
+class LessonDetailSerializer(LessonSerializer):
+    class Meta(LessonSerializer.Meta):
+        fields = LessonSerializer.Meta.fields + ["content"]
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+        ]
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    creator = UserSerializer(read_only=True)
+
     class Meta:
         model = Comment
-        fields = GeneralSerializer.Meta.fields + ["content"]
+        fields = ["id", "content", "creator", "created"]
