@@ -15,7 +15,7 @@ EMAIL_HOST_PASSWORD = "fdc3b90ffd9196"
 if not TESTING:
     # Application definition
     INSTALLED_APPS += ["debug_toolbar", "silk"]
-    
+
     MIDDLEWARE += [
         "silk.middleware.SilkyMiddleware",
         "debug_toolbar.middleware.DebugToolbarMiddleware",
@@ -23,7 +23,7 @@ if not TESTING:
 
     # Debug Toolbar
     # See https://django-debug-toolbar.readthedocs.io/en/latest/installation.html
-    
+
     DEBUG_TOOLBAR_CONFIG = {
         "SHOW_TOOLBAR_CALLBACK": lambda request: True,
         "INTERCEPT_REDIRECTS": False,
@@ -31,7 +31,7 @@ if not TESTING:
 
     # Django REST Framework
     # See https://www.django-rest-framework.org/api-guide/testing/#setting-up-the-test-client
-    
+
     REST_FRAMEWORK = {
         **REST_FRAMEWORK,
         "TEST_REQUEST_DEFAULT_FORMAT": "json",
@@ -48,6 +48,7 @@ if not TESTING:
 
 LOGGING = {
     "version": 1,
+    "disable_existing_loggers": False,
     "handlers": {
         "console": {"level": "DEBUG", "class": "logging.StreamHandler"},
     },

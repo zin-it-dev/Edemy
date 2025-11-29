@@ -5,7 +5,7 @@ from django.conf import settings
 from django.db import transaction
 
 from apis.models import Category, Course
-from apis.tests.factories import CategoryFactory, CourseFactory
+from apis.tests.factories import CategoryFactory, CourseFactory, LessonFactory
 
 
 class Command(BaseCommand):
@@ -25,6 +25,7 @@ class Command(BaseCommand):
             quantity = options["quantity"]
             CategoryFactory.create_batch(quantity)
             CourseFactory.create_batch(quantity)
+            LessonFactory.create_batch(quantity)
             self.stdout.write(
                 self.style.SUCCESS(f"Successfully created {quantity} objects.")
             )

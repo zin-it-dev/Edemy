@@ -3,30 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
 
-from .mixins import GenericMixin, SlugifyMixin
-
-
-class Tag(GenericMixin):
-    """
-    Stores a single tag entry :model:`apis.Tag`.
-    """
-
-    name = models.CharField(unique=True, max_length=50)
-
-    def __str__(self):
-        return self.name
-
-
-class Common(GenericMixin, SlugifyMixin):
-    tags = models.ManyToManyField(
-        Tag,
-        blank=True,
-        related_name="%(app_label)s_%(class)s_related",
-        related_query_name="%(app_label)s_%(class)ss",
-    )
-
-    class Meta:
-        abstract = True
+from .mixins import GenericModel, SlugifyModel, TaggifyModel
 
 
 class User(AbstractUser):
@@ -43,7 +20,7 @@ class User(AbstractUser):
         return self.get_full_name() or self.email or self.username
 
 
-class Category(GenericMixin, SlugifyMixin):
+class Category(GenericModel, SlugifyModel):
     """
     Stores a single category entry :model:`apis.Category`.
     """
@@ -57,7 +34,7 @@ class Category(GenericMixin, SlugifyMixin):
         return self.name
 
 
-class Course(Common):
+class Course(TaggifyModel):
     """
     Stores a single course entry :model:`apis.Course`.
     """
@@ -67,21 +44,37 @@ class Course(Common):
     price = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
 
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    creator = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        null=True,
-        related_name="%(app_label)s_%(class)s_related",
-    )
 
     def __str__(self):
         return self.name
 
-    def prepare_tags(self):
+    @property
+    def tags_indexing(self):
+        """Tags for indexing.
+
+        Used in Elasticsearch indexing.
+        """
         return [tag.name for tag in self.tags.all()]
 
 
-class Interaction(GenericMixin):
+class Lesson(TaggifyModel):
+    """
+    Stores a single lesson entry :model:`apis.Lesson`.
+    """
+
+    name = models.CharField(unique=True)
+    content = models.TextField()
+
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ["course", "name"]
+
+    def __str__(self):
+        return self.name
+
+
+class Interaction(GenericModel):
     creator = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
