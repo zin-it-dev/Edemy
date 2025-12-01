@@ -10,7 +10,7 @@ from .actions import export_as_json
 from .utils import _register_site
 from .forms import UserChangeForm, UserCreationForm
 from .resources import CategoryResource
-from .inlines import CourseInline, CommentInline
+from .inlines import CourseInline, CommentInline, LessonInline
 from .paginatiors import LargeResultsSetPagination
 
 
@@ -88,12 +88,17 @@ class CategoryAdmin(Administrator):
 
 
 class CourseAdmin(Administrator):
-    inlines = [CommentInline]
+    inlines = [LessonInline, CommentInline]
 
     prepopulated_fields = {"slug": ["name"]}
-    list_display = ["name", "category"] + Administrator.list_display
+    list_display = [
+        "name",
+        "headshot_thumbnail",
+        "category",
+    ] + Administrator.list_display
     search_fields = ["name"]
     list_filter = ["category__name"] + Administrator.list_filter
+    readonly_fields = Administrator.readonly_fields + ["headshot_thumbnail"]
 
 
 class CommentAdmin(Administrator):

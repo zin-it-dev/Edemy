@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Course, Comment
+from .models import Course, Comment, Lesson
 
 
 class CourseInline(admin.StackedInline):
@@ -10,4 +10,9 @@ class CourseInline(admin.StackedInline):
 
 class CommentInline(admin.StackedInline):
     model = Comment
+    extra = 3
+
+
+class LessonInline(admin.StackedInline):
+    model = Lesson
     extra = 3

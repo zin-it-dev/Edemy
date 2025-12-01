@@ -1,7 +1,8 @@
-import random
+import random, hashlib
 
 from django.contrib import admin
 from typing import Tuple, List
+from urllib.parse import urlencode
 
 MONTHS = [
     "January",
@@ -39,3 +40,10 @@ def generate_colors(num_providers: int) -> List[Tuple[int, int, int]]:
         (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         for _ in range(num_providers)
     ]
+
+
+def generate_image(email="edemy@gmail.com", size=40, default='identicon'):
+    email_encoded = email.lower().encode('utf-8')
+    email_hash = hashlib.sha256(email_encoded).hexdigest()
+    params = urlencode({'d': default, 's': str(size)})
+    return f"https://www.gravatar.com/avatar/{email_hash}?{params}"
