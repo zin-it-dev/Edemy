@@ -8,6 +8,12 @@ from .repositories import UserRepository
 
 
 class CustomerGrowthJSONView(ColorMixin, BaseLineChartView):
+    """
+    A JSON view for generating customer growth data for a line chart.
+
+    To use it, retrieves monthly customer registration counts, formats them against the months of the year and prepares the data (labels, providers, datasets).
+    """
+
     def execute_query(self):
         results = get_year()
 

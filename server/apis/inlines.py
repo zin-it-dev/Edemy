@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Course
+from .models import Course, Comment, Lesson
 
 
 class CourseInline(admin.StackedInline):
@@ -8,7 +8,11 @@ class CourseInline(admin.StackedInline):
     extra = 3
 
 
-class TagInline(admin.TabularInline):
-    verbose_name_plural = "tags"
-    model = Course.tags.through
+class CommentInline(admin.StackedInline):
+    model = Comment
+    extra = 3
+
+
+class LessonInline(admin.StackedInline):
+    model = Lesson
     extra = 3

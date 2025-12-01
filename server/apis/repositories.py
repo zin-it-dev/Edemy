@@ -3,7 +3,7 @@ from django.db.models.functions import ExtractMonth
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import date
 
-from .models import User, Category, Course, Comment
+from .models import User, Category, Course, Comment, Lesson
 
 
 class GenericRepository:
@@ -11,19 +11,19 @@ class GenericRepository:
         self.model = model
 
     def load(self):
-        return self.model.objects.filter(is_active=True).all()
+        return self.model.objects.filter(is_removed=False).all()
 
-    def fetch(self, obj_id):
+    def fetch(self, **kwargs):
         try:
-            return self.model.objects.get(id=obj_id)
+            return self.model.objects.get(**kwargs)
         except ObjectDoesNotExist:
             return None
 
     def create(self, **kwargs):
         return self.model.objects.create(**kwargs)
 
-    def update(self, obj_id, **kwargs):
-        obj = self.fetch(obj_id)
+    def update(self, **kwargs):
+        obj = self.fetch(key=kwargs.get("key"), **kwargs)
         if obj:
             for key, value in kwargs.items():
                 setattr(obj, key, value)
@@ -31,8 +31,8 @@ class GenericRepository:
             return obj
         return None
 
-    def delete(self, obj_id):
-        obj = self.fetch(obj_id)
+    def delete(self, **kwargs):
+        obj = self.fetch(**kwargs)
         if obj:
             obj.delete()
             return True
@@ -50,17 +50,19 @@ class CourseRepository(GenericRepository):
 
     def load(self):
         return (
-            self.model.objects.filter(is_active=True)
-            .prefetch_related("tags")
+            self.model.objects.filter(is_removed=False)
             .select_related("category")
             .all()
-            .order_by("-date_created")
+            .order_by("-created")
         )
 
 
 class UserRepository(GenericRepository):
     def __init__(self):
         super().__init__(User)
+
+    def load(self):
+        return self.model.objects.filter(is_active=True).all()
 
     def fetch_growth(self):
         return (
@@ -79,7 +81,21 @@ class CommentRepository(GenericRepository):
         super().__init__(Comment)
 
     def load(self, obj_uri):
-        return self.model.objects.filter(course__slug=obj_uri, is_active=True)
+        return (
+            self.model.objects.filter(course__slug=obj_uri, is_removed=False)
+            .all()
+            .order_by("-created")
+        )
 
-    def fetch(self, pk, obj_uri):
-        return self.model.objects.filter(pk=pk, course__slug=obj_uri, is_active=True)
+
+class LessonRepository(GenericRepository):
+    def __init__(self):
+        super().__init__(Lesson)
+
+    def load(self, obj_uri):
+        return (
+            self.model.objects.filter(course__slug=obj_uri, is_removed=False)
+            .prefetch_related("tags")
+            .all()
+            .order_by("-created")
+        )

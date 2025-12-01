@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "cloudinary_storage",
+    "cloudinary",
     "apis.apps.ApisConfig",
     "rest_framework",
     "django_filters",
@@ -52,6 +54,7 @@ INSTALLED_APPS = [
     "import_export",
     "django_pdf_actions",
     "django_elasticsearch_dsl",
+    "taggit",
 ]
 
 # Django REST Framework
@@ -62,11 +65,11 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
     ],
-    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.BasicAuthentication",
     ],
+    "EXCEPTION_HANDLER": "apis.handlers.sentry_exception_handler",
 }
 
 
@@ -135,6 +138,13 @@ if TESTING:
             "NAME": ":memory:",
         }
     }
+
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "unique-test",
+        }
+    }
 else:
     DATABASES = {
         "default": {
@@ -146,6 +156,23 @@ else:
             "PASSWORD": os.environ.get("POSTGRES_PASSWORD", default="password"),
             "HOST": os.environ.get("POSTGRES_HOST", default="127.0.0.1"),
             "PORT": os.environ.get("POSTGRES_PORT", default=5432),
+        }
+    }
+
+    # Redis
+    # See https://github.com/jazzband/django-redis
+
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": os.environ.get("REDIS_URL"),
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+                "CONNECTION_POOL_KWARGS": {
+                    "max_connections": 100,
+                    "retry_on_timeout": True,
+                },
+            },
         }
     }
 
@@ -189,6 +216,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "static/"
+
+MEDIA_URL = "/media/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -236,9 +265,10 @@ sentry_sdk.init(
 IMPORT_EXPORT_SKIP_ADMIN_CONFIRM = True
 
 # Elasticsearch
-# See https://django-elasticsearch-dsl.readthedocs.io/en/latest/settings.html}
-ELASTICSEARCH_DSL = {"default": {"hosts": [os.environ.get("ELASTICSEARCH_URL")]}}
- 
+# See https://django-elasticsearch-dsl.readthedocs.io/en/latest/settings.html
+
+ELASTICSEARCH_DSL = {"default": {"hosts": os.environ.get("ELASTICSEARCH_URL")}}
+
 ELASTICSEARCH_DSL_SIGNAL_PROCESSOR = (
     "django_elasticsearch_dsl.signals.RealTimeSignalProcessor"
 )
@@ -246,3 +276,29 @@ ELASTICSEARCH_DSL_INDEX_SETTINGS = {}
 ELASTICSEARCH_DSL_AUTO_REFRESH = True
 ELASTICSEARCH_DSL_AUTOSYNC = True
 ELASTICSEARCH_DSL_PARALLEL = False
+
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+# Taggit
+# https://django-taggit.readthedocs.io/en/latest/
+TAGGIT_CASE_INSENSITIVE = True
+
+# Django REST Framework Extensions
+# https://chibisov.github.io/drf-extensions/
+REST_FRAMEWORK_EXTENSIONS = {
+    "DEFAULT_CACHE_RESPONSE_TIMEOUT": 60 * 15,
+    "DEFAULT_OBJECT_CACHE_KEY_FUNC": "rest_framework_extensions.utils.default_object_cache_key_func",
+    "DEFAULT_LIST_CACHE_KEY_FUNC": "rest_framework_extensions.utils.default_list_cache_key_func",
+}
+
+# Cloudinary
+# https://github.com/klis87/django-cloudinary-storage
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
+}
+
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"

@@ -22,10 +22,11 @@ LOG_ROOT = os.path.join(BASE_DIR, "logs")
 
 LOGGING = {
     "version": 1,
+    "disable_existing_loggers": False,
     "handlers": {
         "file": {
             "class": "logging.FileHandler",
-            "filename": os.path.join(LOG_ROOT, "general.log"),
+            "filename": os.path.join(LOG_ROOT, "warning.log"),
             "formatter": "verbose",
         },
         "mail_admins": {
@@ -37,7 +38,7 @@ LOGGING = {
     "loggers": {
         "django.request": {
             "handlers": ["mail_admins", "file"],
-            "level": "ERROR",
+            "level": "WARNING",
             "propagate": False,
         },
         "django.db.backends": {"level": "INFO", "handlers": ["mail_admins", "file"]},

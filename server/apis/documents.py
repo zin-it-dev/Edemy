@@ -1,25 +1,20 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
-from elasticsearch_dsl import analyzer
 
-from .models import Course, Tag
-
-html_strip = analyzer(
-    "html_strip",
-    tokenizer="standard",
-    filter=["lowercase", "stop", "snowball"],
-    char_filter=["html_strip"],
-)
+from .models import Course
 
 
 @registry.register_document
 class CourseDocument(Document):
+    """Course Elasticsearch document."""
+
     tags = fields.KeywordField(
-        attr="prepare_tags",
-        multi=True,
+        attr="tags_indexing",
         fields={
-            "raw": fields.TextField(analyzer="keyword"),
+            "raw": fields.TextField(analyzer="keyword", multi=True),
+            "suggest": fields.CompletionField(multi=True),
         },
+        multi=True,
     )
     category = fields.TextField(attr="__str__")
 
@@ -31,6 +26,7 @@ class CourseDocument(Document):
         }
 
     class Django:
+        """Inner nested class Django."""
+
         model = Course
         fields = ["slug", "name", "description"]
-        related_models = [Tag]
