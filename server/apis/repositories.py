@@ -2,28 +2,33 @@ from django.db.models import Model, Count
 from django.db.models.functions import ExtractMonth
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import date
+from django.db import transaction
 
 from .models import User, Category, Course, Comment, Lesson
 
 
 class GenericRepository:
+    """Repository pattern provide generic CRUD operations that can be reused across different models."""
+
     def __init__(self, model: Model):
         self.model = model
 
-    def load(self):
+    def get_all(self):
         return self.model.objects.filter(is_removed=False).all()
 
-    def fetch(self, **kwargs):
+    def get_by_props(self, **kwargs):
         try:
             return self.model.objects.get(**kwargs)
         except ObjectDoesNotExist:
             return None
 
+    @transaction.atomic
     def create(self, **kwargs):
         return self.model.objects.create(**kwargs)
 
-    def update(self, **kwargs):
-        obj = self.fetch(key=kwargs.get("key"), **kwargs)
+    @transaction.atomic
+    def update(self, lookup: dict, **kwargs):
+        obj = self.get_by_props(lookup)
         if obj:
             for key, value in kwargs.items():
                 setattr(obj, key, value)
@@ -31,8 +36,9 @@ class GenericRepository:
             return obj
         return None
 
+    @transaction.atomic
     def delete(self, **kwargs):
-        obj = self.fetch(**kwargs)
+        obj = self.get_by_props(**kwargs)
         if obj:
             obj.delete()
             return True
@@ -48,7 +54,7 @@ class CourseRepository(GenericRepository):
     def __init__(self):
         super().__init__(Course)
 
-    def load(self):
+    def get_latest(self):
         return (
             self.model.objects.filter(is_removed=False)
             .select_related("category")
@@ -61,10 +67,17 @@ class UserRepository(GenericRepository):
     def __init__(self):
         super().__init__(User)
 
-    def load(self):
+    def get_all(self):
         return self.model.objects.filter(is_active=True).all()
 
-    def fetch_growth(self):
+    def get_or_create(self, email, **kwargs):
+        defaults = {k: v for k, v in kwargs.items() if k != 'email'}
+        return self.model.objects.get_or_create(
+            email=email,
+            defaults=defaults
+        )
+
+    def get_monthly_signups(self):
         return (
             self.model.objects.filter(
                 is_staff=False, date_joined__year=date.today().year
@@ -80,7 +93,7 @@ class CommentRepository(GenericRepository):
     def __init__(self):
         super().__init__(Comment)
 
-    def load(self, obj_uri):
+    def get_latest(self, obj_uri):
         return (
             self.model.objects.filter(course__slug=obj_uri, is_removed=False)
             .all()
@@ -92,7 +105,7 @@ class LessonRepository(GenericRepository):
     def __init__(self):
         super().__init__(Lesson)
 
-    def load(self, obj_uri):
+    def get_latest(self, obj_uri):
         return (
             self.model.objects.filter(course__slug=obj_uri, is_removed=False)
             .prefetch_related("tags")

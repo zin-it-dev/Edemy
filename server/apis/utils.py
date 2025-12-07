@@ -42,8 +42,8 @@ def generate_colors(num_providers: int) -> List[Tuple[int, int, int]]:
     ]
 
 
-def generate_image(email="edemy@gmail.com", size=40, default='identicon'):
-    email_encoded = email.lower().encode('utf-8')
+def decode_avatar(email="admin@gmail.com", size=40, default="robohash"):
+    email_encoded = email.lower().encode("utf-8")
     email_hash = hashlib.sha256(email_encoded).hexdigest()
-    params = urlencode({'d': default, 's': str(size)})
+    params = urlencode({"d": default, "s": str(size)})
     return f"https://www.gravatar.com/avatar/{email_hash}?{params}"

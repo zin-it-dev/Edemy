@@ -16,7 +16,7 @@ from .utils import generate_colors
 
 
 class ColorMixin:
-    """ "A mixin to dynamically generate a sufficient number of unique colors."""
+    """A mixin to dynamically generate a sufficient number of unique colors."""
 
     def get_colors(self) -> Iterator[Tuple[int, int, int]]:
         num_providers = len(self.get_providers())

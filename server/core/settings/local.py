@@ -2,6 +2,10 @@ from .base import *
 
 INTERNAL_IPS = ["127.0.0.1"]
 
+# CORS
+# See https://github.com/adamchainz/django-cors-headers
+CORS_ALLOW_ALL_ORIGINS = True
+
 # Email
 # See https://docs.djangoproject.com/en/5.2/topics/email/
 

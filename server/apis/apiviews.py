@@ -29,13 +29,12 @@ from .filters import CourseFilter
 
 
 class CategoryViewSet(CacheResponseMixin, viewsets.ViewSet, generics.ListAPIView):
-    queryset = CategoryRepository().load()
+    queryset = CategoryRepository().get_all()
     serializer_class = CategorySerializer
-    list_cache_timeout = 60 * 30
 
 
 class CourseViewSet(ReadOnlyCachedViewSet, SearchMixin, OrderingMixin):
-    queryset = CourseRepository().load()
+    queryset = CourseRepository().get_all()
     queryset_detail = queryset.prefetch_related("tags")
     serializer_class = CourseSerializer
     serializer_detail_class = CourseDetailSerializer
@@ -48,8 +47,6 @@ class CourseViewSet(ReadOnlyCachedViewSet, SearchMixin, OrderingMixin):
         + [DjangoFilterBackend]
     )
 
-    list_cache_timeout = 60 * 15
-    object_cache_timeout = 60 * 30
     search_fields = ["name", "description"]
 
     def generate_search_query(self, query):
@@ -78,7 +75,7 @@ class CommentViewSet(CacheResponseMixin, viewsets.ModelViewSet, OrderingMixin):
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
-        return CommentRepository().load(obj_uri=self.kwargs["course_slug"])
+        return CommentRepository().get_latest(obj_uri=self.kwargs["course_slug"])
 
     def perform_create(self, serializer):
         serializer.save(
@@ -92,13 +89,10 @@ class LessonViewSet(ReadOnlyCachedViewSet, OrderingMixin):
     serializer_detail_class = LessonDetailSerializer
     pagination_class = StandardResultsSetPagination
 
-    list_cache_timeout = 60 * 15
-    object_cache_timeout = 60 * 30
-
     def get_queryset(self):
-        return LessonRepository().load(obj_uri=self.kwargs["course_slug"])
+        return LessonRepository().get_latest(obj_uri=self.kwargs["course_slug"])
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = UserRepository().load()
+    queryset = UserRepository().get_all()
     serializer_class = UserSerializer
