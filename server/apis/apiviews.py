@@ -29,7 +29,6 @@ from .filters import CourseFilter
 
 
 class CategoryViewSet(CacheResponseMixin, viewsets.ViewSet, generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
     queryset = CategoryRepository().get_all()
     serializer_class = CategorySerializer
 
