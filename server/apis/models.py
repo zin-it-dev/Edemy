@@ -1,3 +1,5 @@
+import enum
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
@@ -7,7 +9,14 @@ from django.contrib import admin
 from django.utils.html import mark_safe
 
 from .mixins import GenericModel, SlugifyModel, TaggifyModel
-from .utils import generate_image
+from .utils import decode_avatar
+from .managers import UserManager
+
+
+class ClerkWebhookEvent(enum.Enum):
+    USER_CREATED = "user.created"
+    USER_DELETED = "user.deleted"
+    USER_UPDATED = "user.updated"
 
 
 class User(AbstractUser):
@@ -15,13 +24,69 @@ class User(AbstractUser):
     Stores a single user entry :model:`apis.User`.
     """
 
+    ROLE_CHOICES = (("ADMIN", "Admin"), ("USER", "User"))
+
+    clerk_id = models.CharField(max_length=50, unique=True, null=True, blank=True)
     email = models.EmailField(_("email address"), unique=True)
+    picture = models.URLField(
+        default=decode_avatar,
+        max_length=200,
+        blank=True,
+        null=True,
+    )
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default="USER")
+
+    objects = UserManager()
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
 
     def __str__(self):
         return self.get_full_name() or self.email or self.username
+
+    @admin.display(description="Avatar")
+    def avatar(self):
+        return mark_safe(
+            f'<img src={self.picture} width="80" height="80" alt={self.username} class="img-thumbnail shadow" />'
+        )
+
+    @classmethod
+    def handle_clerk_webhook(cls, event):
+        data = event["data"]
+        clerk_id = data["id"]
+
+        if event["type"] in [
+            ClerkWebhookEvent.USER_CREATED.value,
+            ClerkWebhookEvent.USER_UPDATED.value,
+        ]:
+            primary_email = next(
+                (
+                    email.get("email_address")
+                    for email in data.get("email_addresses", [])
+                    if email.get("id") == data.get("primary_email_address_id")
+                ),
+                None,
+            )
+
+            user, _ = cls.objects.get_or_create(
+                clerk_id=clerk_id,
+                defaults={
+                    "email": primary_email,
+                    "username": primary_email,
+                },
+            )
+
+            user.first_name = data.get("first_name")
+            user.last_name = data.get("last_name")
+            user.picture = data.get("image_url")
+
+            user.save()
+        elif event["type"] == ClerkWebhookEvent.USER_DELETED.value:
+            try:
+                user = cls.objects.get(clerk_id=clerk_id)
+                user.delete()
+            except cls.DoesNotExist:
+                pass
 
 
 class Category(GenericModel, SlugifyModel):
@@ -46,7 +111,7 @@ class Course(TaggifyModel):
     name = models.CharField(unique=True)
     description = models.TextField()
     price = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
-    thumbnail = models.URLField(default=generate_image(size=120, default="monsterid"), max_length=200, blank=True)
+    thumbnail = models.URLField(max_length=200, blank=True)
     image = models.ImageField(
         upload_to="courses/%y/%m/%d",
         null=True,
@@ -63,7 +128,7 @@ class Course(TaggifyModel):
     def headshot_thumbnail(self):
         headshot = self.image.url if self.image else self.thumbnail
         return mark_safe(
-            f'<img src={headshot} width="120" height="120" alt={self.name} class="img-thumbnail shadow" />'
+            f'<img src={headshot} width="80" height="80" alt={self.name} class="img-thumbnail shadow" />'
         )
 
     @property

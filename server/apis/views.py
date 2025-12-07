@@ -17,7 +17,7 @@ class CustomerGrowthJSONView(ColorMixin, BaseLineChartView):
     def execute_query(self):
         results = get_year()
 
-        for item in UserRepository().fetch_growth():
+        for item in UserRepository().get_monthly_signups():
             results[MONTHS[item["month"] - 1]] = item["count"]
         return results
 

@@ -10,6 +10,7 @@ from .apiviews import (
     LessonViewSet,
 )
 from .views import CustomerGrowthJSONView
+from .webhooks import ClerkWebhookAPIView
 
 app_name = "apis"
 
@@ -25,6 +26,7 @@ courses_router.register(r"lessons", LessonViewSet, basename="lesson")
 urlpatterns = [
     path(r"", include(router.urls)),
     path(r"", include(courses_router.urls)),
+    path("webhooks/", ClerkWebhookAPIView.as_view(), name="clerk_webhook"),
     path(
         "statistics/customer-growth/",
         staff_member_required(CustomerGrowthJSONView.as_view()),

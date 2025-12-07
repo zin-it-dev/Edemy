@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "django_pdf_actions",
     "django_elasticsearch_dsl",
     "taggit",
+    "corsheaders",
 ]
 
 # Django REST Framework
@@ -66,6 +67,7 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
+        "apis.authentication.ClerkAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.BasicAuthentication",
     ],
@@ -101,6 +103,7 @@ MIDDLEWARE = [
     "django.contrib.admindocs.middleware.XViewMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -197,7 +200,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LOGIN_URL = "/admin/"
 
-SITE_ID = 1
+AUTHENTICATION_BACKENDS = [
+    "apis.backends.SettingsBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
 
 
 # Internationalization
@@ -230,6 +236,9 @@ EMAIL_PORT = 2525
 
 DEFAULT_FROM_EMAIL = "support@edemy.com"
 
+ADMINS = ["zin@gmail.com", "admin@gmail.com"]
+
+ADMIN_PASSWORD = "pbkdf2_sha256$1000000$zhrR2TvDhATeiHBNxa3sRF$mYyo3nThAcNMdMuWPQ5UsPxCoG85ZeC35WNxfIS1Bw4="
 
 # Sentry
 # See https://docs.sentry.io/platforms/python/guides/django/
@@ -302,3 +311,8 @@ CLOUDINARY_STORAGE = {
 }
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+# Clerk
+# See https://clerk.com/
+CLERK_SECRET_KEY = os.environ.get("CLERK_SECRET_KEY")
+CLERK_WEBHOOK_SIGNING_SECRET = os.environ.get("CLERK_WEBHOOK_SIGNING_SECRET")

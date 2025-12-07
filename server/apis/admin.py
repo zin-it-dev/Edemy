@@ -26,12 +26,16 @@ class UserAdmin(GenericAdmin, BaseUserAdmin):
     add_form = UserCreationForm
 
     date_hierarchy = "date_joined"
-    list_display = list(BaseUserAdmin.list_display) + ["is_active"]
-    list_filter = ["is_active"]
+    list_display = ["clerk_id", "avatar"] + list(BaseUserAdmin.list_display) + ["is_active", "role"]
+    list_filter = list(BaseUserAdmin.list_filter) + ["is_active", "role"]
     list_editable = ["is_active"]
+    readonly_fields = ["avatar"]
     fieldsets = (
         (None, {"fields": ("username", "email", "password")}),
-        (_("Personal info"), {"fields": ("first_name", "last_name")}),
+        (
+            _("Personal info"),
+            {"fields": ("first_name", "last_name", "picture", "avatar")},
+        ),
         (
             _("Permissions"),
             {
@@ -39,6 +43,7 @@ class UserAdmin(GenericAdmin, BaseUserAdmin):
                     "is_active",
                     "is_staff",
                     "is_superuser",
+                    "role",
                     "groups",
                     "user_permissions",
                 ),
@@ -54,7 +59,7 @@ class UserAdmin(GenericAdmin, BaseUserAdmin):
                 "fields": ["email", "username", "password1", "password2"],
             },
         ),
-        (_("Personal info"), {"fields": ("first_name", "last_name")}),
+        (_("Personal info"), {"fields": ("first_name", "last_name", "picture")}),
         (
             _("Permissions"),
             {
@@ -62,6 +67,7 @@ class UserAdmin(GenericAdmin, BaseUserAdmin):
                     "is_active",
                     "is_staff",
                     "is_superuser",
+                    "role",
                     "groups",
                     "user_permissions",
                 ),
