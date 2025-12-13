@@ -2,15 +2,28 @@ import React from "react";
 import { Route, Routes } from "react-router";
 
 import RootLayout from "@/components/layouts/RootLayout";
-import Home from "@/pages/Home";
-import About from "@/pages/About";
+import { publicRoutes } from "@/routes/routes";
+import useDynamicMeta from "@/hooks/useDynamicMeta";
 
 const App: React.FC = () => {
+  useDynamicMeta([
+    {
+      name: "description",
+      property: "og:description",
+      content: "Discover and learn about any topic 🔖",
+    },
+  ]);
+
   return (
     <Routes>
       <Route element={<RootLayout />}>
-        <Route index element={<Home />} />
-        <Route path="about" element={<About />} />
+        {publicRoutes.map((route) => (
+          <Route
+            key={route.path}
+            path={route.path}
+            element={<route.component />}
+          />
+        ))}
       </Route>
     </Routes>
   );

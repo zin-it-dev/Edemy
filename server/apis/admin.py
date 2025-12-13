@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportModelAdmin, ExportActionMixin
 from django_pdf_actions.actions import export_to_pdf_landscape, export_to_pdf_portrait
 
-from .models import User, Comment, Course, Category
+from .models import User, Comment, Course, Category, Lesson
 from .actions import export_as_json
 from .utils import _register_site
 from .forms import UserChangeForm, UserCreationForm
@@ -26,7 +26,11 @@ class UserAdmin(GenericAdmin, BaseUserAdmin):
     add_form = UserCreationForm
 
     date_hierarchy = "date_joined"
-    list_display = ["clerk_id", "avatar"] + list(BaseUserAdmin.list_display) + ["is_active", "role"]
+    list_display = (
+        ["clerk_id", "avatar"]
+        + list(BaseUserAdmin.list_display)
+        + ["is_active", "role"]
+    )
     list_filter = list(BaseUserAdmin.list_filter) + ["is_active", "role"]
     list_editable = ["is_active"]
     readonly_fields = ["avatar"]
@@ -107,6 +111,12 @@ class CourseAdmin(Administrator):
     readonly_fields = Administrator.readonly_fields + ["headshot_thumbnail"]
 
 
+class LessonAdmin(Administrator):
+    list_display = ["name", "content", "course"] + Administrator.list_display
+    list_filter = ["course__name"] + Administrator.list_filter
+    search_fields = ["name"]
+
+
 class CommentAdmin(Administrator):
     list_display = ["creator", "course", "content"] + Administrator.list_display
 
@@ -114,6 +124,6 @@ class CommentAdmin(Administrator):
 admin.site.register(Permission)
 
 _register_site(
-    models=[User, Category, Course, Comment],
-    admin_classes=[UserAdmin, CategoryAdmin, CourseAdmin, CommentAdmin],
+    models=[User, Category, Course, Comment, Lesson],
+    admin_classes=[UserAdmin, CategoryAdmin, CourseAdmin, CommentAdmin, LessonAdmin],
 )

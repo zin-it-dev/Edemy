@@ -24,8 +24,7 @@ class CourseSerializer(GenericSerializer):
             "name",
             "description",
             "price",
-            "thumbnail",
-            "image",
+            "photo",
             "category",
         ]
 

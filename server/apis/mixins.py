@@ -84,7 +84,7 @@ class OrderingMixin:
 
 
 class ReadOnlyCachedViewSet(
-    CacheResponseMixin, DetailSerializerMixin, viewsets.ReadOnlyModelViewSet
+    DetailSerializerMixin, viewsets.ReadOnlyModelViewSet
 ):
     """
     A viewset that provides cached `retrieve` and `list` actions.

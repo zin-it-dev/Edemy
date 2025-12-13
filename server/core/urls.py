@@ -1,12 +1,13 @@
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, re_path, include
-from django.conf import settings
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
+from django.conf import settings
+from django.conf.urls.static import static
 
 from core.admin import admin_statistics
 
@@ -55,7 +56,9 @@ urlpatterns = [
     path("redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     # DRF
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
-]
+    # CKEditor
+    re_path(r"^ckeditor/", include("ckeditor_uploader.urls")),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG and not settings.TESTING:
     urlpatterns += [

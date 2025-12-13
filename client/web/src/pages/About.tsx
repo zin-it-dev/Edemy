@@ -1,6 +1,8 @@
-import React from "react";
+import useDocumentTitle from "@/hooks/useDocumentTitle";
 
-const About: React.FC = () => {
+const About = () => {
+  useDocumentTitle("About");
+
   return <div>About</div>;
 };
 

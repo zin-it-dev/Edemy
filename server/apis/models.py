@@ -7,6 +7,7 @@ from django.utils.text import slugify
 from cloudinary_storage.storage import MediaCloudinaryStorage
 from django.contrib import admin
 from django.utils.html import mark_safe
+from ckeditor_uploader.fields import RichTextUploadingField
 
 from .mixins import GenericModel, SlugifyModel, TaggifyModel
 from .utils import decode_avatar
@@ -139,6 +140,10 @@ class Course(TaggifyModel):
         """
         return [tag.name for tag in self.tags.all()]
 
+    @property
+    def photo(self):
+        return self.image or self.thumbnail
+
 
 class Lesson(TaggifyModel):
     """
@@ -146,7 +151,7 @@ class Lesson(TaggifyModel):
     """
 
     name = models.CharField(unique=True)
-    content = models.TextField()
+    content = RichTextUploadingField()
 
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
@@ -158,6 +163,8 @@ class Lesson(TaggifyModel):
 
 
 class Interaction(GenericModel):
+    """A mixin to be inherited user interactions, linking a creator to a course."""
+
     creator = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
