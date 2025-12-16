@@ -1,6 +1,7 @@
 import { useSearchParams } from "react-router";
 
 import { useCourses } from "@/hooks/useCourses";
+import type { ApiParams } from "@/types/base.type";
 import Item from "../ui/Item";
 import withGridRender from "../ui/withGridRender";
 import Paginator from "../ui/Paginator";
@@ -15,16 +16,15 @@ const CourseContainer = ({
   pagination?: boolean;
 }) => {
   const [searchParams] = useSearchParams();
-  const category = searchParams.get("category") || "";
-  const page = searchParams.get("page") || "1";
-  const search = searchParams.get("search") || "";
 
-  const { data: courses, isPending } = useCourses({
+  const params: ApiParams = {
     limit,
-    category,
-    page,
-    search,
-  });
+    category: searchParams.get("category")!,
+    page: searchParams.get("page")! || "1",
+    search: searchParams.get("search")!,
+  };
+
+  const { data: courses, isPending } = useCourses(params);
   console.log(courses);
 
   if (isPending) {

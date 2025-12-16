@@ -14,6 +14,10 @@ export const publicRoutes: RouteConfig[] = [
     path: "/courses/",
     component: lazy(() => import("@/pages/Courses")),
   },
+   {
+    path: "/courses/:slug/",
+    component: lazy(() => import("@/pages/Course")),
+  },
   {
     path: "/about",
     component: lazy(() => import("@/pages/About")),

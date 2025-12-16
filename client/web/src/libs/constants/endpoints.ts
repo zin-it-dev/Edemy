@@ -15,4 +15,5 @@ export const endpoints = {
 
     return query ? `/courses/?${query}` : "/courses/";
   },
+  course: (slug: string) => `/courses/${slug}/`
 } as const;

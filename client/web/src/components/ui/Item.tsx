@@ -1,23 +1,29 @@
-import { Button, Card } from "react-bootstrap";
+import { Card } from "react-bootstrap";
+import { Link } from "react-router";
 
 export type CourseProps = {
   slug: string;
   name: string;
   price: string | number;
+  description: string;
 };
 
-const Item = ({ name, price }: CourseProps) => {
+const Item = ({ slug, name, price, description }: CourseProps) => {
   return (
     <Card>
-      <Card.Img variant="top" src="holder.js/100px180" />
+      <Link className="text-decoration-none" to={`/courses/${slug}/`}>
+        <Card.Img variant="top" src="holder.js/100px180" alt={name} />
+      </Link>
       <Card.Body>
-        <Card.Title>{name}</Card.Title>
+        <Card.Title>
+          <Link to={`/courses/${slug}/`} className="text-decoration-none">
+            {name}
+          </Link>
+        </Card.Title>
         <Card.Text className="line-clamp">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
+          {description}
         </Card.Text>
         <Card.Text>{price}</Card.Text>
-        <Button variant="primary">Learn now</Button>
       </Card.Body>
     </Card>
   );

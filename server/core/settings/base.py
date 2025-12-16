@@ -299,9 +299,9 @@ TAGGIT_CASE_INSENSITIVE = True
 # Django REST Framework Extensions
 # https://chibisov.github.io/drf-extensions/
 REST_FRAMEWORK_EXTENSIONS = {
-    # "DEFAULT_CACHE_RESPONSE_TIMEOUT": 60 * 15,
-    # "DEFAULT_OBJECT_CACHE_KEY_FUNC": "rest_framework_extensions.utils.default_object_cache_key_func",
-    # "DEFAULT_LIST_CACHE_KEY_FUNC": "rest_framework_extensions.utils.default_list_cache_key_func",
+    "DEFAULT_CACHE_RESPONSE_TIMEOUT": 60 * 15,
+    "DEFAULT_OBJECT_CACHE_KEY_FUNC": "rest_framework_extensions.utils.default_object_cache_key_func",
+    "DEFAULT_LIST_CACHE_KEY_FUNC": "rest_framework_extensions.utils.default_list_cache_key_func",
 }
 
 # Cloudinary

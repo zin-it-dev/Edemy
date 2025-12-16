@@ -3,6 +3,7 @@ import { Link, NavLink } from "react-router";
 
 import Search from "../ui/Search";
 import Account from "../ui/Account";
+import { navlinks } from "@/libs/constants/navlinks";
 
 const Header = () => {
   const expand: string = "sm" as const;
@@ -60,25 +61,20 @@ const Header = () => {
 
             {/* Navbar */}
             <Nav className="ms-auto gap-3">
-              <Nav.Item>
-                <Nav.Link as={NavLink} to={"/"}>
-                  Courses
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link as={NavLink} to={"/about"}>
-                  About Us
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link as={NavLink} to={"/pricing"}>
-                  Pricing
-                </Nav.Link>
-              </Nav.Item>
+              {navlinks.map((item) => (
+                <Nav.Item key={item.path}>
+                  <Nav.Link as={NavLink} to={item.path}>
+                    {item.name}
+                  </Nav.Link>
+                </Nav.Item>
+              ))}
             </Nav>
 
             {/* Login */}
-            <Account styles="ms-md-3 d-none d-sm-block" sizes={{ size: "sm" }} />
+            <Account
+              styles="ms-md-3 d-none d-sm-block"
+              sizes={{ size: "sm" }}
+            />
           </Offcanvas.Body>
         </Navbar.Offcanvas>
       </Container>
