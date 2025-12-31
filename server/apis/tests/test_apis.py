@@ -2,7 +2,7 @@ import pytest, json
 
 from django.urls import reverse
 
-from .factories import CategoryFactory, LessonFactory
+from .factories import CategoryFactory, LessonFactory, CourseFactory
 
 pytestmark = pytest.mark.django_db
 

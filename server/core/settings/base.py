@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-import os, sys
+import os, sys, dj_database_url
 
 from dotenv import load_dotenv
 from pathlib import Path
@@ -151,17 +151,9 @@ if TESTING:
         }
     }
 else:
+    DATABASE_URL = f"postgres://{os.environ.get('POSTGRES_USER')}:{os.environ.get('POSTGRES_PASSWORD')}@{os.environ.get('POSTGRES_HOST')}:{os.environ.get('POSTGRES_PORT')}/{os.environ.get('POSTGRES_DB')}"
     DATABASES = {
-        "default": {
-            "ENGINE": f"django.db.backends.{os.environ.get('POSTGRES_ENGINE', default='sqlite3')}",
-            "NAME": os.environ.get(
-                "POSTGRES_DB", default=os.path.join(BASE_DIR, "edemydb.sqlite3")
-            ),
-            "USER": os.environ.get("POSTGRES_USER", default="root"),
-            "PASSWORD": os.environ.get("POSTGRES_PASSWORD", default="password"),
-            "HOST": os.environ.get("POSTGRES_HOST", default="127.0.0.1"),
-            "PORT": os.environ.get("POSTGRES_PORT", default=5432),
-        }
+        "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
     }
 
     # Redis

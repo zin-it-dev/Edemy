@@ -4,10 +4,11 @@ FROM python:3.12-slim
 EXPOSE 8000
 
 # Keeps Python from generating .pyc files in the container
-ENV PYTHONDONTWRITEBYTECODE=1
-
-# Turns off buffering for easier container logging
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_CREATE=false \
+    POETRY_CACHE_DIR='/var/cache/pypoetry'
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends netcat-openbsd && \
@@ -16,13 +17,14 @@ RUN apt-get update && \
 WORKDIR /app
 COPY . /app
 
-# Install pip requirements
-RUN pip install -r requirements/local.txt
+RUN pip install poetry
 
-RUN sed -i 's/\r$//g' ./scripts/migrate.entrypoint.sh
-RUN chmod +x ./scripts/migrate.entrypoint.sh
+RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
 
-ENTRYPOINT ["./scripts/migrate.entrypoint.sh"]
+COPY entrypoint.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
+
+ENTRYPOINT ["sh", "./entrypoint.sh"]
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

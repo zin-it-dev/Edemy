@@ -4,10 +4,12 @@ from django.test import Client
 from rest_framework.test import APIClient
 from pytest_factoryboy import register
 
-from .factories import CategoryFactory
+from .factories import CategoryFactory, CourseFactory, LessonFactory
 from apis.models import User
 
 register(CategoryFactory)
+register(CourseFactory)
+register(LessonFactory)
 
 
 @pytest.fixture
