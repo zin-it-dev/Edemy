@@ -1,0 +1,12 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "dev": "poetry run python -u manage.py runserver",
+    "test": "poetry run pytest",
+    "lint": "poetry run ruff check --fix"
+  },
+  "license": "MIT"
+}

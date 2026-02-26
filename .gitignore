@@ -452,3 +452,6 @@ playwright-report/
 blob-report/
 playwright/.cache/
 playwright/.auth/
+
+.turbo
+.ruff_cache
