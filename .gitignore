@@ -455,3 +455,5 @@ playwright/.auth/
 
 .turbo
 .ruff_cache
+
+.vscode/
