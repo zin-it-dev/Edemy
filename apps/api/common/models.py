@@ -1,7 +1,9 @@
+from django.conf import settings
 from django.db import models 
 from model_utils.models import TimeStampedModel, SoftDeletableModel
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
+from taggit.managers import TaggableManager
 
 
 class GenericModel(TimeStampedModel, SoftDeletableModel):
@@ -28,3 +30,28 @@ class SlugifyModel(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
+
+class TaggableModel(GenericModel, SlugifyModel):
+    """A mixin to enable generic tagging across inheriting models."""
+
+    tags = TaggableManager()
+
+    class Meta:
+        abstract = True
+
+
+class InteractionModel(GenericModel):
+    """
+    A base model for user interactions with courses, such as comments or ratings.
+    """
+
+    creator = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="%(app_label)s_%(class)s_related",
+    )
+    course = models.ForeignKey("Course", on_delete=models.CASCADE)
+
+    class Meta:
+        abstract = True
