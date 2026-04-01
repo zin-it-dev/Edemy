@@ -1,14 +1,12 @@
-from django.db.models import Model
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
+from django.db.models import Model
 
 
 class GenericRepository:
-    """
-    Repository pattern provide generic CRUD operations that can be reused across different models.
-    """
+    """Repository pattern provide generic CRUD operations that can be reused across different models."""
 
-    def __init__(self, model: Model):
+    def __init__(self, model: Model) -> None:
         self.model = model
 
     def get_all(self):

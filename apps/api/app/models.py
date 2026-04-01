@@ -1,29 +1,29 @@
+from cloudinary_storage.storage import MediaCloudinaryStorage
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from cloudinary_storage.storage import MediaCloudinaryStorage
 
-from common.models import GenericModel, SlugifyModel, TaggableModel, InteractionModel
+from common.models import GenericModel, InteractionModel, SlugifyModel, TaggableModel
 
 
 class User(AbstractUser):
-    pass
+    """Stores a single user entry :model:`app.User`."""
 
 
 class Category(GenericModel, SlugifyModel):
+    """Stores a single category entry :model:`app.Category`."""
+
     name = models.CharField(max_length=80, unique=True)
     
     class Meta:
         verbose_name_plural = _("Categories")
     
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
     
 
 class Course(TaggableModel):
-    """
-    Stores a single course entry :model:`app.Course`.
-    """
+    """Stores a single course entry :model:`app.Course`."""
 
     name = models.CharField(unique=True)
     description = models.TextField()
@@ -38,14 +38,12 @@ class Course(TaggableModel):
 
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
 class Lesson(TaggableModel):
-    """
-    Stores a single lesson entry :model:`app.Lesson`.
-    """
+    """Stores a single lesson entry :model:`app.Lesson`."""
 
     name = models.CharField(unique=True)
     content = models.TextField()
@@ -55,16 +53,14 @@ class Lesson(TaggableModel):
     class Meta:
         unique_together = ["course", "name"]
     
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
 class Comment(InteractionModel):
-    """
-    Stores a single comment entry :model:`app.Comment`.
-    """
+    """Stores a single comment entry :model:`app.Comment`."""
 
     content = models.TextField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.content[:10]

@@ -1,15 +1,13 @@
 from django.conf import settings
-from django.db import models 
-from model_utils.models import TimeStampedModel, SoftDeletableModel
-from django.utils.translation import gettext_lazy as _
+from django.db import models
 from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
+from model_utils.models import SoftDeletableModel, TimeStampedModel
 from taggit.managers import TaggableManager
 
 
 class GenericModel(TimeStampedModel, SoftDeletableModel):
-    """
-    An abstract base class that provides common fields for other models.
-    """
+    """An abstract base class that provides common fields for other models."""
 
     class Meta: 
         abstract = True
@@ -42,9 +40,7 @@ class TaggableModel(GenericModel, SlugifyModel):
 
 
 class InteractionModel(GenericModel):
-    """
-    A base model for user interactions with courses, such as comments or ratings.
-    """
+    """A base model for user interactions with courses, such as comments or ratings."""
 
     creator = models.ForeignKey(
         settings.AUTH_USER_MODEL,
