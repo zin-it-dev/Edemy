@@ -53,7 +53,9 @@ ignore = [
     "D101", "D103", "F403", "ANN201", 
     "TRY003", "EM101", "F405", "ARG005",
     "E501", "E402", "ANN001", "D102",
-    "D106", "ARG001", "RET504", "RUF012"
+    "D106", "ARG001", "RET504", "RUF012",
+    "D105", "ANN204", "ANN003", "D107",
+    "ANN002"
 ]
 select = [
     "ANN", # flake8-annotations

@@ -183,7 +183,8 @@ DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 # Sentry
 # See https://docs.sentry.io/platforms/python/guides/django/
 
-import sentry_sdk, django.db.models.signals
+import django.db.models.signals
+import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
 sentry_sdk.init(
