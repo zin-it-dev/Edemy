@@ -29,6 +29,7 @@ jobs:
       CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
       CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
       SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+      GITHUB_USERNAME: ${{ github.repository_owner }}
 
     services:
       postgres:

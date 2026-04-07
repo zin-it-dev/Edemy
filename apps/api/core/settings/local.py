@@ -13,3 +13,10 @@ if not TESTING:
     # See https://django-debug-toolbar.readthedocs.io/en/latest/installation.html
 
     DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": ":memory:"
+        }
+    }

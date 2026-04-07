@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "poetry run python -u manage.py runserver",
     "test": "poetry run pytest",
-    "lint": "poetry run ruff check --fix"
+    "lint": "poetry run ruff check --fix --unsafe-fixes ."
   },
   "license": "MIT"
 }

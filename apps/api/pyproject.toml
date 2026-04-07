@@ -7,7 +7,7 @@ authors = [
 ]
 license = {text = "MIT"}
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<4.0"
 dependencies = [
     "django (>=6.0.2,<7.0.0)",
     "djangorestframework (>=3.16.1,<4.0.0)",
@@ -19,7 +19,11 @@ dependencies = [
     "sentry-sdk (>=2.53.0,<3.0.0)",
     "django-taggit (>=6.1.0,<7.0.0)",
     "django-cloudinary-storage (>=0.3.0,<0.4.0)",
-    "pillow (>=12.1.1,<13.0.0)"
+    "pillow (>=12.1.1,<13.0.0)",
+    "django-import-export (>=4.4.0,<5.0.0)",
+    "django-pdf-actions (>=0.1.52,<0.2.0)",
+    "django-jazzmin (>=3.0.4,<4.0.0)",
+    "docutils (>=0.22.4,<0.23.0)"
 ]
 
 [build-system]
@@ -55,7 +59,7 @@ ignore = [
     "E501", "E402", "ANN001", "D102",
     "D106", "ARG001", "RET504", "RUF012",
     "D105", "ANN204", "ANN003", "D107",
-    "ANN002"
+    "ANN002", "PTH118", "D401", "D205"
 ]
 select = [
     "ANN", # flake8-annotations

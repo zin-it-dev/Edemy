@@ -8,11 +8,17 @@ from taggit.managers import TaggableManager
 
 class GenericModel(TimeStampedModel, SoftDeletableModel):
     """An abstract base class that provides common fields for other models."""
+    
+    is_removed = models.BooleanField(
+            default=False, 
+            verbose_name=_("Active"),
+            help_text=_("Designates whether this item is active or has been removed.")
+        )
 
     class Meta: 
         abstract = True
 
-        
+
 class SlugifyModel(models.Model):
     """An abstract base class to be inherited by all models use slug field."""
 
