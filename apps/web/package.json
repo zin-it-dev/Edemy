@@ -1,0 +1,44 @@
+{
+  "name": "web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "tsc -b && vite build",
+    "test": "vitest run --coverage",
+    "test:ui": "vitest --ui",
+    "lint": "eslint . --fix",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@clerk/clerk-react": "^5.60.2",
+    "@clerk/react-router": "^2.4.5",
+    "bootstrap": "^5.3.8",
+    "bootswatch": "^5.3.8",
+    "react": "^19.2.0",
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^19.2.0",
+    "react-router": "^7.13.0"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "@vitest/coverage-v8": "^4.0.18",
+    "@vitest/ui": "^4.0.18",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "jsdom": "^28.0.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.1",
+    "vite-plugin-babel": "^1.5.1",
+    "vite-plugin-qrcode": "^0.3.0",
+    "vitest": "^4.0.18"
+  }
+}
