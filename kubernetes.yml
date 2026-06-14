@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: edemy
+    namespace: default
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: edemy-api
+            service: django
+    template:
+        metadata:
+            labels:
+                app: edemy-api
+                service: django
+        spec:
+            containers:
+                - name: edemy-api
+                  image: zinitdev/edemy
+                  imagePullPolicy: Always
+                  resources:
+                      requests:
+                          cpu: "100m"
+                          memory: "128Mi"
+                      limits:
+                          cpu: "250m"
+                          memory: "256Mi"
+                  env:
+                      - name: POSTGRES_PASSWORD
+                        valueFrom:
+                            secretKeyRef:
+                                name: postgres-secret
+                                key: POSTGRES_PASSWORD
+                      - name: POSTGRES_USER
+                        value: postgres
+                      - name: POSTGRES_DB
+                        value: edemy_db
+                      - name: POSTGRES_SERVER
+                        value: postgres
+                      - name: POSTGRES_PORT
+                        value: "5432"
+                  ports:
+                      - containerPort: 8001
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: service-entrypoint
+    namespace: default
+spec:
+    type: NodePort
+    selector:
+        app: edemy-api
+        service: django
+    ports:
+        - port: 8001
+          targetPort: 8001
+          nodePort: 30001

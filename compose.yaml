@@ -1,0 +1,91 @@
+services:
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - 5173:5173
+    env_file:
+      - ./web/.env
+    develop:
+      watch:
+        - action: sync
+          path: ./web
+          target: ./app
+        - action: rebuild
+          path: ./web/bun.lock
+        - action: rebuild
+          path: ./web/package.json
+
+
+  api:
+    build:
+      context: ./api
+      dockerfile: ./Dockerfile
+      target: development
+    ports:
+      - 8000:8000
+    env_file:
+      - ./api/.env
+    depends_on:
+      db:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_started
+    develop:
+      watch:
+        - action: sync
+          path: ./api
+          target: /app
+          ignore:
+            - __pycache__/
+            - "*.pyc"
+            - .git/
+            - .venv/
+        - action: rebuild
+          path: ./api/pyproject.toml
+        - action: rebuild
+          path: ./api/uv.lock
+
+
+  db:
+    image: dhi.io/postgres:18
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql
+    env_file:
+      - ./api/.env
+    expose:
+      - 5432
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: elasticsearch:7.14.2
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+
+
+  inngest:
+    image: inngest/inngest:latest
+    command: 'inngest dev -u http://api:8000/api/inngest'
+    ports:
+      - 8288:8288
+    depends_on:
+      api:
+        condition: service_started
+
+volumes:
+  db-data:
+  esdata:
