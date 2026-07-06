@@ -1,9 +1,5 @@
-from django.apps import AppConfig
+from django.contrib.admin.apps import AdminConfig as BaseAdminConfig
 
 
-class CoreConfig(AppConfig):
-    name = "core"
-    verbose_name = "Edemy 🎓"
-
-    def ready(self):
-        pass
+class AdminConfig(BaseAdminConfig):
+    default_site = "core.admin.AdminSite"

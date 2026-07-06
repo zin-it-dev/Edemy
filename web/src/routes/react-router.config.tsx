@@ -1,15 +1,15 @@
 import { lazy } from 'react';
 import type { RouteObject } from 'react-router';
-import DashboardLayout from '@/components/layouts/DashboardLayout';
-import RootLayout from '@/components/layouts/RootLayout';
-import Protected from '@/components/ui/Protected';
+import DashboardLayout from '@/components/layouts/dashboard-layout';
+import RootLayout from '@/components/layouts/root-layout';
+import Protected from '@/routes/protected';
 
-const Home = lazy(() => import('@/pages/Home'));
-const NotFound = lazy(() => import('@/pages/NotFound'));
-const Dashboard = lazy(() => import('@/pages/Dashboard'));
-const CourseDetail = lazy(() => import('@/pages/CourseDetail'));
-const OfficialCourses = lazy(() => import('@/pages/OfficialCourses'));
-const Pricings = lazy(() => import('@/pages/Pricings'));
+const Home = lazy(() => import('@/pages/landing-page'));
+const NotFound = lazy(() => import('@/pages/not-found'));
+const Dashboard = lazy(() => import('@/pages/dashboard'));
+const Detail = lazy(() => import('@/pages/detail'));
+const Explorer = lazy(() => import('@/pages/explorer'));
+const Pricings = lazy(() => import('@/pages/pricings'));
 
 export const routes: RouteObject[] = [
   {
@@ -18,7 +18,7 @@ export const routes: RouteObject[] = [
     children: [
       {
         index: true,
-        element: <Home />,
+        element: <Home />
       },
       {
         path: '/pricing',
@@ -29,11 +29,11 @@ export const routes: RouteObject[] = [
         children: [
           {
             index: true,
-            element: <OfficialCourses />,
+            element: <Explorer />,
           },
           {
             path: ':slug',
-            element: <CourseDetail />,
+            element: <Detail />,
           },
         ],
       },

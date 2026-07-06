@@ -30,6 +30,9 @@ dependencies = [
 dev = [
     "django-debug-toolbar>=6.3.0",
     "django-silk>=5.5.0",
+    "django-extensions>=4.1",
+    "pydot>=4.0.1",
+    "pyparsing>=3.3.2",
     "pysonar>=1.5.0.4793",
     "pytest>=9.0.3",
     "pytest-cov>=7.1.0",
@@ -66,3 +69,16 @@ ignore = [
 [tool.djlint]
 profile = "django"
 ignore = "H020,H021"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "core.settings.staging"
+python_files = ["test_*.py", "*_test.py", "tests.py"]
+addopts = "-p no:warnings --no-migrations --reuse-db"
+
+[tool.coverage.run]
+source = "."
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+

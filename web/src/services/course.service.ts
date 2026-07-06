@@ -1,4 +1,4 @@
-import axios from '@/lib/axios';
+import axios from '@/api/axios';
 import type { Course, Courses } from '@/utils/types';
 
 export const fetchCourses = async (): Promise<Courses> => {

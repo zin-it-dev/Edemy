@@ -1,0 +1,23 @@
+---
+title: Edemy 🎓 - Class Diagram
+---
+classDiagram
+    class CommonInfo {
+        <<abstract>>
+        - id: int
+        - is_active: bool
+        - date_created: datetime
+        - date_modified: datetime
+
+        - delete() bool
+    }
+
+    class CommonItem {
+        <<abstract>>
+        - tags: List~Tag~
+    }
+
+
+    class Tag {
+        - name: str
+    }
