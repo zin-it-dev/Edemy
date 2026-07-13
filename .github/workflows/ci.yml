@@ -9,7 +9,7 @@ on:
 
 env:
   SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-  SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
+  SONAR_LOGIN: ${{ secrets.SONAR_HOST_URL }}
 
 jobs:
   lint:
@@ -25,6 +25,10 @@ jobs:
         with:
           python-version: '3.14'
           cache: 'pip'
+      
+      - name: Install build tools
+        run: |
+          pip install --upgrade pip setuptools wheel build
       
       - name: Install dependencies
         run: |
@@ -51,6 +55,10 @@ jobs:
         with:
           python-version: '3.14'
           cache: 'pip'
+      
+      - name: Install build tools
+        run: |
+          pip install --upgrade pip setuptools wheel build
       
       - name: Install dependencies
         run: |
