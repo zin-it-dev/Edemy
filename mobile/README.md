@@ -1,1 +1,0 @@
-"expo-dev-client": "^56.0.20",

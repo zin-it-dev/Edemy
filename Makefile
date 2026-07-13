@@ -3,6 +3,7 @@
 help:
 	@echo "Available commands:"
 	@echo "  make up              - Start all services"
+	@echo "  make watch           - Debug all services"
 	@echo "  make stop            - Stop all services"
 	@echo "  make down            - Stop and remove all services (with volumes)"
 	@echo "  make migrate         - Run database migrations"
@@ -13,7 +14,10 @@ help:
 	@echo "  make logs            - View live container logs"
 
 up:
-	docker compose up -d
+	docker compose up -d --build
+
+watch:
+	docker compose watch
 
 stop:
 	docker compose stop
