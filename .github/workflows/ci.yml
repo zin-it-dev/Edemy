@@ -10,6 +10,8 @@ on:
 env:
   SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
   SONAR_LOGIN: ${{ secrets.SONAR_HOST_URL }}
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  INNGEST_DEV: ${{ secrets.INNGEST_DEV }}
 
 jobs:
   lint:
@@ -24,21 +26,22 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.14'
-          cache: 'pip'
       
-      - name: Install build tools
-        run: |
-          pip install --upgrade pip setuptools wheel build
+      - name: Install uv
+        uses: astral-sh/setup-uv@v2
+        with:
+          enable-cache: true
       
       - name: Install dependencies
         run: |
           cd packages/api
-          pip install -e ".[dev]"
+          uv venv .venv
+          uv pip install -e ".[dev]"
       
       - name: Lint with ruff
         run: |
           cd packages/api
-          ruff check . --output-format=github
+          uv run ruff check . --output-format=github
         continue-on-error: true
 
   test-api:
@@ -54,21 +57,22 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.14'
-          cache: 'pip'
       
-      - name: Install build tools
-        run: |
-          pip install --upgrade pip setuptools wheel build
+      - name: Install uv
+        uses: astral-sh/setup-uv@v2
+        with:
+          enable-cache: true
       
       - name: Install dependencies
         run: |
           cd packages/api
-          pip install -e ".[dev]"
+          uv venv .venv
+          uv pip install -e ".[dev]"
       
       - name: Run pytest with coverage
         run: |
           cd packages/api
-          pytest --cov=apps --cov-report=xml --cov-report=html --cov-report=term-summary
+          uv run pytest --cov=apps --cov-report=xml --cov-report=html --cov-report=term
       
       - name: Upload coverage reports
         uses: actions/upload-artifact@v4

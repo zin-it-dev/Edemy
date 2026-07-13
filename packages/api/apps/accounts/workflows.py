@@ -1,7 +1,7 @@
 import secrets
 
 import inngest
-from ..client import inngest_client
+from apps.client import inngest_client
 
 from .models import User
 
