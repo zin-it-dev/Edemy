@@ -9,6 +9,8 @@ from django.core.validators import MinValueValidator
 
 from core.mixins import TimestampMixin, SoftDeleteMixin
 from core.models import GenericModel
+from core.fields import DynamicImageURLField
+from .managers import UserManager
 
 
 class Roles(models.TextChoices):
@@ -22,17 +24,16 @@ class User(AbstractUser):
 
     clerk_id = models.CharField(max_length=255, unique=True, null=True, blank=True)
     email = models.EmailField(_("email address"), max_length=255, unique=True)
-    # picture = HybridImageField(
-    #     _("picture"),
-    #     upload_to="avatars/%Y/%m/%d",
-    #     storage=MediaCloudinaryStorage(),
-    #     null=True,
-    #     blank=True,
-    #     max_length=255,
-    # )
+    picture = DynamicImageURLField(
+        _("picture"),
+        upload_to="avatars/%Y/%m/%d",
+        null=True,
+        blank=True
+    )
     role = models.CharField(_("role"), max_length=8, choices=Roles, default=Roles.USER)
+    subscription_id = models.CharField(_("subscription ID"), max_length=125)
 
-    # objects = UserManager()
+    objects = UserManager()
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]

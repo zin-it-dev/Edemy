@@ -1,69 +1,71 @@
 import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarGroup,
-    SidebarHeader,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    // useSidebar,
-} from "@/components/ui/sidebar";
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from '@/components/ui/sidebar';
+import Logo from '@/components/ui/logo';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "./dropdown-menu";
-import { ChevronDown, User2 } from "lucide-react";
+  User2
+} from 'lucide-react';
+import { NavLink } from 'react-router';
+import { DialogCourse } from './dialog-course';
+import { sidebarData } from '@/constants/data';
+
 
 export function AppSidebar() {
-    // const {
-    //     state,
-    //     open,
-    //     setOpen,
-    //     openMobile,
-    //     setOpenMobile,
-    //     isMobile,
-    //     toggleSidebar,
-    // } = useSidebar();
-
-    return (
-        <Sidebar variant='sidebar'>
-            <SidebarHeader>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger
-                                render={
-                                    <SidebarMenuButton>
-                                        Select Workspace
-                                        <ChevronDown className='ml-auto' />
-                                    </SidebarMenuButton>
-                                }
-                            />
-                            <DropdownMenuContent className='w-[--radix-popper-anchor-width]'>
-                                <DropdownMenuItem>
-                                    <span>Acme Inc</span>
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarHeader>
-            <SidebarContent>
-                <SidebarGroup />
-                <SidebarGroup />
-            </SidebarContent>
-            <SidebarFooter>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton>
-                            <User2 /> Username
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarFooter>
-        </Sidebar>
-    );
+  return (
+    <Sidebar variant="sidebar">
+      <SidebarHeader>
+        <SidebarMenu className={'p-2'}>
+          <Logo to={'/'} />
+        </SidebarMenu>
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>AI Tutor</SidebarGroupLabel>
+          <DialogCourse />
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {sidebarData.map((opt) => (
+                <SidebarMenuItem key={opt.title}>
+                  <NavLink
+                    to={opt.to}
+                    end={opt.end}
+                    style={{ display: 'contents' }}
+                  >
+                    {({ isActive }) => (
+                      <SidebarMenuButton isActive={isActive} className="py-6">
+                        <opt.icon className="mr-2 size-7" />
+                        <span className={isActive ? 'font-medium' : ''}>
+                          {opt.title}
+                        </span>
+                      </SidebarMenuButton>
+                    )}
+                  </NavLink>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <User2 /> Username
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+    </Sidebar>
+  );
 }

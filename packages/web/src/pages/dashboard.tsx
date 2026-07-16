@@ -1,7 +1,15 @@
-const Dashboard = () => {
-  return (
-    <div>Dashboard</div>
-  )
-}
+import CourseList from '@/components/ui/course-list';
+import { useAuth } from '@/hooks/use-auth';
 
-export default Dashboard
+const Dashboard = () => {
+  const { user } = useAuth();
+
+  return (
+    <>
+      <p>{user?.username}</p>
+      <CourseList />
+    </>
+  );
+};
+
+export default Dashboard;

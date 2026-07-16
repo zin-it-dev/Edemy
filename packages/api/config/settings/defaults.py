@@ -32,7 +32,12 @@ SECRET_KEY = "django-insecure-z+4ma8vgmn%l-b51fo7@*qmo6t+hl89@kp+zh59awe8n(szl9@
 # SECURITY WARNING: don't run with debug turned on in production!
 TESTING = "test" in sys.argv or "PYTEST_VERSION" in os.environ
 
-ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS", "*").split(",")
+ADMINS = MANAGERS = [
+    ("Lê Hiển Vinh", "zin.it.dev@gmail.com"),
+    ("Alice", "alice@cyb.org"),
+]
+
+LOGIN_REDIRECT_URL = '/admin'
 
 # Application definition
 
@@ -46,6 +51,7 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'cloudinary',
     "rest_framework",
+    "corsheaders",
     "core.apps.CoreConfig",
     "accounts.apps.AccountsConfig",
     "content.apps.ContentConfig",
@@ -54,6 +60,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -64,7 +71,12 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
-    ]
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "accounts.middleware.ClerkAuthentication",
+    ],
 }
 
 ROOT_URLCONF = "config.urls"
@@ -101,8 +113,9 @@ import dj_database_url
 DATABASES = {
     'default': dj_database_url.parse(
         url=env("DATABASE_URL"),
-        conn_max_age=600, 
-        conn_health_checks=True
+        conn_max_age=0, 
+        conn_health_checks=True,
+        disable_server_side_cursors=True
     )
 }
 
@@ -144,6 +157,8 @@ STATIC_URL = "static/"
 
 MEDIA_URL = '/media/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR.parent, 'media')
+
 STATIC_ROOT = os.path.join(BASE_DIR.parent, "staticfiles")
 
 
@@ -151,6 +166,15 @@ STATIC_ROOT = os.path.join(BASE_DIR.parent, "staticfiles")
 # https://docs.djangoproject.com/en/6.0/topics/auth/customizing/#reusable-apps-and-auth-user-model
 
 AUTH_USER_MODEL = "accounts.User"
+
+
+# Authentication
+# https://docs.djangoproject.com/en/6.0/topics/auth/customizing/#writing-an-authentication-backend
+
+AUTHENTICATION_BACKENDS = [
+    "accounts.middleware.SettingsBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
 
 
 # Cloudinary
@@ -164,3 +188,7 @@ CLOUDINARY_STORAGE = {
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+# Clerk
+# https://clerk.com/changelog/2024-10-08-python-backend-sdk-beta
+
+CLERK_SECRET_KEY = env("CLERK_SECRET_KEY")

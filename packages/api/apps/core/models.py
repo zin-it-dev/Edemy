@@ -5,6 +5,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 
 from .mixins import NamedMixin, SoftDeleteMixin, TimestampMixin
+from .fields import DynamicImageURLField
 
 
 class GenericModel(TimestampMixin, SoftDeleteMixin, NamedMixin):
@@ -17,7 +18,12 @@ class GenericModel(TimestampMixin, SoftDeleteMixin, NamedMixin):
 
 
 class CommonInfo(GenericModel):
-    thumbnail = models.ImageField(upload_to="resources/%Y/%m/%d")
+    thumbnail = DynamicImageURLField(
+        _("thumbnail"),
+        upload_to="resources/%Y/%m/%d",
+        null=True,
+        blank=True
+    )
     description = models.TextField(_("description"), null=True, blank=True)
     tags = GenericRelation("Tag")
 

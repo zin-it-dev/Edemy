@@ -32,8 +32,7 @@ const FieldTextarea = (props: FieldTextareaProps) => {
                         <Textarea
                             id='textarea-invalid'
                             placeholder={props.placeholder}
-                            rows={8}
-                            className={"rounded-xl pb-12"}
+                            className={"rounded-xl pb-12 min-h-40"}
                             required
                         />
                         <Button

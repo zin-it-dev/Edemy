@@ -3,7 +3,7 @@ services:
     build:
       context: ./packages/web
       dockerfile: ./Dockerfile
-      
+      target: development
     ports:
       - 5173:5173
     env_file:
@@ -50,7 +50,7 @@ services:
 
   inngest:
     image: inngest/inngest:latest
-    command: 'inngest dev -u http://api:8000/api/inngest --no-discovery'
+    command: 'inngest dev -u http://api:8000/api/inngest'
     ports:
       - 8288:8288
     depends_on:

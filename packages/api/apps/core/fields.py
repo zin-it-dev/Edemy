@@ -2,7 +2,7 @@ from django.db.models import ImageField
 from django.db.models.fields.files import ImageFieldFile
 
 
-class HybridImageFieldFile(ImageFieldFile):
+class DynamicImageFieldFile(ImageFieldFile):
     def save(self, name, content, save=True):
         if isinstance(content, str):
             self.name = content
@@ -14,20 +14,18 @@ class HybridImageFieldFile(ImageFieldFile):
 
     @property
     def url(self):
-        if self.name and (
-            self.name.startswith("http://") or self.name.startswith("https://")
-        ):
+        if not self.name:
+            return ""
+    
+        if self.name.startswith(("http://", "https://")):
             return self.name
-
-        if self.name:
-            return super().url
-
-        return ""
+        
+        return super().url
 
 
-class HybridImageField(ImageField):
-    attr_class = HybridImageFieldFile
-
+class DynamicImageURLField(ImageField):
+    attr_class = DynamicImageFieldFile
+    
     def to_python(self, value):
         if isinstance(value, str):
             return value

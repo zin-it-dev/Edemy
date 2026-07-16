@@ -5,11 +5,13 @@ from rest_framework.routers import SimpleRouter
 from django.urls import include, path
 from apps.client import inngest_client
 from content.api.views import CategoryViewSet, CourseViewSet
+from accounts.api.views import UserViewSet
 from accounts.workflows import sync_user
 
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
+router.register("users", UserViewSet, basename="user")
 router.register("categories", CategoryViewSet, basename="category")
 router.register("courses", CourseViewSet, basename="course")
 

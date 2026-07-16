@@ -434,3 +434,6 @@ test-results/
 playwright-report/
 .local-browsers/
 .dev_profile*
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
