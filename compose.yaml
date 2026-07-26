@@ -1,42 +1,46 @@
 services:
   web:
     build:
-      context: ./packages/web
-      dockerfile: ./Dockerfile
+      context: ./web
+      dockerfile: Dockerfile
       target: development
     ports:
       - 5173:5173
     env_file:
-      - ./packages/web/.env
+      - ./web/.env
     develop:
       watch:
         - action: sync
-          path: ./packages/web/src
+          path: ./web/src
           target: ./app/src
           ignore:
             - node_modules/
         - action: rebuild
-          path: ./packages/web/bun.lock
+          path: ./web/bun.lock
         - action: rebuild
-          path: ./packages/web/package.json
+          path: ./web/package.json
         - action: rebuild
-          path: ./packages/web/vite.config.ts
+          path: ./web/vite.config.ts
           target: ./app/vite.config.ts
 
-  api:
+  server:
     restart: unless-stopped
+    image: django:v1
     build:
-      context: ./packages/api
-      dockerfile: ./Dockerfile
+      context: ./server
+      dockerfile: Dockerfile
       target: development
     ports:
       - 8000:8000
     env_file:
-      - ./packages/api/.env
+      - ./server/.env
+    depends_on:
+      - redis
+      - elasticsearch
     develop:
       watch:
         - action: sync
-          path: ./packages/api
+          path: ./server
           target: /app
           ignore:
             - __pycache__/
@@ -44,17 +48,43 @@ services:
             - .git/
             - .venv/
         - action: rebuild
-          path: ./packages/api/pyproject.toml
+          path: ./server/pyproject.toml
         - action: rebuild
-          path: ./packages/api/uv.lock
+          path: ./server/uv.lock
 
   inngest:
     image: inngest/inngest:latest
-    command: 'inngest dev -u http://api:8000/api/inngest'
+    command: 'inngest dev -u http://server:8000/api/inngest'
     ports:
       - 8288:8288
     depends_on:
-      api:
+      server:
         condition: service_started
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    expose:
+      - 6379
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+    entrypoint: redis-server --appendonly yes --port 6379
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: elasticsearch:7.14.2
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+
+volumes:
+  redis_data:
+  esdata:
 

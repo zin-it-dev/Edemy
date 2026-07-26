@@ -1,0 +1,30 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: edemy
+    namespace: default
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: edemy-api
+            service: django
+    template:
+        metadata:
+            labels:
+                app: edemy-api
+                service: django
+        spec:
+            containers:
+                - name: nginx
+                  image: nginx:latest
+                  ports:
+                      - containerPort: 80
+                  resources:
+                    requests:
+                        memory: "64Mi"
+                        cpu: "100m"
+                    limits:
+                        memory: "128Mi"
+                        cpu: "250m"

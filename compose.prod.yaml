@@ -9,28 +9,28 @@ services:
     env_file:
       - ./packages/web/.env
 
-  api:
+  server:
     restart: unless-stopped
     build:
-      context: ./packages/api
-      dockerfile: ./Dockerfile
+      context: ./server
+      dockerfile: Dockerfile
       target: production
     ports:
       - 8000:8000
     env_file:
-      - ./packages/api/.env.prod
+      - ./server/.env.prod
 
   nginx:
     build: 
-      context: ./packages/api
+      context: ./server
       target: nginx-proxy
     restart: unless-stopped
     volumes:
-      - static_volume:/home/app/api/staticfiles
+      - static_volume:/home/app/staticfiles
     ports:
       - 1337:80
     depends_on:
-      - api
+      - server
 
 volumes:
   static_volume:
