@@ -1,7 +1,0 @@
-{
-  "name": "@repo/typescript-config",
-  "private": true,
-  "devDependencies": {
-    "vite-tsconfig-paths": "^6.1.1"
-  }
-}

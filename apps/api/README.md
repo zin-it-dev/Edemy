@@ -1,2 +1,0 @@
-# Edemy - Backend 🚀
-
