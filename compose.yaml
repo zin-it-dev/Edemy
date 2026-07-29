@@ -1,0 +1,58 @@
+# Discover and learn about any topic 🔖
+services:
+  server:
+    image: edemy-backend
+    container_name: edemy-backend
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      target: development
+    restart: always
+    ports:
+      - 8000:8000
+    env_file:
+      - ./server/.env
+    develop:
+      watch:
+        - action: sync
+          path: ./server
+          target: /app
+          ignore:
+            - __pycache__/
+            - "*.pyc"
+            - .git/
+            - .venv/
+        - action: rebuild
+          path: ./server/pyproject.toml
+        - action: rebuild
+          path: ./server/uv.lock
+
+  client:
+    image: edemy-frontend
+    container_name: edemy-frontend
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      target: development
+    network_mode: "host"
+    env_file:
+      - ./client/.env
+    depends_on:
+      - server
+    develop:
+      watch:
+        - action: sync
+          path: ./client
+          target: /app
+          ignore:
+            - node_modules/
+            - .next/
+            - bun.lock
+        - action: rebuild
+          path: ./client/package.json
+
+  inngest:
+    image: inngest/inngest:latest
+    command: "inngest dev -u http://server:3000/api/inngest"
+    ports:
+      - 8288:8288

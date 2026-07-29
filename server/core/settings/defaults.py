@@ -13,10 +13,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 import os
 import sys
 from pathlib import Path
-
 from dotenv import load_dotenv
-
-from utils.helpers import get_env
+from core.utils import get_env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -54,7 +52,7 @@ except OSError:
 DEBUG = get_env("DEBUG", default=True, converter=lambda x: x.lower() == "true")
 
 ALLOWED_HOSTS = get_env(
-    "DJANGO_ALLOWED_HOSTS", default=[], converter=lambda x: x.split(",")
+    "DJANGO_ALLOWED_HOSTS", default=["*"], converter=lambda x: x.split(",")
 )
 
 # Admin and managers for this project. These people receive private site alerts.
@@ -73,6 +71,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "corsheaders",
+    "common.apps.CommonConfig",
     "accounts.apps.AccountsConfig",
     "courses.apps.CoursesConfig"
 ]
@@ -117,11 +116,13 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+import dj_database_url
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR.parent, "db.sqlite3"),
-    }
+    "default": dj_database_url.parse(
+        url=get_env("DATABASE_URL"),
+        conn_max_age=600, conn_health_checks=True
+    )
 }
 
 
