@@ -25,8 +25,7 @@ export default function Home() {
     return (
         <div className='flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black'>
             <Suspense fallback={<div>Loading...</div>}>
-                <Posts posts={posts} />
-
+                {posts ? <Posts posts={posts} /> : <p>No items!</p>}
                 <Button>Button</Button>
             </Suspense>
         </div>

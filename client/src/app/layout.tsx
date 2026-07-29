@@ -7,8 +7,8 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 
 const fontSans = Architects_Daughter({
   weight: "400",
-  variable: "--font-sans",
   subsets: ["latin"],
+  variable: "--font-sans",
 });
 
 const fontSerif = Merriweather({
