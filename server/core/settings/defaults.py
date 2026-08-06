@@ -60,6 +60,8 @@ ADMINS = (("Nguyen Van Hai", "zin.it@example.com"),)
 
 MANAGERS = ADMINS
 
+LOGIN_URL = "/admin/login/"
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -71,15 +73,50 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "corsheaders",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
     "common.apps.CommonConfig",
     "accounts.apps.AccountsConfig",
-    "courses.apps.CoursesConfig"
+    "courses.apps.CoursesConfig",
 ]
 
 REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
-    ]
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "accounts.middlewares.ClerkAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ],
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ],
+}
+
+SPECTACULAR_SETTINGS = {
+    "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
+    "COMPONENT_SPLIT_PATCH": True,
+    "COMPONENT_SPLIT_REQUEST": True,
+    "TITLE": "Edemy 🎓",
+    "DESCRIPTION": "Discover and learn about any topic 🔖",
+    "VERSION": "1.0.0",
+    "LICENCE": {"name": "License"},
+    "CONTACT": {"name": "@lhzinh", "email": "zin.it.dev@gmail.com"},
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_DIST": "SIDECAR",
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": True,
+        "displayRequestDuration": True,
+    },
+    "UPLOADED_FILES_USE_URL": True,
+    "SCHEMA_PATH_PREFIX_TRIM": True,
 }
 
 MIDDLEWARE = [
@@ -98,7 +135,7 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR.parent, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -120,11 +157,9 @@ import dj_database_url
 
 DATABASES = {
     "default": dj_database_url.parse(
-        url=get_env("DATABASE_URL"),
-        conn_max_age=600, conn_health_checks=True
+        url=get_env("DATABASE_URL"), conn_max_age=600, conn_health_checks=True
     )
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -148,6 +183,13 @@ AUTH_USER_MODEL = "accounts.User"
 
 CORS_ALLOW_CREDENTIALS = True
 
+CLERK_SECRET_KEY = get_env("CLERK_SECRET_KEY")
+
+CLERK_JWT_KEY = get_env("CLERK_JWT_KEY")
+
+CLERK_AUTHORIZED_PARTIES = get_env("CLERK_AUTHORIZED_PARTIES")
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
@@ -166,6 +208,8 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 STATIC_ROOT = os.path.join(BASE_DIR.parent, "staticfiles")
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR.parent, "static")]
 
 MEDIA_URL = "media/"
 

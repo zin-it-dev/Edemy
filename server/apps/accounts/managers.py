@@ -21,7 +21,7 @@ class UserManager(AbstractUserManager):
 
         user = self.model(
             email=self.normalize_email(email),
-            username=self._create_username(email),
+            username=self._random_username(email),
             **extra_fields,
         )
 

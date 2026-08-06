@@ -5,6 +5,7 @@ from django.core.exceptions import ImproperlyConfigured
 
 T = TypeVar("T")
 
+
 def get_env(key: str, default: T | None = None, converter: Callable[[str], T] = str):
     value = os.environ.get(key)
 

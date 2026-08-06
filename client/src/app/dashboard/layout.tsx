@@ -1,18 +1,18 @@
-'use client'
-import { use } from 'react'
- 
-export default function Posts({
-  posts,
-}: {
-  posts: Promise<{ id: string; title: string }[]>
-}) {
-  const allPosts = use(posts)
- 
-  return (
-    <ul>
-      {allPosts.map((post) => (
-        <li key={post.id}>{post.title}</li>
-      ))}
-    </ul>
-  )
+import React from "react";
+import SignedOutRedirect from "@/components/features/auth/signed-out-redirect";
+import Sidebar from "@/components/shared/sidebar";
+
+export default function DashboardLayout({
+    children,
+}: Readonly<{
+    children: React.ReactNode;
+}>) {
+    return (
+        <SignedOutRedirect>
+            <div className='flex'>
+                <Sidebar />
+                <main className='flex-1'>{children}</main>
+            </div>
+        </SignedOutRedirect>
+    );
 }

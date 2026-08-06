@@ -253,3 +253,14 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# pnpm deploy output
+/bundle
+
+# Hardhat Build Artifacts
+/artifacts
+
+# Gas snapshot files
+/.gas-snapshot
+
+# Snapshot cheatcodes output
+/snapshots
