@@ -1,9 +1,9 @@
-from .defaults import *
+from .base import *
 
-
-TESTING = "test" in sys.argv or "PYTEST_VERSION" in os.environ
 
 INTERNAL_IPS = ["127.0.0.1"]
+
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 CORS_ALLOW_ALL_ORIGINS = True
 

@@ -1,4 +1,3 @@
-# Discover and learn about any topic 🔖
 services:
   server:
     image: edemy-backend
