@@ -1,8 +1,5 @@
-# Discover and learn about any topic 🔖
 services:
   server:
-    image: edemy-backend
-    container_name: edemy-backend
     build:
       context: ./server
       dockerfile: Dockerfile
@@ -12,6 +9,8 @@ services:
       - 8000:8000
     env_file:
       - ./server/.env
+    depends_on:
+      - inngest
     develop:
       watch:
         - action: sync
@@ -28,8 +27,6 @@ services:
           path: ./server/uv.lock
 
   client:
-    image: edemy-frontend
-    container_name: edemy-frontend
     build:
       context: ./client
       dockerfile: Dockerfile
@@ -53,6 +50,7 @@ services:
 
   inngest:
     image: inngest/inngest:latest
-    command: "inngest dev -u http://server:3000/api/inngest"
+    command: "inngest dev -u http://server:8000/api/inngest"
     ports:
       - 8288:8288
+      - 8289:8289

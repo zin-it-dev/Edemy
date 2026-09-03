@@ -1,5 +1,3 @@
-import React from "react";
-
-export type RootLayoutProps = Readonly<{
-    children: React.ReactNode;
-}>;
+export type User = {
+    email: string;
+}
