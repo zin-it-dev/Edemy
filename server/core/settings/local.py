@@ -3,7 +3,7 @@ from .base import *
 
 INTERNAL_IPS = ["127.0.0.1"]
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
 
 CORS_ALLOW_ALL_ORIGINS = True
 

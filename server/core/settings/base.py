@@ -62,6 +62,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "cloudinary_storage",
+    "cloudinary",
     "rest_framework",
     "corsheaders",
     "drf_spectacular",
@@ -152,6 +154,8 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+MEDIA_URL = "/media/"
+
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
@@ -171,15 +175,27 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
     ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "accounts.auth.ClerkAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ],
     "DEFAULT_THROTTLE_CLASSES": [
         "rest_framework.throttling.AnonRateThrottle",
         "rest_framework.throttling.UserRateThrottle",
+    ],
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
     ],
     "DEFAULT_THROTTLE_RATES": {
         "anon": "100/day",
         "user": "1000/day",
         "upload": "10/hour",
     },
+    "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.URLPathVersioning",
+    "ALLOWED_VERSIONS": ["v1", "v2"],
+    "DEFAULT_VERSION": "v1",
 }
 
 
@@ -187,7 +203,50 @@ REST_FRAMEWORK = {
 # https://drf-spectacular.readthedocs.io/en/latest/
 
 SPECTACULAR_SETTINGS = {
+    "SERVE_PERMISSIONS": [
+        "rest_framework.permissions.AllowAny"
+        if DEBUG
+        else "rest_framework.permissions.IsAdminUser"
+    ],
+    "COMPONENT_SPLIT_PATCH": True,
+    "COMPONENT_SPLIT_REQUEST": True,
+    "TITLE": "Edemy 🎓",
+    "DESCRIPTION": "Discover and learn about any topic 🔖",
+    "VERSION": "1.0.0",
+    "LICENCE": {"name": "MIT License"},
+    "CONTACT": {"name": "ZIN", "email": "zin.it.dev@gmail.com"},
+    "SERVE_INCLUDE_SCHEMA": False,
     "SWAGGER_UI_DIST": "SIDECAR",
     "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
     "REDOC_DIST": "SIDECAR",
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": True,
+        "displayRequestDuration": True,
+    },
+    "UPLOADED_FILES_USE_URL": True,
+    "SCHEMA_PATH_PREFIX_TRIM": True,
+}
+
+
+# Clerk
+# https://clerk.com/
+
+CLERK_SECRET_KEY = os.environ["CLERK_SECRET_KEY"]
+CLERK_JWT_KEY = os.environ.get("CLERK_JWT_KEY")
+CLERK_AUTHORIZED_PARTIES = [
+    p.strip()
+    for p in os.environ.get("CLERK_AUTHORIZED_PARTIES", "").split(",")
+    if p.strip()
+]
+
+
+# Cloudinary
+# https://github.com/klis87/django-cloudinary-storage#installation
+
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
 }

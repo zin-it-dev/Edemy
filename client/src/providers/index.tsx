@@ -1,6 +1,8 @@
-import React, { ReactNode, ComponentType } from 'react';
+import { ReactNode, ComponentType } from 'react';
 import QueryProvider from '@/providers/query-provider';
 import { ThemeProvider } from './theme-provider';
+import { ClerkProvider } from '@clerk/nextjs';
+import { shadcn } from '@clerk/ui/themes';
 
 interface ComposeProvidersProps {
   providers: Array<ComponentType<any> | [ComponentType<any>, Record<string, any>]>;
@@ -8,7 +10,6 @@ interface ComposeProvidersProps {
 }
 
 const ComposeProviders = ({ providers, children }: ComposeProvidersProps) => {
-  // We use reduceRight so the first item in the array stays the outermost provider
   return providers.reduceRight((acc, curr) => {
     if (Array.isArray(curr)) {
       const [Provider, props] = curr;
@@ -21,6 +22,7 @@ const ComposeProviders = ({ providers, children }: ComposeProvidersProps) => {
 
 export const Providers = ({children}: {children: ReactNode}) => {
     const providers = [
+        [ClerkProvider, { appearance: { theme: shadcn } }],
         QueryProvider,
         [
           ThemeProvider, 

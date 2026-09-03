@@ -23,38 +23,40 @@ Production-grade Django architecture patterns for scalable, maintainable applica
 
 ```
 myproject/
-├── config/
+├── core/
 │   ├── __init__.py
 │   ├── settings/
 │   │   ├── __init__.py
 │   │   ├── base.py          # Base settings
-│   │   ├── development.py   # Dev settings
+│   │   ├── local.py   # Dev settings
 │   │   ├── production.py    # Production settings
-│   │   └── test.py          # Test settings
+│   │   └── testing.py          # Test settings
 │   ├── urls.py
 │   ├── wsgi.py
 │   └── asgi.py
 ├── manage.py
 └── apps/
     ├── __init__.py
-    ├── users/
+    │   ├── urls.py
+    ├── accounts/
     │   ├── __init__.py
+    │   ├── apiviews.py
+    │   ├── tasks.py
+    │   ├── serializers.py
     │   ├── models.py
     │   ├── views.py
-    │   ├── serializers.py
-    │   ├── urls.py
     │   ├── permissions.py
     │   ├── filters.py
     │   ├── services.py
     │   └── tests/
-    └── products/
+    └── courses/
         └── ...
 ```
 
 ### Split Settings Pattern
 
 ```python
-# config/settings/base.py
+# core/settings/base.py
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -74,8 +76,8 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     # Local apps
-    "apps.users",
-    "apps.products",
+    "apps.accounts",
+    "apps.courses",
 ]
 
 MIDDLEWARE = [
@@ -90,8 +92,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "config.urls"
-WSGI_APPLICATION = "config.wsgi.application"
+ROOT_URLCONF = "core.urls"
+WSGI_APPLICATION = "core.wsgi.application"
 
 DATABASES = {
     "default": {
@@ -104,7 +106,7 @@ DATABASES = {
     }
 }
 
-# config/settings/development.py
+# core/settings/local.py
 from .base import *
 
 DEBUG = True
@@ -118,7 +120,7 @@ MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-# config/settings/production.py
+# core/settings/production.py
 from .base import *
 
 DEBUG = False

@@ -76,7 +76,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ### Custom User Model
 
 ```python
-# apps/users/models.py
+# apps/accounts/models.py
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -91,7 +91,7 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ["username"]
 
     class Meta:
-        db_table = "users"
+        db_table = "accounts"
         verbose_name = "User"
         verbose_name_plural = "Users"
 
@@ -100,7 +100,7 @@ class User(AbstractUser):
 
 
 # settings/base.py
-AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = "accounts.User"
 ```
 
 ### Password Hashing
