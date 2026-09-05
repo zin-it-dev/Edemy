@@ -1,11 +1,11 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
-from libs.mixins.models import TimestampMixin, IsActiveMixin, SlugMixin
+from core.models import TimestampMixin, IsActiveMixin, SlugMixin
 
 
 class Category(SlugMixin, TimestampMixin, IsActiveMixin):
-    name = models.CharField(max_length=80)
+    name = models.CharField(max_length=80, unique=True)
 
     def __str__(self):
         return self.name
@@ -37,3 +37,5 @@ class Course(SlugMixin, TimestampMixin, IsActiveMixin):
 
     def __str__(self):
         return self.title
+
+

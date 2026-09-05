@@ -23,7 +23,7 @@ Production-grade Django architecture patterns for scalable, maintainable applica
 
 ```
 myproject/
-├── core/
+├── config/
 │   ├── __init__.py
 │   ├── settings/
 │   │   ├── __init__.py
@@ -56,7 +56,7 @@ myproject/
 ### Split Settings Pattern
 
 ```python
-# core/settings/base.py
+# config/settings/base.py
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -92,8 +92,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "core.urls"
-WSGI_APPLICATION = "core.wsgi.application"
+ROOT_URLCONF = "config.urls"
+WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
     "default": {
@@ -106,7 +106,7 @@ DATABASES = {
     }
 }
 
-# core/settings/local.py
+# config/settings/local.py
 from .base import *
 
 DEBUG = True
@@ -118,9 +118,9 @@ INSTALLED_APPS += ["debug_toolbar"]
 
 MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.config.mail.backends.console.EmailBackend"
 
-# core/settings/production.py
+# config/settings/production.py
 from .base import *
 
 DEBUG = False
@@ -160,7 +160,7 @@ LOGGING = {
 ```python
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.config.validators import MinValueValidator, MaxValueValidator
 
 
 class User(AbstractUser):
@@ -572,7 +572,7 @@ class ProductListView(generic.ListView):
 ### Low-Level Caching
 
 ```python
-from django.core.cache import cache
+from django.config.cache import cache
 
 
 def get_featured_products():
@@ -590,7 +590,7 @@ def get_featured_products():
 ### QuerySet Caching
 
 ```python
-from django.core.cache import cache
+from django.config.cache import cache
 
 
 def get_popular_categories():

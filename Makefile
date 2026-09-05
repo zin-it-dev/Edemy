@@ -51,3 +51,6 @@ lint:
 
 logs:
 	$(COMPOSE) logs -f server
+
+notebook:
+	source ./.venv/bin/activate && uv run --with jupyter jupyter lab
