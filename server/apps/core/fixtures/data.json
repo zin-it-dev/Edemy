@@ -1,0 +1,66 @@
+[
+    {
+        "model": "courses.category",
+        "pk": 1,
+        "fields": {
+            "slug": "languages-platforms",
+            "name": "Languages / Platforms"
+        }
+    },
+    {
+        "model": "courses.category",
+        "pk": 2,
+        "fields": {
+            "slug": "design",
+            "name": "Design"
+        }
+    },
+    {
+        "model": "courses.category",
+        "pk": 3,
+        "fields": {
+            "slug": "web-development",
+            "name": "Web Development"
+        }
+    },
+    {
+        "model": "courses.course",
+        "pk": 1,
+        "fields": {
+            "slug": "python",
+            "title": "Python",
+            "description": "Learn Python programming from scratch.",
+            "category": 1
+        }
+    },
+    {
+        "model": "courses.course",
+        "pk": 2,
+        "fields": {
+            "slug": "python-for-data-analysis",
+            "title": "Python for Data Analysis",
+            "description": "Learn Python for data analysis.",
+            "category": 1
+        }
+    },
+    {
+        "model": "courses.course",
+        "pk": 3,
+        "fields": {
+            "slug": "javascript",
+            "title": "JavaScript",
+            "description": "Learn JavaScript programming from scratch.",
+            "category": 1
+        }
+    },
+    {
+        "model": "courses.course",
+        "pk": 4,
+        "fields": {
+            "slug": "design-system",
+            "title": "Design System",
+            "description": "Learn about design systems.",
+            "category": 2
+        }
+    }
+]

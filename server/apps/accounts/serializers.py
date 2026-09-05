@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from libs.mixins.serializers import DynamicFieldsModelSerializer
+from core.serializers import DynamicFieldsModelSerializer
 from accounts.models import User
 
 
@@ -8,3 +8,14 @@ class UserSerializer(DynamicFieldsModelSerializer):
         model = User
         fields = "__all__"
         extra_kwargs = {"password": {"write_only": True}}
+
+
+class CurrentUserDefault:
+    """
+    May be applied as a `default=...` value on a serializer field.
+    Returns the current user.
+    """
+    requires_context = True
+
+    def __call__(self, serializer_field):
+        return serializer_field.context['request'].user

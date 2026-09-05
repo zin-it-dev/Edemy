@@ -109,6 +109,12 @@
       "skillPath": "skills/features/clerk-webhooks/SKILL.md",
       "computedHash": "e3c348bdc6dee1f28bc56577cd4aac605d3dfc3c63fcb10fc51e6c04c1fe3fb0"
     },
+    "design-patterns": {
+      "source": "ratacat/claude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/design-patterns/SKILL.md",
+      "computedHash": "a8199678b6e436810a476ed3cc339be658ef07c40daf4b5d47024a3cf42a637a"
+    },
     "inngest-agent-evals": {
       "source": "inngest/inngest-skills",
       "sourceType": "github",

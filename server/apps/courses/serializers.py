@@ -1,17 +1,15 @@
 from rest_framework import serializers
 from courses.models import Category, Course
-from libs.mixins.serializers import DynamicFieldsModelSerializer
+from core.serializers import DynamicFieldsModelSerializer
 
 
 class CategorySerializer(DynamicFieldsModelSerializer):
-    class Meta:
+    class Meta(DynamicFieldsModelSerializer.Meta):
         model = Category
-        fields = "__all__"
-        read_only_fields = ["date_created", "date_updated"]
 
 
 class CourseSerializer(DynamicFieldsModelSerializer):
-    class Meta:
+    category = CategorySerializer(fields=('id', 'slug', 'name'))
+    
+    class Meta(DynamicFieldsModelSerializer.Meta):
         model = Course
-        fields = "__all__"
-        read_only_fields = ["date_created", "date_updated"]

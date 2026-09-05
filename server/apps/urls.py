@@ -2,15 +2,16 @@ import inngest.django
 from django.conf import settings
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter, SimpleRouter
-from core.client import inngest_client
+from config.client import inngest_client
 from accounts.tasks import sync_user_from_clerk
 from accounts.apiviews import UserViewSet
-from courses.apiviews import CategoryViewSet
+from courses.apiviews import CategoryViewSet, CourseViewSet
 
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 router.register("users", UserViewSet, basename="user")
 router.register("categories", CategoryViewSet, basename="category")
+router.register("courses", CourseViewSet, basename="course")
 
 urlpatterns = [
     inngest.django.serve(

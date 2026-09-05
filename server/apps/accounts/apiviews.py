@@ -11,9 +11,7 @@ class UserViewSet(viewsets.GenericViewSet):
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
 
-    @action(
-        detail=False, methods=["get"], url_path="current-user", url_name="current_user"
-    )
+    @action(detail=False, methods=["get"], url_path="current-user")
     def current_user(self, request):
         "Get current logged in user"
         serializer = self.get_serializer(request.user)
