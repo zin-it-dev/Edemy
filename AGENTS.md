@@ -2,6 +2,20 @@
 
 AI-first e-learning SaaS platform. Three-service architecture: Next.js frontend, Django REST backend, Expo mobile app. Clerk for auth, Inngest for background jobs, PostgreSQL for data.
 
+## Agent skills
+
+### Issue tracker
+
+Issues and specs live in GitHub Issues, managed with the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Use the canonical labels `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, and `wontfix`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+This is a single-context repo with root `CONTEXT.md` and `docs/adr/` documentation. See `docs/agents/domain.md`.
+
 ## Monorepo Layout
 
 ```
