@@ -1,5 +1,5 @@
 import axios from "@/lib/axios";
-import { Category, CoursesResponse } from "@/types";
+import { Category, CoursesResponse } from "@/types/types";
 import { queryOptions } from "@tanstack/react-query";
 
 export const catalogQueryKeys = {

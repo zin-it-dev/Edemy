@@ -8,15 +8,6 @@ from django.contrib import admin
 from django.utils.html import mark_safe
 
 
-def _gravatar_url(
-    email: str = "edemy@gmail.com", default: str = "identicon", size: int = 80
-) -> str:
-    email_encoded = email.strip().lower().encode("utf-8")
-    email_hash = hashlib.sha256(email_encoded).hexdigest()
-    params = urlencode({"d": default, "s": str(size)})
-    return f"https://www.gravatar.com/avatar/{email_hash}?{params}"
-
-
 class User(AbstractUser):
     """Application user synchronized with Clerk identity records."""
 
@@ -31,12 +22,12 @@ class User(AbstractUser):
         PRO = "PRO", _("Pro")
         ENTERPRISE = "ENTERPRISE", _("Enterprise")
 
-    clerk_id = models.CharField(max_length=255, unique=True)
-    email = models.EmailField(_("email address"), unique=True)
+    id = models.CharField(max_length=255, primary_key=True)
+    email = models.EmailField(_("email address"), unique=True, db_index=True)
     picture = models.ImageField(
         upload_to="avatars/%y/%m/%d",
         blank=True,
-        default=_gravatar_url,
+        default=f"https://www.gravatar.com/avatar/xxx.@gmail.com?{urlencode({"d": "identicon", "s": 80})}",
         storage=MediaCloudinaryStorage(),
     )
     role = models.CharField(
@@ -53,10 +44,6 @@ class User(AbstractUser):
         verbose_name = _("user")
         verbose_name_plural = _("users")
         ordering = ["-date_joined"]
-        indexes = [
-            models.Index(fields=["clerk_id"]),
-            models.Index(fields=["email"]),
-        ]
 
     @property
     def is_admin(self) -> bool:

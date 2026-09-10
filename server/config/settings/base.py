@@ -16,6 +16,16 @@ import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 from django.core.management.utils import get_random_secret_key
+from django.core.exceptions import ImproperlyConfigured
+
+
+def get_env_value(env_variable, default_value=None):
+    try:
+        return os.environ.get(env_variable, default_value)
+    except KeyError:
+        error_msg = 'Set the {} environment variable'.format(env_variable)
+        raise ImproperlyConfigured(error_msg)
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,7 +39,7 @@ load_dotenv(dotenv_path=os.path.join(BASE_DIR.parent, ".env"))
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DJANGO_DEBUG", 1)
+DEBUG = get_env_value("DJANGO_DEBUG", 1)
 
 TESTING = "test" in sys.argv or "PYTEST_VERSION" in os.environ
 
@@ -45,6 +55,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django.contrib.postgres',
     "cloudinary_storage",
     "cloudinary",
     "rest_framework",
@@ -54,6 +65,7 @@ INSTALLED_APPS = [
     "core.apps.CoreConfig",
     "accounts.apps.AccountsConfig",
     "courses.apps.CoursesConfig",
+    "orders.apps.OrdersConfig"
 ]
 
 MIDDLEWARE = [
@@ -95,7 +107,7 @@ AUTH_USER_MODEL = "accounts.User"
 
 DATABASES = {
     "default": dj_database_url.parse(
-        url=os.getenv("DATABASE_URL"), conn_max_age=600, conn_health_checks=True
+        url=get_env_value("DATABASE_URL"), conn_max_age=600, conn_health_checks=True
     )
 }
 
@@ -140,6 +152,9 @@ STATIC_URL = "static/"
 
 MEDIA_URL = "/media/"
 
+STATIC_ROOT = os.path.join(BASE_DIR, "static"),
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "media"),
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
@@ -218,11 +233,11 @@ SPECTACULAR_SETTINGS = {
 # Clerk
 # https://clerk.com/
 
-CLERK_SECRET_KEY = os.environ["CLERK_SECRET_KEY"]
-CLERK_JWT_KEY = os.environ.get("CLERK_JWT_KEY")
+CLERK_SECRET_KEY = get_env_value("CLERK_SECRET_KEY")
+CLERK_JWT_KEY = get_env_value("CLERK_JWT_KEY")
 CLERK_AUTHORIZED_PARTIES = [
     p.strip()
-    for p in os.environ.get("CLERK_AUTHORIZED_PARTIES", "").split(",")
+    for p in get_env_value("CLERK_AUTHORIZED_PARTIES").split(",")
     if p.strip()
 ]
 
@@ -231,9 +246,9 @@ CLERK_AUTHORIZED_PARTIES = [
 # https://github.com/klis87/django-cloudinary-storage#installation
 
 CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
-    "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
-    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
+    "CLOUD_NAME": get_env_value("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": get_env_value("CLOUDINARY_API_KEY"),
+    "API_SECRET": get_env_value("CLOUDINARY_API_SECRET"),
 }
 
 
@@ -245,7 +260,7 @@ import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
 sentry_sdk.init(
-    dsn=os.environ.get("SENTRY_DSN"),
+    dsn=get_env_value("SENTRY_DSN"),
     send_default_pii=True,
     traces_sample_rate=1.0,
     profiles_sample_rate=1.0,

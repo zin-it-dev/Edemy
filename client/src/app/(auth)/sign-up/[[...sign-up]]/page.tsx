@@ -11,6 +11,10 @@ export default function SignUpPage() {
               card: 'shadow-2xl border border-border',
             },
           }}
+          path="/sign-up"
+          routing="path"
+          signInUrl="/sign-in"
+          forceRedirectUrl="/dashboard"
         />
       </div>
     </div>

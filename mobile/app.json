@@ -8,7 +8,8 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "experiments": {
-      "typedRoutes": true
+      "typedRoutes": true,
+      "reactCompiler": true
     },
     "ios": {
       "supportsTablet": true,
@@ -32,13 +33,30 @@
     },
     "plugins": [
       "expo-router",
-      "expo-status-bar"
+      "expo-status-bar",
+      [
+        "expo-dev-client",
+        {
+          "launchMode": "most-recent",
+          "defaultLaunchURL": "http://localhost:8081",
+          "android": {
+            "defaultLaunchURL": "http://10.0.0.2:8081"
+          }
+        }
+      ]
     ],
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "e7df5317-590e-40c9-a104-7c6b6776f5a7"
+        "projectId": "7b3bc162-a5b5-4c59-b463-f7122c5a002b"
       }
+    },
+    "owner": "zin.dev",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/7b3bc162-a5b5-4c59-b463-f7122c5a002b"
     }
   }
 }

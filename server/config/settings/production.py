@@ -1,7 +1,7 @@
 from .base import *
 
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
+ALLOWED_HOSTS = get_env_value("ALLOWED_HOSTS").split(",")
 
 
 # Security headers

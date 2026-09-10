@@ -1,12 +1,10 @@
 "use client";
-
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, LogIn, Menu, Sparkles } from "lucide-react";
+import { ArrowRight, LogIn, Menu, Sparkles, User } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button";
 import { Button } from "@/components/ui/button";
-import { VariantProps } from "class-variance-authority"
+import { VariantProps } from "class-variance-authority";
 import { categoriesQueryOptions } from "@/services/catalog";
 import {
     NavigationMenu,
@@ -24,6 +22,9 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
+import { Show, SignInButton, GoogleOneTap } from "@clerk/nextjs";
+import Logo from "@/components/shared/logo";
+import CustomUserButton from "@/components/shared/user-button";
 
 const exploreLinks = [
     {
@@ -81,22 +82,12 @@ const Header = () => {
     return (
         <header className='sticky top-0 z-50 bg-background/85 px-4 backdrop-blur-xl sm:px-6'>
             <div className='mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 md:grid md:grid-cols-[1fr_auto_1fr]'>
-                <Link
-                    href='/'
-                    className='flex w-fit shrink-0 items-center gap-2 justify-self-start font-semibold'
-                    aria-label='Edemy'
-                >
-                    <Image
-                        src='/logo.png'
-                        alt='Edemy'
-                        width={30}
-                        height={30}
-                        priority
-                    />
-                    <span className='text-xl tracking-tight'>Edemy</span>
-                </Link>
+                <Logo className='flex w-fit shrink-0 items-center gap-2 justify-self-start font-semibold' />
 
-                <NavigationMenu className='hidden justify-self-center md:flex' align='center'>
+                <NavigationMenu
+                    className='hidden justify-self-center md:flex'
+                    align='center'
+                >
                     <NavigationMenuList className='gap-1'>
                         <NavigationMenuItem>
                             <NavigationMenuTrigger>
@@ -118,14 +109,19 @@ const Header = () => {
                                         </p>
                                     </div>
                                     <div className='grid gap-1'>
-                                        {[...exploreLinks, ...categoryLinks].map((link) => (
+                                        {[
+                                            ...exploreLinks,
+                                            ...categoryLinks,
+                                        ].map((link) => (
                                             <MenuLink
                                                 key={link.href}
                                                 {...link}
                                             />
                                         ))}
                                         {categoriesLoading && (
-                                            <span className='px-2 py-2 text-xs text-muted-foreground'>Loading categories...</span>
+                                            <span className='px-2 py-2 text-xs text-muted-foreground'>
+                                                Loading categories...
+                                            </span>
                                         )}
                                         {categoryLinks.map((link) => (
                                             <Link
@@ -133,8 +129,12 @@ const Header = () => {
                                                 href={link.href}
                                                 className='rounded-md px-2 py-2.5 hover:bg-muted'
                                             >
-                                                <span className='block text-sm font-medium'>{link.title}</span>
-                                                <span className='block text-xs text-muted-foreground'>{link.description}</span>
+                                                <span className='block text-sm font-medium'>
+                                                    {link.title}
+                                                </span>
+                                                <span className='block text-xs text-muted-foreground'>
+                                                    {link.description}
+                                                </span>
                                             </Link>
                                         ))}
                                     </div>
@@ -163,20 +163,15 @@ const Header = () => {
                 </NavigationMenu>
 
                 <div className='flex items-center justify-end gap-2 md:justify-self-end'>
-                    <Button
-                        variant='ghost'
-                        className='hidden gap-1.5 sm:inline-flex'
-                    >
-                            <LogIn data-icon='inline-start' aria-hidden='true' />
-                            Sign in
-                    </Button>
-                    <ButtonLink
-                        href='/sign-up'
-                        className='hidden rounded-full sm:inline-flex text-white'
-                    >
-                        Start learning
-                        <ArrowRight data-icon='inline-end' aria-hidden='true' />
-                    </ButtonLink>
+                    <Show when='signed-out'>
+                        <GoogleOneTap />
+                        <SignInButton>
+                          <User />
+                        </SignInButton>
+                    </Show>
+                    <Show when='signed-in'>
+                        <CustomUserButton />
+                    </Show>
                     <Sheet>
                         <SheetTrigger
                             render={
@@ -195,7 +190,9 @@ const Header = () => {
                             className='w-[min(22rem,90vw)]'
                         >
                             <SheetHeader>
-                                <SheetTitle className='text-primary'>Edemy</SheetTitle>
+                                <SheetTitle className='text-primary'>
+                                    Edemy
+                                </SheetTitle>
                                 <SheetDescription>
                                     Explore courses and manage your learning
                                     journey.
@@ -207,11 +204,17 @@ const Header = () => {
                             >
                                 <section className='rounded-lg border border-border/60 p-3'>
                                     <div className='mb-2 flex items-center gap-2 px-1'>
-                                        <Sparkles className='size-4 text-primary' aria-hidden='true' />
-                                        <h2 className='text-sm font-semibold'>Explore</h2>
+                                        <Sparkles
+                                            className='size-4 text-primary'
+                                            aria-hidden='true'
+                                        />
+                                        <h2 className='text-sm font-semibold'>
+                                            Explore
+                                        </h2>
                                     </div>
                                     <p className='mb-2 px-1 text-xs text-muted-foreground'>
-                                        Learn in your rhythm with personalized paths that keep momentum visible.
+                                        Learn in your rhythm with personalized
+                                        paths that keep momentum visible.
                                     </p>
                                     <div className='grid gap-1'>
                                         {exploreLinks.map((link) => (
@@ -220,14 +223,20 @@ const Header = () => {
                                                 href={link.href}
                                                 className='rounded-md px-2 py-2.5 hover:bg-muted'
                                             >
-                                                <span className='block text-sm font-medium'>{link.title}</span>
-                                                <span className='block text-xs text-muted-foreground'>{link.description}</span>
+                                                <span className='block text-sm font-medium'>
+                                                    {link.title}
+                                                </span>
+                                                <span className='block text-xs text-muted-foreground'>
+                                                    {link.description}
+                                                </span>
                                             </Link>
                                         ))}
                                     </div>
                                 </section>
                                 <section className='rounded-lg border border-border/60 p-3'>
-                                    <h2 className='mb-2 px-1 text-sm font-semibold'>Learn</h2>
+                                    <h2 className='mb-2 px-1 text-sm font-semibold'>
+                                        Learn
+                                    </h2>
                                     <div className='grid gap-1'>
                                         {learnLinks.map((link) => (
                                             <Link
@@ -235,8 +244,12 @@ const Header = () => {
                                                 href={link.href}
                                                 className='rounded-md px-2 py-2.5 hover:bg-muted'
                                             >
-                                                <span className='block text-sm font-medium'>{link.title}</span>
-                                                <span className='block text-xs text-muted-foreground'>{link.description}</span>
+                                                <span className='block text-sm font-medium'>
+                                                    {link.title}
+                                                </span>
+                                                <span className='block text-xs text-muted-foreground'>
+                                                    {link.description}
+                                                </span>
                                             </Link>
                                         ))}
                                     </div>
@@ -249,14 +262,21 @@ const Header = () => {
                                 </Link>
                             </nav>
                             <div className='mt-auto flex flex-col gap-2 p-4'>
-                                <ButtonLink href="/sign-in" variant='outline' className="w-full">
+                                <ButtonLink
+                                    href='/sign-in'
+                                    variant='outline'
+                                    className='w-full'
+                                >
                                     <LogIn
                                         data-icon='inline-start'
                                         aria-hidden='true'
                                     />
                                     Sign in
                                 </ButtonLink>
-                                <ButtonLink href="/sign-up" className='w-full rounded-full'>
+                                <ButtonLink
+                                    href='/sign-up'
+                                    className='w-full rounded-full'
+                                >
                                     Start learning
                                     <ArrowRight
                                         data-icon='inline-end'
@@ -272,30 +292,30 @@ const Header = () => {
     );
 };
 
-export default Header
-
+export default Header;
 
 interface ButtonLinkProps
-  extends React.ComponentProps<typeof Link>,
-    VariantProps<typeof buttonVariants> {
-  children: React.ReactNode
+    extends
+        React.ComponentProps<typeof Link>,
+        VariantProps<typeof buttonVariants> {
+    children: React.ReactNode;
 }
 
 export function ButtonLink({
-  href,
-  children,
-  variant,
-  size = "sm",
-  className,
-  ...props
+    href,
+    children,
+    variant,
+    size = "sm",
+    className,
+    ...props
 }: ButtonLinkProps) {
-  return (
-    <Link
-      href={href}
-      className={buttonVariants({ variant, size, className })}
-      {...props}
-    >
-      {children}
-    </Link>
-  )
+    return (
+        <Link
+            href={href}
+            className={buttonVariants({ variant, size, className })}
+            {...props}
+        >
+            {children}
+        </Link>
+    );
 }
